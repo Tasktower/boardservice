@@ -53,6 +53,25 @@ namespace Tasktower.BoardService
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasktower.BoardService", Version = "v1" });
+                var openidScheme = new OpenApiSecurityScheme()
+                {
+                    Name = "openid",
+                    Description = "Enter JWT Bearer token **_only_**",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer", // must be lower case
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                c.AddSecurityDefinition(openidScheme.Reference.Id, openidScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {openidScheme, Array.Empty<string>()}
+                });
             });
         }
 

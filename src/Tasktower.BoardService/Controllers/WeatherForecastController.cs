@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +25,7 @@ namespace Tasktower.BoardService.Controllers
             _logger = logger;
         }
 
+       
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -34,6 +37,16 @@ namespace Tasktower.BoardService.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [Authorize]
+        [HttpGet("/secret")]
+        public string GetData()
+        {
+            var user = this.User;
+            var id = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+            return id;
+            // return user.Claims.ToDictionary(c => c.Type, c => c.Value);
         }
     }
 }
