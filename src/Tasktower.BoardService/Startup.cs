@@ -37,13 +37,14 @@ namespace Tasktower.BoardService
             }).AddJwtBearer(o =>
             {
                 o.RequireHttpsMetadata = false;
-                o.Authority = Configuration["Jwt:Authority"];
-                o.Audience = Configuration["Jwt:Audience"];
+                o.Authority = Configuration["Auth:Authority"];
+                o.Audience = Configuration["Auth:Audience"];
                 o.IncludeErrorDetails = true;
             });
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Administrator", policy => policy.RequireClaim("user_roles", "[Administrator]"));
+                options.AddPolicy("Administrator", policy => 
+                    policy.RequireClaim(System.Security.Claims.ClaimTypes.Role, "ADMIN"));
             });
 
             // Custom scoped services

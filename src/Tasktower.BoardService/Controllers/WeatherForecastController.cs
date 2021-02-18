@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -40,13 +41,33 @@ namespace Tasktower.BoardService.Controllers
         }
 
         [Authorize]
-        [HttpGet("/secret")]
+        [HttpGet("/auth")]
         public string GetData()
         {
             var user = this.User;
             var id = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
-            return id;
-            // return user.Claims.ToDictionary(c => c.Type, c => c.Value);
+            var roles = user.FindAll(System.Security.Claims.ClaimTypes.Role);
+            return $"{id}, {string.Join(",", from role in roles select role.Value)}";
+        }
+
+        [Authorize(Roles = "ADMIN,STANDARD")]
+        [HttpGet("/both")]
+        public string GetData2()
+        {
+            var user = this.User;
+            var id = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+            var roles = user.FindAll(System.Security.Claims.ClaimTypes.Role);
+            return $"{id}, {string.Join(",", from role in roles select role.Value)}";
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet("/adminonly")]
+        public string GetData3()
+        {
+            var user = this.User;
+            var id = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+            var roles = user.FindAll(System.Security.Claims.ClaimTypes.Role);
+            return $"{id}, {string.Join(",", from role in roles select role.Value)}";
         }
     }
 }
