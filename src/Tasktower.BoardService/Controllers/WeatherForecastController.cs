@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Tasktower.BoardService.Security;
 
 namespace Tasktower.BoardService.Controllers
 {
@@ -50,8 +51,8 @@ namespace Tasktower.BoardService.Controllers
             return $"{id}, {string.Join(",", from role in roles select role.Value)}";
         }
 
-        [Authorize(Roles = "ADMIN,STANDARD")]
-        [HttpGet("/both")]
+        [Authorize(Policy = Policies.PolicyNameCanModerate)]
+        [HttpGet("/moderator")]
         public string GetData2()
         {
             var user = this.User;
@@ -60,7 +61,7 @@ namespace Tasktower.BoardService.Controllers
             return $"{id}, {string.Join(",", from role in roles select role.Value)}";
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Policy = Policies.PolicyNameAdministrator)]
         [HttpGet("/adminonly")]
         public string GetData3()
         {
