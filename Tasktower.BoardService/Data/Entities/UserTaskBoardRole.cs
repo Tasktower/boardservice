@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Tasktower.BoardService.Data.Entities
 {
-    public class UserBoardRole : AbstractAuditableEntity
+    public class UserTaskBoardRole : BaseAuditableEntity
     {
         public enum BoardRole { OWNER, BOARD_EDITOR, BOARD_READER }
         public Guid TaskBoardId { get; set; }

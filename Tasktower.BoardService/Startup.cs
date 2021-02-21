@@ -34,7 +34,7 @@ namespace Tasktower.BoardService
                 .AddJwtBearer(o => AuthStartupOptionsRunner.ConfigureJWTBearer(Configuration, o));
             services.AddAuthorization(AuthStartupOptionsRunner.ConfigureAuthorization);
             services.AddHttpContextAccessor();
-            services.AddDbContext<BoardContext>(options =>
+            services.AddDbContext<BoardDBContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLServerBoardDB"));
             });

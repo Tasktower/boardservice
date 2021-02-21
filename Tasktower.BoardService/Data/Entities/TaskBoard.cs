@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tasktower.BoardService.Data.Entities
 {
-    public class TaskBoard : AbstractAuditableEntity
+    public class TaskBoard : BaseAuditableEntity
     {
         public Guid Id { get; set; }
 
@@ -14,9 +14,9 @@ namespace Tasktower.BoardService.Data.Entities
 
         public string Description { get; set; }
 
-        public ICollection<UserBoardRole> UserBoardRole { get; set; }
+        public ICollection<UserTaskBoardRole> UserBoardRole { get; set; }
 
-        public ICollection<BoardColumn> BoardColumns { get; set; }
+        public ICollection<TaskBoardColumn> TaskBoardColumns { get; set; }
 
     }
 }

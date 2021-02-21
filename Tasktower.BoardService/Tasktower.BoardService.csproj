@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>04c6dc29-1b74-461d-b51d-c1fbc406ac38</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\Tasktower.Manager</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>

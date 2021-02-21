@@ -11,16 +11,16 @@ using Tasktower.BoardService.Security;
 
 namespace Tasktower.BoardService.Data.Context
 {
-    public class BoardContext : DbContext
+    public class BoardDBContext : DbContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public BoardContext(DbContextOptions<BoardContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+        public BoardDBContext(DbContextOptions<BoardDBContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private static void BuildAuditableEntity<T>(EntityTypeBuilder<T> entityTypeBuilder) 
-            where T : AbstractAuditableEntity
+        protected static void BuildAuditableEntity<T>(EntityTypeBuilder<T> entityTypeBuilder) 
+            where T : BaseAuditableEntity
         {
             entityTypeBuilder.Property(e => e.CreatedAt)
                 .HasColumnName("created_at")
@@ -39,8 +39,7 @@ namespace Tasktower.BoardService.Data.Context
             entityTypeBuilder.Property(e => e.Version)
                 .HasColumnName("version")
                 .IsRequired()
-                .IsRowVersion()
-                .HasDefaultValue(0);
+                .IsConcurrencyToken();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,9 +69,9 @@ namespace Tasktower.BoardService.Data.Context
                 entityTypeBuilder.HasKey(e => new { e.Id });
             });
 
-            modelBuilder.Entity<UserBoardRole>(entityTypeBuilder => {
+            modelBuilder.Entity<UserTaskBoardRole>(entityTypeBuilder => {
                 entityTypeBuilder = entityTypeBuilder
-                    .ToTable("user_board_roles");
+                    .ToTable("user_task_board_roles");
                 BuildAuditableEntity(entityTypeBuilder);
 
                 entityTypeBuilder.Property(e => e.TaskBoardId)
@@ -87,7 +86,7 @@ namespace Tasktower.BoardService.Data.Context
                 entityTypeBuilder.Property(e => e.Role)
                     .HasConversion(
                         r => r.ToString(),
-                        s => Enum.Parse<UserBoardRole.BoardRole>(s))
+                        s => Enum.Parse<UserTaskBoardRole.BoardRole>(s))
                     .HasColumnName("role")
                     .HasMaxLength(20)
                     .IsRequired();
@@ -102,9 +101,9 @@ namespace Tasktower.BoardService.Data.Context
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<BoardColumn>(entityTypeBuilder => {
+            modelBuilder.Entity<TaskBoardColumn>(entityTypeBuilder => {
                 entityTypeBuilder = entityTypeBuilder
-                    .ToTable("board_columns");
+                    .ToTable("task_board_columns");
                 BuildAuditableEntity(entityTypeBuilder);
 
                 entityTypeBuilder.Property(e => e.Id)
@@ -127,7 +126,7 @@ namespace Tasktower.BoardService.Data.Context
 
                 entityTypeBuilder
                     .HasOne(e => e.TaskBoard)
-                    .WithMany(t => t.BoardColumns)
+                    .WithMany(t => t.TaskBoardColumns)
                     .HasForeignKey(e => e.TaskBoardId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
@@ -157,7 +156,7 @@ namespace Tasktower.BoardService.Data.Context
                     .HasColumnName("board_column_id");
 
                 entityTypeBuilder
-                    .HasOne(e => e.BoardColumn)
+                    .HasOne(e => e.TaskBoardColumn)
                     .WithMany(c => c.TaskCards)
                     .HasForeignKey(e => e.BoardColumnId)
                     .OnDelete(DeleteBehavior.Cascade);
@@ -169,49 +168,35 @@ namespace Tasktower.BoardService.Data.Context
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            // Get all the entities that inherit from AuditableEntity
-            // and have a state of Added or Modified
             var entries = ChangeTracker
                 .Entries()
-                .Where(e => e.Entity is AbstractAuditableEntity && (
+                .Where(e => e.Entity is BaseAuditableEntity && (
                     e.State == EntityState.Added
                     || e.State == EntityState.Modified));
 
-            // For each entity we will set the Audit properties
             foreach (var entityEntry in entries)
             {
-                UserContext userContext = new UserContext(_httpContextAccessor?.HttpContext?.User);
-                // If the entity state is Added let's set
-                // the CreatedAt and CreatedBy properties
+                UserContext userContext = new UserContext(_httpContextAccessor?.HttpContext);
                 if (entityEntry.State == EntityState.Added)
                 {
-                    ((AbstractAuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
-                    ((AbstractAuditableEntity)entityEntry.Entity).CreatedBy = userContext.Name ?? "ANONYMOUS";
+                    ((BaseAuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
+                    ((BaseAuditableEntity)entityEntry.Entity).CreatedBy = userContext.Name ?? "ANONYMOUS";
                 }
                 else
                 {
-                    // If the state is Modified then we don't want
-                    // to modify the CreatedAt and CreatedBy properties
-                    // so we set their state as IsModified to false
-                    Entry((AbstractAuditableEntity)entityEntry.Entity).Property(p => p.CreatedAt).IsModified = false;
-                    Entry((AbstractAuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
+                    Entry((BaseAuditableEntity)entityEntry.Entity).Property(p => p.CreatedAt).IsModified = false;
+                    Entry((BaseAuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
                 }
-
-                // In any case we always want to set the properties
-                // ModifiedAt and ModifiedBy
-                ((AbstractAuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
-                ((AbstractAuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name ?? "ANONYMOUS";
+                ((BaseAuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
+                ((BaseAuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name ?? "ANONYMOUS";
+                ((BaseAuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
             }
-
-            // After we set all the needed properties
-            // we call the base implementation of SaveChangesAsync
-            // to actually save our entities in the database
             return await base.SaveChangesAsync(cancellationToken);
         }
 
         public DbSet<TaskBoard> TaskBoards { get; set; }
-        public DbSet<UserBoardRole> UserBoardRoles { get; set; }
-        public DbSet<BoardColumn> BoardColumns { get; set; }
+        public DbSet<UserTaskBoardRole> UserBoardRoles { get; set; }
+        public DbSet<TaskBoardColumn> BoardColumns { get; set; }
         public DbSet<TaskCard> TaskCards { get; set; }
     }
 }

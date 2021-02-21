@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Tasktower.BoardService.Data.Entities
 {
-    public abstract class AbstractAuditableEntity
+    public abstract class BaseAuditableEntity
     {
-        public int Version { get; set; }
+        public long Version { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         public string ModifiedBy { get; set; }
