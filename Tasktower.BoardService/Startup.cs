@@ -12,7 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Tasktower.Webtools.DependencyInjection;
 using Tasktower.Webtools.Errors.Middleware;
-using Tasktower.BoardService.Config;
+using Tasktower.BoardService.Options;
+using Tasktower.BoardService.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tasktower.BoardService
 {
@@ -28,15 +30,22 @@ namespace Tasktower.BoardService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(AuthStartupConfigRunner.ConfigureAuthentication)
-                .AddJwtBearer(o => AuthStartupConfigRunner.ConfigureJWTBearer(Configuration, o));
-            services.AddAuthorization(AuthStartupConfigRunner.ConfigureAuthorization);
+            services.AddAuthentication(AuthStartupOptionsRunner.ConfigureAuthentication)
+                .AddJwtBearer(o => AuthStartupOptionsRunner.ConfigureJWTBearer(Configuration, o));
+            services.AddAuthorization(AuthStartupOptionsRunner.ConfigureAuthorization);
+            services.AddHttpContextAccessor();
+            services.AddDbContext<BoardContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("SQLServerBoardDB"));
+            });
 
             // Custom scoped services
             services.AddScopedServices();
 
-            services.AddControllers();
-            services.AddSwaggerGen(SwaggerStartupConfigRunner.ConfigureSwaggerGen);
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddSwaggerGen(SwaggerStartupOptionsRunner.ConfigureSwaggerGen);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +55,7 @@ namespace Tasktower.BoardService
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(SwaggerStartupConfigRunner.ConfigureSwaggerUI);
+                app.UseSwaggerUI(SwaggerStartupOptionsRunner.ConfigureSwaggerUI);
             }
 
             app.UseCustonErrorHandler(new ErrorHandleMiddlewareOptions
