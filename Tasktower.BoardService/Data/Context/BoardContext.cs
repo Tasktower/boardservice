@@ -153,24 +153,14 @@ namespace Tasktower.BoardService.Data.Context
                     .IsRequired()
                     .HasDefaultValue("");
 
-                entityTypeBuilder.Property(e => e.TaskBoardId)
-                    .HasColumnName("task_board_id")
-                    .IsRequired();
-
                 entityTypeBuilder.Property(e => e.BoardColumnId)
                     .HasColumnName("board_column_id");
-
-                entityTypeBuilder
-                    .HasOne(e => e.TaskBoard)
-                    .WithMany(t => t.TaskCards)
-                    .HasForeignKey(e => e.TaskBoardId)
-                    .OnDelete(DeleteBehavior.Cascade);
 
                 entityTypeBuilder
                     .HasOne(e => e.BoardColumn)
                     .WithMany(c => c.TaskCards)
                     .HasForeignKey(e => e.BoardColumnId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entityTypeBuilder
                     .HasKey(e => new { e.Id });

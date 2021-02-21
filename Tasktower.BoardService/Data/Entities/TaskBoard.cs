@@ -18,7 +18,5 @@ namespace Tasktower.BoardService.Data.Entities
 
         public ICollection<BoardColumn> BoardColumns { get; set; }
 
-        public ICollection<TaskCard> TaskCards { get; set;  }
-
     }
 }

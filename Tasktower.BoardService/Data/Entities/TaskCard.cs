@@ -10,9 +10,7 @@ namespace Tasktower.BoardService.Data.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string TaskDescriptionMarkup { get; set; }
-        public Guid TaskBoardId { get; set; }
         public Guid BoardColumnId { get; set; }
-        public virtual TaskBoard TaskBoard { get; set; }
         public virtual BoardColumn BoardColumn { get; set; }
     }
 }

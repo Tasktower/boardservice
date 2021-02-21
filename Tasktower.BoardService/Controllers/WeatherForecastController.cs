@@ -52,7 +52,7 @@ namespace Tasktower.BoardService.Controllers
         {
             var list = await _context.TaskBoards
                 .Include(t => t.BoardColumns)
-                .Include(t => t.TaskCards)
+                .Include("BoardColumns.TaskCards")
                 .Include(t => t.UserBoardRole)
                 .ToListAsync();
             return list;
