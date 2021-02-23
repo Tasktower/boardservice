@@ -26,10 +26,9 @@ namespace Tasktower.BoardService.Security
 
         public string UserId => _user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        public string Name => _user?.FindFirst("name")?.Value;
+        public string Name => _user?.Identity?.Name;
 
-        public ICollection<Role> Roles => _user?.FindAll(ClaimTypes.Role)
-            .Select(r => Enum.TryParse(r.Value, out Role role) ? role : Role.UKNOWN)
-            .ToList();
+        public ICollection<string> Roles => _user?.FindAll(ClaimTypes.Role)
+            .Select(r => r.Value).ToHashSet();
     }
 }
