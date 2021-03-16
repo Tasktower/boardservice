@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tasktower.BoardService.Security
 {
-    public class InternalAuthenticationOptions : AuthenticationSchemeOptions
+    public class HeaderAuthenticationOptions : AuthenticationSchemeOptions
     {
         public const string DefaultScheme = "API Key";
         public string Scheme => DefaultScheme;

@@ -12,15 +12,12 @@ using System.Threading.Tasks;
 
 namespace Tasktower.BoardService.Security
 {
-    public class InternalAuthenticationHandler : AuthenticationHandler<InternalAuthenticationOptions>
+    public class HeaderAuthenticationHandler : AuthenticationHandler<HeaderAuthenticationOptions>
     {
         private const string ProblemDetailsContentType = "application/problem+json";
-        private const string UserIdHeaderName = "userid";
-        private const string NameHeaderName = "name";
-        private const string EmailHeaderName = "email";
-        private const string RolesHeaderName = "roles";
-        public InternalAuthenticationHandler(
-            IOptionsMonitor<InternalAuthenticationOptions> options,
+
+        public HeaderAuthenticationHandler(
+            IOptionsMonitor<HeaderAuthenticationOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock) : base(options, logger, encoder, clock)
@@ -30,7 +27,7 @@ namespace Tasktower.BoardService.Security
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
  
-            if (!Request.Headers.TryGetValue(UserIdHeaderName, out var userIdHeaderValues))
+            if (!Request.Headers.TryGetValue(SecurityHeaderNames.UserId, out var userIdHeaderValues))
             {
                 return AuthenticateResult.NoResult();
             }
@@ -40,7 +37,7 @@ namespace Tasktower.BoardService.Security
                 return AuthenticateResult.NoResult();
             }
 
-            if (!Request.Headers.TryGetValue(NameHeaderName, out var namedHeaderValues))
+            if (!Request.Headers.TryGetValue(SecurityHeaderNames.Name, out var namedHeaderValues))
             {
                 return AuthenticateResult.NoResult();
             }
@@ -50,7 +47,7 @@ namespace Tasktower.BoardService.Security
                 return AuthenticateResult.NoResult();
             }
 
-            if (!Request.Headers.TryGetValue(EmailHeaderName, out var emailHeaderValues))
+            if (!Request.Headers.TryGetValue(SecurityHeaderNames.Email, out var emailHeaderValues))
             {
                 return AuthenticateResult.NoResult();
             }
@@ -60,7 +57,7 @@ namespace Tasktower.BoardService.Security
                 return AuthenticateResult.NoResult();
             }
 
-            if (!Request.Headers.TryGetValue(RolesHeaderName, out var roleHeaderValues))
+            if (!Request.Headers.TryGetValue(SecurityHeaderNames.Roles, out var roleHeaderValues))
             {
                 return AuthenticateResult.NoResult();
             }

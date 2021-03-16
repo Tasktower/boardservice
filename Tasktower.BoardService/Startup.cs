@@ -33,7 +33,7 @@ namespace Tasktower.BoardService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(AuthStartupOptionsRunner.ConfigureAuthentication)
-                .AddInternalAuthentication(options => { });
+                .AddHeaderAuthentication(options => { });
             services.AddAuthorization(AuthStartupOptionsRunner.ConfigureAuthorization);
             services.AddHttpContextAccessor();
             services.AddDbContext<BoardDBContext>(options =>

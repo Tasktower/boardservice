@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tasktower.BoardService.Security;
 
 namespace Tasktower.BoardService.Options
 {
@@ -15,30 +16,11 @@ namespace Tasktower.BoardService.Options
     {
         public static void ConfigureSwaggerGen(SwaggerGenOptions c) {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasktower.BoardService", Version = "3.0.0" });
-            //var openidScheme = new OpenApiSecurityScheme()
-            //{
-            //    Name = "openid",
-            //    Description = "Enter JWT Bearer token **_only_**",
-            //    In = ParameterLocation.Header,
-            //    Type = SecuritySchemeType.Http,
-            //    Scheme = "bearer", // must be lower case
-            //    BearerFormat = "JWT",
-            //    Reference = new OpenApiReference
-            //    {
-            //        Id = JwtBearerDefaults.AuthenticationScheme,
-            //        Type = ReferenceType.SecurityScheme
-            //    }
-            //};
-            //c.AddSecurityDefinition(openidScheme.Reference.Id, openidScheme);
-            //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            //    {
-            //        {openidScheme, Array.Empty<string>()}
-            //    });
             var useridScheme = new OpenApiSecurityScheme()
             {
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
-                Name = "userid",
+                Name = SecurityHeaderNames.UserId,
                 Reference = new OpenApiReference
                 {
                     Id = "userid header",
@@ -52,7 +34,7 @@ namespace Tasktower.BoardService.Options
             {
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
-                Name = "name",
+                Name = SecurityHeaderNames.Name,
                 Reference = new OpenApiReference
                 {
                     Id = "name header",
@@ -65,7 +47,7 @@ namespace Tasktower.BoardService.Options
             {
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
-                Name = "email",
+                Name = SecurityHeaderNames.Email,
                 Reference = new OpenApiReference
                 {
                     Id = "email header",
@@ -78,7 +60,7 @@ namespace Tasktower.BoardService.Options
             {
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
-                Name = "roles",
+                Name = SecurityHeaderNames.Roles,
                 Reference = new OpenApiReference
                 {
                     Id = "roles header",

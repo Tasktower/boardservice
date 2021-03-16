@@ -16,14 +16,8 @@ namespace Tasktower.BoardService.Options
     {
         public static void ConfigureAuthentication(AuthenticationOptions options)
         {
-            options.DefaultAuthenticateScheme = InternalAuthenticationOptions.DefaultScheme;
-            options.DefaultChallengeScheme = InternalAuthenticationOptions.DefaultScheme;
-        }
-
-        public static void ConfigureJWTBearer(IConfiguration configuration, JwtBearerOptions o)
-        {
-            o.Authority = configuration["Auth:Authority"];
-            o.Audience = configuration["Auth:Audience"];
+            options.DefaultAuthenticateScheme = HeaderAuthenticationOptions.DefaultScheme;
+            options.DefaultChallengeScheme = HeaderAuthenticationOptions.DefaultScheme;
         }
 
         public static void ConfigureAuthorization(AuthorizationOptions options)

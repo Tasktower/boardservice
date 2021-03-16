@@ -8,9 +8,9 @@ namespace Tasktower.BoardService.Security.Extensions
 {
     public static class AuthenticationBuilderExtensions
     {
-        public static AuthenticationBuilder AddInternalAuthentication(this AuthenticationBuilder authenticationBuilder, Action<InternalAuthenticationOptions> options)
+        public static AuthenticationBuilder AddHeaderAuthentication(this AuthenticationBuilder authenticationBuilder, Action<HeaderAuthenticationOptions> options)
         {
-            return authenticationBuilder.AddScheme<InternalAuthenticationOptions, InternalAuthenticationHandler>(InternalAuthenticationOptions.DefaultScheme, options);
+            return authenticationBuilder.AddScheme<HeaderAuthenticationOptions, HeaderAuthenticationHandler>(HeaderAuthenticationOptions.DefaultScheme, options);
         }
     }
 }
