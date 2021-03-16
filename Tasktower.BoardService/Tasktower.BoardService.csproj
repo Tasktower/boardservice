@@ -21,8 +21,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.7" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Tasktower.Webtools\Tasktower.Webtools\Tasktower.Webtools.csproj" />
-  </ItemGroup>
-
 </Project>

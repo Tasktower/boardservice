@@ -14,25 +14,85 @@ namespace Tasktower.BoardService.Options
     public static class SwaggerStartupOptionsRunner
     {
         public static void ConfigureSwaggerGen(SwaggerGenOptions c) {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasktower.BoardService", Version = "v1" });
-            var openidScheme = new OpenApiSecurityScheme()
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasktower.BoardService", Version = "3.0.0" });
+            //var openidScheme = new OpenApiSecurityScheme()
+            //{
+            //    Name = "openid",
+            //    Description = "Enter JWT Bearer token **_only_**",
+            //    In = ParameterLocation.Header,
+            //    Type = SecuritySchemeType.Http,
+            //    Scheme = "bearer", // must be lower case
+            //    BearerFormat = "JWT",
+            //    Reference = new OpenApiReference
+            //    {
+            //        Id = JwtBearerDefaults.AuthenticationScheme,
+            //        Type = ReferenceType.SecurityScheme
+            //    }
+            //};
+            //c.AddSecurityDefinition(openidScheme.Reference.Id, openidScheme);
+            //c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            //    {
+            //        {openidScheme, Array.Empty<string>()}
+            //    });
+            var useridScheme = new OpenApiSecurityScheme()
             {
-                Name = "openid",
-                Description = "Enter JWT Bearer token **_only_**",
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer", // must be lower case
-                BearerFormat = "JWT",
+                Type = SecuritySchemeType.ApiKey,
+                Name = "userid",
                 Reference = new OpenApiReference
                 {
-                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Id = "userid header",
+                    Type = ReferenceType.SecurityScheme
+                }
+
+            };
+            c.AddSecurityDefinition(useridScheme.Reference.Id, useridScheme);
+
+            var nameScheme = new OpenApiSecurityScheme()
+            {
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Name = "name",
+                Reference = new OpenApiReference
+                {
+                    Id = "name header",
                     Type = ReferenceType.SecurityScheme
                 }
             };
-            c.AddSecurityDefinition(openidScheme.Reference.Id, openidScheme);
+
+            c.AddSecurityDefinition(nameScheme.Reference.Id, nameScheme);
+            var emailScheme = new OpenApiSecurityScheme()
+            {
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Name = "email",
+                Reference = new OpenApiReference
+                {
+                    Id = "email header",
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+
+            c.AddSecurityDefinition(emailScheme.Reference.Id, emailScheme);
+            var rolesScheme = new OpenApiSecurityScheme()
+            {
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Name = "roles",
+                Reference = new OpenApiReference
+                {
+                    Id = "roles header",
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+
+            c.AddSecurityDefinition(rolesScheme.Reference.Id, rolesScheme);
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    {openidScheme, Array.Empty<string>()}
+                    {useridScheme, Array.Empty<string>()},
+                    {nameScheme, Array.Empty<string>()},
+                    {emailScheme, Array.Empty<string>()},
+                    {rolesScheme, Array.Empty<string>()}
                 });
         }
 

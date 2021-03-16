@@ -10,11 +10,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Tasktower.Webtools.DependencyInjection;
-using Tasktower.Webtools.Errors.Middleware;
+using Tasktower.BoardService.Errors.Middleware.Extensions;
+using Tasktower.BoardService.Security.Extensions;
+using Tasktower.BoardService.Errors.Middleware;
 using Tasktower.BoardService.Options;
 using Tasktower.BoardService.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Tasktower.BoardService.Helpers.DependencyInjection;
 
 namespace Tasktower.BoardService
 {
@@ -31,7 +33,7 @@ namespace Tasktower.BoardService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(AuthStartupOptionsRunner.ConfigureAuthentication)
-                .AddJwtBearer(o => AuthStartupOptionsRunner.ConfigureJWTBearer(Configuration, o));
+                .AddInternalAuthentication(options => { });
             services.AddAuthorization(AuthStartupOptionsRunner.ConfigureAuthorization);
             services.AddHttpContextAccessor();
             services.AddDbContext<BoardDBContext>(options =>

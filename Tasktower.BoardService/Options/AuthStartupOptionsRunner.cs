@@ -8,8 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Tasktower.BoardService.Security;
-using Tasktower.Webtools.Security.Auth;
-using Tasktower.Webtools.Security.Auth.Extensions;
+using Tasktower.BoardService.Security.Extensions;
 
 namespace Tasktower.BoardService.Options
 {
@@ -17,8 +16,8 @@ namespace Tasktower.BoardService.Options
     {
         public static void ConfigureAuthentication(AuthenticationOptions options)
         {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = InternalAuthenticationOptions.DefaultScheme;
+            options.DefaultChallengeScheme = InternalAuthenticationOptions.DefaultScheme;
         }
 
         public static void ConfigureJWTBearer(IConfiguration configuration, JwtBearerOptions o)

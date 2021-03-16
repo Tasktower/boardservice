@@ -1,6 +1,4 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-RUN apt install git
-RUN git clone https://github.com/Tasktower/Tasktower.Webtools
 COPY . Tasktower.BoardService/Tasktower.BoardService
 WORKDIR  /Tasktower.BoardService/Tasktower.BoardService
 RUN rm -rf Tasktower.BoardService.Tests

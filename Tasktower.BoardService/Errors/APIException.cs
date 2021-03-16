@@ -4,11 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Tasktower.Webtools.Errors;
 
 namespace Tasktower.BoardService.Errors
 {
-    public class APIException : WebAppException
+    public class APIException : Exception
     {
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum Code
@@ -44,6 +43,12 @@ namespace Tasktower.BoardService.Errors
                 _ => new APIException(Code.INTERNAL_SERVER_ERROR, HttpStatusCode.InternalServerError, "Something went wrong", args),
             };
         }
+
+        public IEnumerable<APIException> MultipleErrors { get; protected set; } = null;
+
+        public HttpStatusCode StatusCode { get; protected set; }
+
+        public string ErrorCode { get; protected set; }
 
         private APIException(Code code, HttpStatusCode statusCode, string messageFormat, params string[] args)
             : base(string.Format(messageFormat, args))

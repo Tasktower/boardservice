@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tasktower.BoardService.Data.DAL;
 using Tasktower.BoardService.Dto;
-using Tasktower.Webtools.Paging;
+using Tasktower.BoardService.Helpers.Paging;
 
 namespace Tasktower.BoardService.BLL
 {
