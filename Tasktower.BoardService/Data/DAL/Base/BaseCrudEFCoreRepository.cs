@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Tasktower.BoardService.Data.DAL.BaseDAL
+namespace Tasktower.BoardService.Data.DAL.Base
 {
     public abstract class BaseCrudEFCoreRepository<TEntity, TContext> : ICrudRepository<TEntity>
         where TEntity : class

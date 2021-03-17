@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tasktower.BoardService.Dto;
-using Tasktower.BoardService.Helpers.Paging;
+using Tasktower.BoardService.Tools.Paging;
 
 namespace Tasktower.BoardService.BLL
 {

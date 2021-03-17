@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Tasktower.BoardService.Helpers.JsonTools
+namespace Tasktower.BoardService.Tools.JsonTools
 {
     public static class JsonSerializerUtils
     {

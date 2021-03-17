@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Tasktower.BoardService.Helpers.DependencyInjection
+namespace Tasktower.BoardService.Tools.DependencyInjection.Extensions
 {
     public static class CustomServiceInjectExtension
     {

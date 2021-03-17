@@ -16,7 +16,7 @@ using Tasktower.BoardService.Errors.Middleware;
 using Tasktower.BoardService.Options;
 using Tasktower.BoardService.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using Tasktower.BoardService.Helpers.DependencyInjection;
+using Tasktower.BoardService.Tools.DependencyInjection.Extensions;
 
 namespace Tasktower.BoardService
 {

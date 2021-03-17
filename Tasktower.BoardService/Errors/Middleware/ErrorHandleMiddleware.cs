@@ -65,7 +65,7 @@ namespace Tasktower.BoardService.Errors.Middleware
                 errorCode,
                 multipleErrors,
                 status = statusCode
-            }, Helpers.JsonTools.JsonSerializerUtils.CustomSerializerOptions()); ;
+            }, Tools.JsonTools.JsonSerializerUtils.CustomSerializerOptions()); ;
 
             if (_options.UseStackTrace)
             {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Tasktower.BoardService.Data.DAL.BaseDAL
+namespace Tasktower.BoardService.Data.DAL.Base
 {
     public interface ICrudRepository<TEntity> where TEntity : class
     {
