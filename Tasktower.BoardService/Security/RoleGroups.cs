@@ -9,12 +9,12 @@ namespace Tasktower.BoardService.Security
     {
         public static IEnumerable<string> AdminGroup()
         {
-            return AccessorUtils.RolesToAccessorGroup(Roles.ADMIN);
+            return new[] {Roles.ADMIN};
         }
 
         public static IEnumerable<string> ModeratorGroup()
         {
-            return AccessorUtils.RolesToAccessorGroup(Roles.MODERATOR);
+            return new[] {Roles.MODERATOR};
         }
     }
 }

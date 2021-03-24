@@ -70,21 +70,6 @@ namespace Tasktower.BoardService.Controllers
             return Ok();
         }
 
-        [HttpGet("headers")]
-        public async Task<object> GetUserBoardRoles(
-            [FromHeader(Name = "userid")] string userid,
-            [FromHeader(Name = "name")] string name,
-            [FromHeader(Name = "email")] string email,
-            [FromHeader(Name = "roles")] string[] roles)
-        {
-            return new {
-                userid = userid,
-                name = name,
-                email = email,
-                roles = roles
-            };
-        }
-
         [HttpGet("userboardroles")]
         public async Task<UserTaskBoardRole> GetUserBoardRoles(
             [FromQuery(Name ="taskBoardId")] Guid taskBoardId, 
@@ -101,7 +86,7 @@ namespace Tasktower.BoardService.Controllers
             return userContext;
         }
 
-        [Authorize(Policy = Policies.PolicyNameCanModerate)]
+        [Authorize(Policy = Policies.PolicyNames.CanModerate)]
         [HttpGet("moderator")]
         public object GetData2()
         {
@@ -109,7 +94,7 @@ namespace Tasktower.BoardService.Controllers
             return userContext;
         }
 
-        [Authorize(Policy = Policies.PolicyNameAdministrator)]
+        [Authorize(Policy = Policies.PolicyNames.Admin)]
         [HttpGet("adminonly")]
         public object GetData3()
         {

@@ -7,16 +7,29 @@ namespace Tasktower.BoardService.Security
 {
     public static class Policies
     {
-        public const string PolicyNameAdministrator = "Administrator";
-        public static readonly Policy AdministratorPolicy = new Policy(PolicyNameAdministrator, policyBuilder => {
-            policyBuilder.RequireClaim(System.Security.Claims.ClaimTypes.Role, AccessorUtils.MergeAccessGroups(RoleGroups.AdminGroup()));
+        public static class PolicyNames
+        {
+            public const string Admin = "Admin";
+            public const string CanModerate = "CanModerate";
+        }
+
+        public static readonly Policy AdministratorPolicy = new Policy(PolicyNames.Admin, policyBuilder => {
+            policyBuilder.RequireClaim(System.Security.Claims.ClaimTypes.Role, 
+                new []
+                    {
+                        RoleGroups.AdminGroup()
+                    }
+                    .SelectMany(g => g).Distinct());
         });
 
-        public const string PolicyNameCanModerate = "CanModerate";
-        public static readonly Policy CanModeratePolicy = new Policy(PolicyNameCanModerate, policyBuilder => {
-            policyBuilder.RequireClaim(System.Security.Claims.ClaimTypes.Role, AccessorUtils.MergeAccessGroups(
-                RoleGroups.AdminGroup(), 
-                RoleGroups.ModeratorGroup()));
+        public static readonly Policy CanModeratePolicy = new Policy(PolicyNames.CanModerate, policyBuilder => {
+            policyBuilder.RequireClaim(System.Security.Claims.ClaimTypes.Role, 
+                new []
+                    {
+                        RoleGroups.AdminGroup(), 
+                        RoleGroups.ModeratorGroup()
+                    }
+                    .SelectMany(g => g).Distinct());
         });
     }
 }
