@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,8 +15,9 @@ using Tasktower.BoardService.Errors.Middleware.Extensions;
 using Tasktower.BoardService.Security.Extensions;
 using Tasktower.BoardService.Errors.Middleware;
 using Tasktower.BoardService.Options;
-using Tasktower.BoardService.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
+using Tasktower.BoardService.DataAccess.Context;
 using Tasktower.BoardService.Tools.DependencyInjection.Extensions;
 
 namespace Tasktower.BoardService
@@ -46,7 +48,10 @@ namespace Tasktower.BoardService
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                {
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddSwaggerGen(SwaggerStartupOptionsRunner.ConfigureSwaggerGen);
         }
 

@@ -45,7 +45,7 @@ namespace Tasktower.BoardService.Errors.Middleware
             IEnumerable<object> multipleErrors = null;
 
             // Specify different custom exceptions here
-            if (ex is APIException webEx)
+            if (ex is ApiException webEx)
             {
                 statusCode = webEx.StatusCode;
                 errorCode = webEx.ErrorCode;

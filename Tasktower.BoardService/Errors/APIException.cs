@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Tasktower.BoardService.Errors
 {
-    public class APIException : Exception
+    public class ApiException : Exception
     {
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum Code
         {
             INTERNAL_SERVER_ERROR,
@@ -22,35 +21,36 @@ namespace Tasktower.BoardService.Errors
             FORBIDDEN
         }
 
-        public static APIException CreateFromMultiple(IEnumerable<APIException> multipleExceptions)
+        public static ApiException CreateFromMultiple(IEnumerable<ApiException> multipleExceptions)
         {
             var apiEx = Create(Code.MULTIPLE_EXCEPTIONS_FOUND);
             apiEx.MultipleErrors = multipleExceptions;
             return apiEx;
         }
 
-        public static APIException Create(Code code, params string[] args)
+        public static ApiException Create(Code code, params string[] args)
         {
             return code switch
             {
-                Code.ACCOUNT_ALREADY_EXISTS => new APIException(code, HttpStatusCode.BadRequest, "Account already exists", args),
-                Code.ACCOUNT_NOT_FOUND => new APIException(code, HttpStatusCode.BadRequest, "Account not found", args),
-                Code.ACCOUNT_FAILED_TO_CREATE => new APIException(code, HttpStatusCode.BadRequest, "Account failed to create", args),
-                Code.MULTIPLE_EXCEPTIONS_FOUND => new APIException(code, HttpStatusCode.BadRequest, "Multiple exceptions found", args),
-                Code.UNAUTHORIZED => new APIException(code, HttpStatusCode.Unauthorized, "Unauthorized", args),
-                Code.FORBIDDEN => new APIException(code, HttpStatusCode.Forbidden, "Forbidden", args),
-                Code.INTERNAL_SERVER_ERROR => new APIException(code, HttpStatusCode.InternalServerError, "Something went wrong", args),
-                _ => new APIException(Code.INTERNAL_SERVER_ERROR, HttpStatusCode.InternalServerError, "Something went wrong", args),
+                Code.ACCOUNT_ALREADY_EXISTS => new ApiException(code, HttpStatusCode.BadRequest, "Account already exists", args),
+                Code.ACCOUNT_NOT_FOUND => new ApiException(code, HttpStatusCode.BadRequest, "Account not found", args),
+                Code.ACCOUNT_FAILED_TO_CREATE => new ApiException(code, HttpStatusCode.BadRequest, "Account failed to create", args),
+                Code.MULTIPLE_EXCEPTIONS_FOUND => new ApiException(code, HttpStatusCode.BadRequest, "Multiple exceptions found", args),
+                Code.UNAUTHORIZED => new ApiException(code, HttpStatusCode.Unauthorized, "Unauthorized", args),
+                Code.FORBIDDEN => new ApiException(code, HttpStatusCode.Forbidden, "Forbidden", args),
+                Code.INTERNAL_SERVER_ERROR => new ApiException(code, HttpStatusCode.InternalServerError, "Something went wrong", args),
+                _ => new ApiException(Code.INTERNAL_SERVER_ERROR, HttpStatusCode.InternalServerError, "Something went wrong", args),
             };
         }
 
-        public IEnumerable<APIException> MultipleErrors { get; protected set; } = null;
+        public IEnumerable<ApiException> MultipleErrors { get; protected set; } = null;
 
-        public HttpStatusCode StatusCode { get; protected set; }
+        public HttpStatusCode StatusCode { get; private set; }
 
-        public string ErrorCode { get; protected set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public string ErrorCode { get; private set; }
 
-        private APIException(Code code, HttpStatusCode statusCode, string messageFormat, params string[] args)
+        private ApiException(Code code, HttpStatusCode statusCode, string messageFormat, params string[] args)
             : base(string.Format(messageFormat, args))
         {
             ErrorCode = code.ToString();

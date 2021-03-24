@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-using Tasktower.BoardService.Data.Context;
-using Tasktower.BoardService.Data.DAL;
-using Tasktower.BoardService.Data.Entities;
+using Tasktower.BoardService.DataAccess.Context;
+using Tasktower.BoardService.DataAccess.Entities;
+using Tasktower.BoardService.DataAccess.Repositories;
 using Tasktower.BoardService.Security;
 
 namespace Tasktower.BoardService.Controllers
@@ -39,7 +39,7 @@ namespace Tasktower.BoardService.Controllers
             var list = await _context.TaskBoards
                 .Include(t => t.TaskBoardColumns)
                 .Include("TaskBoardColumns.TaskCards")
-                .Include(t => t.UserBoardRole)
+                .Include(t => t.UserBoardRoles)
                 .ToListAsync();
             return list;
         }
@@ -75,7 +75,7 @@ namespace Tasktower.BoardService.Controllers
             [FromQuery(Name ="taskBoardId")] Guid taskBoardId, 
             [FromQuery(Name = "userid")] string userid)
         {
-            return await _context.UserBoardRoles.FindAsync(taskBoardId, userid);
+            return await _unitOfWork.UserTaskBoardRoleRepository.GetById(taskBoardId, userid);
         }
 
         [Authorize]
