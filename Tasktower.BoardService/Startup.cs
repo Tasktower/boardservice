@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,12 +37,13 @@ namespace Tasktower.BoardService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = HeaderAuthenticationOptions.DefaultScheme;
-                    options.DefaultChallengeScheme = HeaderAuthenticationOptions.DefaultScheme;
-                })
-                .AddHeaderAuthentication(options => { });
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o => {
+                o.Authority = Configuration["Auth:Authority"];
+                o.Audience = Configuration["Auth:Audience"];
+            });
             
             services.AddAuthorization(options =>
             {
@@ -72,69 +74,33 @@ namespace Tasktower.BoardService
                 });
             
             services.AddSwaggerGen(c =>
-            {
+            { 
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasktower.BoardService", Version = "3.0.0" });
-            var useridScheme = new OpenApiSecurityScheme()
-            {
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Name = SecurityHeaderNames.UserId,
-                Reference = new OpenApiReference
-                {
-                    Id = "userid header",
-                    Type = ReferenceType.SecurityScheme
-                }
 
-            };
-            c.AddSecurityDefinition(useridScheme.Reference.Id, useridScheme);
 
-            var nameScheme = new OpenApiSecurityScheme()
-            {
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Name = SecurityHeaderNames.Name,
-                Reference = new OpenApiReference
+                var bearerSchema = new OpenApiSecurityScheme()
                 {
-                    Id = "name header",
-                    Type = ReferenceType.SecurityScheme
-                }
-            };
-
-            c.AddSecurityDefinition(nameScheme.Reference.Id, nameScheme);
-            var emailScheme = new OpenApiSecurityScheme()
-            {
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Name = SecurityHeaderNames.Email,
-                Reference = new OpenApiReference
-                {
-                    Id = "email header",
-                    Type = ReferenceType.SecurityScheme
-                }
-            };
-
-            c.AddSecurityDefinition(emailScheme.Reference.Id, emailScheme);
-            var rolesScheme = new OpenApiSecurityScheme()
-            {
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Name = SecurityHeaderNames.Roles,
-                Reference = new OpenApiReference
-                {
-                    Id = "roles header",
-                    Type = ReferenceType.SecurityScheme
-                }
-            };
-
-            c.AddSecurityDefinition(rolesScheme.Reference.Id, rolesScheme);
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {useridScheme, Array.Empty<string>()},
-                    {nameScheme, Array.Empty<string>()},
-                    {emailScheme, Array.Empty<string>()},
-                    {rolesScheme, Array.Empty<string>()}
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT",  
+                    
+                    Reference = new OpenApiReference
+                    {
+                        Id = "Bearer Token",
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                c.AddSecurityDefinition(bearerSchema.Reference.Id, bearerSchema);
+                
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {bearerSchema, Array.Empty<string>()}
+                    });
                 });
-            });
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -146,7 +112,10 @@ namespace Tasktower.BoardService
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tasktower.BoardService v1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", 
+                        "Tasktower.BoardService Local v1");
+                    c.SwaggerEndpoint("/api/boardservice/swagger/v1/swagger.json", 
+                        "Tasktower.BoardService Deploy v1");
                 });
             }
 
