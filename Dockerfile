@@ -1,5 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-COPY . Tasktower.BoardService/Tasktower.BoardService
+COPY . Tasktower.BoardService
 WORKDIR  /Tasktower.BoardService/Tasktower.BoardService
 RUN rm -rf Tasktower.BoardService.Tests
 RUN dotnet restore "Tasktower.BoardService.csproj"
