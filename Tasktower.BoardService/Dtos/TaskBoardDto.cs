@@ -9,25 +9,25 @@ namespace Tasktower.BoardService.Dtos
     public class TaskBoardDto
     {
         public Guid Id { get; set; }
-
         public string Title { get; set; }
-
         public string Description { get; set; }
+        public List<string> Columns { get; set; }
+        
+        public Guid ProjectId { get; set; }
+        public virtual ProjectDto Project { get; set; }
+        public ICollection<TaskDto> Tasks { get; set; }
 
-        public ICollection<UserTaskBoardRoleDto> UserBoardRole { get; set; }
-
-        public ICollection<UserTaskBoardRoleDto> TaskBoardColumns { get; set; }
-
-        public static TaskBoardDto FromTaskCardDto(TaskBoard taskBoard,
+        public static TaskBoardDto FromTaskBoard(TaskBoard taskBoard,
             params Expression<Func<TaskBoardDto, object>>[] members)
         {
-            var config = TypeAdapterConfig<TaskBoard, TaskBoardDto>.NewConfig()
+            var config = TypeAdapterConfig<Project, TaskBoardDto>.NewConfig()
                 .Ignore(members)
+                .PreserveReference(true)
                 .Config;
             return taskBoard.Adapt<TaskBoardDto>(config);
         }
 
-        public TaskBoard ToTaskCard(params Expression<Func<TaskBoard, object>>[] members)
+        public TaskBoard ToTaskBoard(params Expression<Func<TaskBoard, object>>[] members)
         {
             var config = TypeAdapterConfig<TaskBoardDto, TaskBoard>.NewConfig()
                 .Ignore(members)

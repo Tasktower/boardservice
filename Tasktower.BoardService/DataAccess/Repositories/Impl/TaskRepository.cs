@@ -1,4 +1,5 @@
-﻿using Tasktower.BoardService.DataAccess.Context;
+﻿using System;
+using Tasktower.BoardService.DataAccess.Context;
 using Tasktower.BoardService.DataAccess.Entities;
 using Tasktower.BoardService.DataAccess.Repositories.Base;
 using Tasktower.BoardService.Tools.DependencyInjection;
@@ -6,8 +7,10 @@ using Tasktower.BoardService.Tools.DependencyInjection;
 namespace Tasktower.BoardService.DataAccess.Repositories.Impl
 {
     [ScopedService]
-    public class TaskBoardColumnRepository : CrudRepositoryImpl<TaskBoardColumn, BoardDBContext>, ITaskBoardColumnRepository
+    public class TaskRepository : 
+        CrudRepositoryImpl<Guid, Task, BoardDBContext>, 
+        ITaskRepository
     {
-        public TaskBoardColumnRepository(BoardDBContext context) : base(context) { }
+        public TaskRepository(BoardDBContext context) : base(context) { }
     }
 }

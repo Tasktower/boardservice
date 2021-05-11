@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Tasktower.BoardService.DataAccess.Context;
 using Tasktower.BoardService.DataAccess.Entities;
 using Tasktower.BoardService.DataAccess.Repositories;
+using Tasktower.BoardService.Dtos;
 using Tasktower.BoardService.Security;
 
 namespace Tasktower.BoardService.Controllers
@@ -33,49 +34,22 @@ namespace Tasktower.BoardService.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("boards")]
-        public async Task<IEnumerable<TaskBoard>> GetBoards()
+        [HttpGet("project")]
+        public async Task<IEnumerable<Project>> GetBoards()
         {
-            var list = await _context.TaskBoards
-                .Include(t => t.TaskBoardColumns)
-                .Include("TaskBoardColumns.TaskCards")
-                .Include(t => t.UserBoardRoles)
+            var list = await _context.Projects
+                .Include(t => t.TaskBoards)
+                .Include("TaskBoards.Tasks")
+                .Include(t => t.ProjectRoles)
                 .ToListAsync();
             return list;
         }
 
-        [HttpPost("insertColumn")]
-        public async Task<TaskBoardColumn> InsertColumn(
-            [FromBody]TaskBoardColumn boardColumn)
+        [HttpGet("projectRoles")]
+        public async Task<ProjectRole> GetUserBoardRoles(
+            [FromQuery(Name ="id")] Guid id)
         {
-            await _unitOfWork.TaskBoardColumnRepository.Insert(boardColumn);
-            await _unitOfWork.SaveChanges();
-            return boardColumn;
-        }
-
-        [HttpPost("updateColumn")]
-        public async Task<TaskBoardColumn> UpdateColumn(
-            [FromBody] TaskBoardColumn boardColumn)
-        {
-            await _unitOfWork.TaskBoardColumnRepository.Update(boardColumn);
-            await _unitOfWork.SaveChanges();
-            return boardColumn;
-        }
-
-        [HttpDelete("removeColumn/{id}")]
-        public async Task<ActionResult> RemoveColumn(Guid id)
-        {
-            await _unitOfWork.TaskBoardColumnRepository.Delete(id);
-            await _unitOfWork.SaveChanges();
-            return Ok();
-        }
-
-        [HttpGet("userboardroles")]
-        public async Task<UserTaskBoardRole> GetUserBoardRoles(
-            [FromQuery(Name ="taskBoardId")] Guid taskBoardId, 
-            [FromQuery(Name = "userid")] string userid)
-        {
-            return await _unitOfWork.UserTaskBoardRoleRepository.GetById(taskBoardId, userid);
+            return await _unitOfWork.ProjectRoleRepository.GetById(id);
         }
 
         [Authorize]

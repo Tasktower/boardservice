@@ -4,7 +4,7 @@ using Tasktower.BoardService.DataAccess.Repositories.Base;
 
 namespace Tasktower.BoardService.DataAccess.Repositories
 {
-    public interface ITaskBoardRepository : ICrudRepository<Guid, TaskBoard>
+    public interface IProjectRepository : ICrudRepository<Guid, Project>
     {
     }
 }

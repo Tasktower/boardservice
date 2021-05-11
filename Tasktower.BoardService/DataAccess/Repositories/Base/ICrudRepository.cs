@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Tasktower.BoardService.DataAccess.Repositories.Base
 {
-    public interface ICrudRepository<TEntity> where TEntity : class
+    public interface ICrudRepository<TIdType, TEntity> where TEntity : class
     {
         public ValueTask<IEnumerable<TEntity>> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");
 
-        public ValueTask<TEntity> GetById(params object[] idValues);
+        public ValueTask<TEntity> GetById(TIdType id);
         public ValueTask Insert(TEntity entity);
-        public ValueTask Delete(params object[] idValues);
+        public ValueTask Delete(TIdType idValues);
         public ValueTask Delete(TEntity entityToDelete);
         public ValueTask Update(TEntity entityToUpdate);
     }

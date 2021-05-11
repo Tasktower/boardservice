@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tasktower.BoardService.DataAccess.Repositories.Base
 {
-    public abstract class CrudRepositoryImpl<TEntity, TContext> : ICrudRepository<TEntity>
+    public abstract class CrudRepositoryImpl<TIdType, TEntity, TContext> : ICrudRepository<TIdType, TEntity>
         where TEntity : class
         where TContext : DbContext
     {
@@ -48,7 +48,7 @@ namespace Tasktower.BoardService.DataAccess.Repositories.Base
             }
         }
 
-        public virtual async ValueTask<TEntity> GetById(params object[] idValues)
+        public virtual async ValueTask<TEntity> GetById(TIdType idValues)
         {
             return await dbSet.FindAsync(idValues);
         }
@@ -58,7 +58,7 @@ namespace Tasktower.BoardService.DataAccess.Repositories.Base
             await dbSet.AddAsync(entity);
         }
 
-        public virtual async ValueTask Delete(params object[] idValues)
+        public virtual async ValueTask Delete(TIdType idValues)
         {
             TEntity entityToDelete = await dbSet.FindAsync(idValues);
             await Delete(entityToDelete);

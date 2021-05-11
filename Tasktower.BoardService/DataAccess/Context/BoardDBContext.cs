@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Tasktower.BoardService.DataAccess.Entities;
 using Tasktower.BoardService.Security;
+using Task = Tasktower.BoardService.DataAccess.Entities.Task;
 
 namespace Tasktower.BoardService.DataAccess.Context
 {
@@ -19,10 +20,10 @@ namespace Tasktower.BoardService.DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Project>(Project.BuildEntity);
+            modelBuilder.Entity<ProjectRole>(ProjectRole.BuildEntity);
             modelBuilder.Entity<TaskBoard>(TaskBoard.BuildEntity);
-            modelBuilder.Entity<UserTaskBoardRole>(UserTaskBoardRole.BuildEntity);
-            modelBuilder.Entity<TaskBoardColumn>(TaskBoardColumn.BuildEntity);
-            modelBuilder.Entity<TaskCard>(TaskCard.BuildEntity);
+            modelBuilder.Entity<Task>(Task.BuildEntity);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -48,14 +49,14 @@ namespace Tasktower.BoardService.DataAccess.Context
                 }
                 ((BaseAuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
                 ((BaseAuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name ?? "ANONYMOUS";
-                ((BaseAuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                // ((BaseAuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
             }
             return await base.SaveChangesAsync(cancellationToken);
         }
 
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectRole> ProjectRoles { get; set; }
         public DbSet<TaskBoard> TaskBoards { get; set; }
-        public DbSet<UserTaskBoardRole> UserBoardRoles { get; set; }
-        public DbSet<TaskBoardColumn> BoardColumns { get; set; }
-        public DbSet<TaskCard> TaskCards { get; set; }
+        public DbSet<Task> Tasks { get; set; }
     }
 }

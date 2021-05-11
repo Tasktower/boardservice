@@ -6,7 +6,7 @@ namespace Tasktower.BoardService.BusinessLogic
 {
     public interface IBoardService
     {
-        Page<TaskBoardDto> GetTaskBoards(String userId, String searchTitle);
+        Page<ProjectDto> GetTaskBoards(String userId, String searchTitle);
 
     }
 }

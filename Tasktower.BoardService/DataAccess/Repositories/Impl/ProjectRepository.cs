@@ -7,10 +7,10 @@ using Tasktower.BoardService.Tools.DependencyInjection;
 namespace Tasktower.BoardService.DataAccess.Repositories.Impl
 {
     [ScopedService]
-    public class TaskBoardRepository : 
-        CrudRepositoryImpl<Guid, TaskBoard, BoardDBContext>, 
-        ITaskBoardRepository
+    public class ProjectRepository : 
+        CrudRepositoryImpl<Guid, Project, BoardDBContext>, 
+        IProjectRepository
     {
-        public TaskBoardRepository(BoardDBContext context) : base(context) { }
+        public ProjectRepository(BoardDBContext context) : base(context) { }
     }
 }

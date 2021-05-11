@@ -15,7 +15,7 @@ namespace Tasktower.BoardService.BusinessLogic
             _unitOfWork = unitOfWork;
         }
 
-        public Page<TaskBoardDto> GetTaskBoards(string userId, string searchTitle)
+        public Page<ProjectDto> GetTaskBoards(string userId, string searchTitle)
         {
             // Todo: impliment
             throw new NotImplementedException();

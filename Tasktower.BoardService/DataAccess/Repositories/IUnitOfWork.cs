@@ -6,12 +6,12 @@ namespace Tasktower.BoardService.DataAccess.Repositories
     {
         public ValueTask SaveChanges();
 
-        public ITaskBoardRepository TaskBoardRepository { get; }
+        public IProjectRepository ProjectRepository { get; }
         
-        public ITaskBoardColumnRepository TaskBoardColumnRepository { get;  }
+        public ITaskBoardRepository TaskBoardRepository { get;  }
 
-        public ITaskCardRepository TaskCardRepository { get; }
+        public ITaskRepository TaskRepository { get; }
 
-        public IUserTaskBoardRoleRepository UserTaskBoardRoleRepository { get; }
+        public IProjectRoleRepository ProjectRoleRepository { get; }
     }
 }

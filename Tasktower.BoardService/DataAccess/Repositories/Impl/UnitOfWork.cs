@@ -7,28 +7,29 @@ namespace Tasktower.BoardService.DataAccess.Repositories.Impl
     [ScopedService]
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly BoardDBContext _boardDBContext;
-        public UnitOfWork(BoardDBContext boardDBContext,
+        private readonly BoardDBContext _boardDbContext;
+        
+        public UnitOfWork(BoardDBContext boardDbContext,
+            IProjectRepository projectRepository,
             ITaskBoardRepository taskBoardRepository,
-            ITaskBoardColumnRepository taskBoardColumnRepository,
-            ITaskCardRepository taskCardRepository,
-            IUserTaskBoardRoleRepository userTaskBoardRoleRepository) 
+            ITaskRepository taskRepository,
+            Repositories.IProjectRoleRepository projectRoleRepository) 
         {
-            _boardDBContext = boardDBContext;
+            _boardDbContext = boardDbContext;
+            ProjectRepository = projectRepository;
             TaskBoardRepository = taskBoardRepository;
-            TaskBoardColumnRepository = taskBoardColumnRepository;
-            TaskCardRepository = taskCardRepository;
-            UserTaskBoardRoleRepository = userTaskBoardRoleRepository;
+            TaskRepository = taskRepository;
+            ProjectRoleRepository = projectRoleRepository;
         }
 
         public async ValueTask SaveChanges()
         {
-            await _boardDBContext.SaveChangesAsync();
+            await _boardDbContext.SaveChangesAsync();
         }
 
-        public ITaskBoardRepository TaskBoardRepository { get;  }
-        public ITaskBoardColumnRepository TaskBoardColumnRepository { get; }
-        public ITaskCardRepository TaskCardRepository { get; }
-        public IUserTaskBoardRoleRepository UserTaskBoardRoleRepository { get; }
+        public IProjectRepository ProjectRepository { get;  }
+        public ITaskBoardRepository TaskBoardRepository { get; }
+        public ITaskRepository TaskRepository { get; }
+        public Repositories.IProjectRoleRepository ProjectRoleRepository { get; }
     }
 }
