@@ -49,7 +49,7 @@ namespace Tasktower.BoardService.DataAccess.Context
                 }
                 ((BaseAuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
                 ((BaseAuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name ?? "ANONYMOUS";
-                // ((BaseAuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                ((BaseAuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
             }
             return await base.SaveChangesAsync(cancellationToken);
         }

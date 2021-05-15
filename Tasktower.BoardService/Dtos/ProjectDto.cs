@@ -6,7 +6,7 @@ using Tasktower.BoardService.DataAccess.Entities;
 
 namespace Tasktower.BoardService.Dtos
 {
-    public class ProjectDto
+    public class ProjectDto : AuditableDto
     {
         public Guid Id { get; set; }
 
