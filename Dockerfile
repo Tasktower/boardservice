@@ -11,4 +11,4 @@ EXPOSE 443
 EXPOSE 80
 WORKDIR /App
 COPY --from=build /App ./
-ENTRYPOINT ["dotnet", "Tasktower.BoardService.dll"]
+ENTRYPOINT ["dotnet", "Tasktower.ProjectService.dll"]

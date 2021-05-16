@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Tasktower.BoardService": {
+    "Tasktower.ProjectService": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
