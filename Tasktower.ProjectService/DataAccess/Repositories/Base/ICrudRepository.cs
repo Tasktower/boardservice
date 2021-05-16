@@ -15,6 +15,8 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Base
 
         public ValueTask<TEntity> GetById(TIdType id);
         public ValueTask Insert(TEntity entity);
+
+        public ValueTask InsertMany(IEnumerable<TEntity> entities);
         public ValueTask Delete(TIdType idValues);
         public ValueTask Delete(TEntity entityToDelete);
         public ValueTask Update(TEntity entityToUpdate);

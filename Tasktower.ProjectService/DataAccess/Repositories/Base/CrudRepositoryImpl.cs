@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Tasktower.ProjectService.DataAccess.Entities;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories.Base
 {
@@ -56,6 +57,11 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Base
         public virtual async ValueTask Insert(TEntity entity)
         {
             await dbSet.AddAsync(entity);
+        }
+        
+        public virtual async ValueTask InsertMany(IEnumerable<TEntity> entities)
+        {
+            await dbSet.AddRangeAsync(entities.ToArray());
         }
 
         public virtual async ValueTask Delete(TIdType idValues)
