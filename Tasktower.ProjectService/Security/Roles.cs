@@ -11,5 +11,15 @@ namespace Tasktower.ProjectService.Security
     {
         public const string ADMIN = "ADMIN";
         public const string MODERATOR = "MODERATOR";
+        
+        public static IEnumerable<string> AdminGroup()
+        {
+            return new[] {ADMIN};
+        }
+
+        public static IEnumerable<string> ModeratorGroup()
+        {
+            return new[] {MODERATOR};
+        }
     }
 }

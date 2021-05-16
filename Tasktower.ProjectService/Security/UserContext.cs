@@ -10,14 +10,15 @@ namespace Tasktower.ProjectService.Security
     public class UserContext
     {
         private readonly ClaimsPrincipal _user;
-        public UserContext(HttpContext context)
+
+        public static UserContext FromHttpContext(HttpContext context)
         {
-            _user = context?.User;
+            return new UserContext(context);
         }
 
-        public UserContext(ClaimsPrincipal user)
+        private UserContext(HttpContext context)
         {
-            _user = user;
+            _user = context?.User;
         }
 
         public bool IsAuthenticated => _user?.Identity?.IsAuthenticated ?? false;

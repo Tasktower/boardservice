@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Tasktower.ProjectService.DataAccess.Context;
-using Tasktower.ProjectService.Tools.DependencyInjection;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
 {
-    [ScopedService]
     public class UnitOfWork : IUnitOfWork
     {
         private readonly BoardDBContext _boardDbContext;

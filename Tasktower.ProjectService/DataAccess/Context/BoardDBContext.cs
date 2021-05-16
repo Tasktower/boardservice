@@ -34,7 +34,7 @@ namespace Tasktower.ProjectService.DataAccess.Context
 
             foreach (var entityEntry in entries)
             {
-                UserContext userContext = new UserContext(_httpContextAccessor?.HttpContext);
+                UserContext userContext = UserContext.FromHttpContext(_httpContextAccessor?.HttpContext);
                 if (entityEntry.State == EntityState.Added)
                 {
                     ((Entities.BaseAuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;

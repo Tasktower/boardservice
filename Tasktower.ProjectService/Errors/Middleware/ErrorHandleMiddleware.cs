@@ -37,7 +37,7 @@ namespace Tasktower.ProjectService.Errors.Middleware
             }
         }
 
-        private Task HandleException(HttpContext context, Exception ex)
+        private Task HandleException(HttpContext context, Exception exception)
         {
             string errorCode = null;
             string message;
@@ -45,23 +45,21 @@ namespace Tasktower.ProjectService.Errors.Middleware
             IEnumerable<object> multipleErrors = null;
 
             // Specify different custom exceptions here
-            if (ex is ApiException webEx)
+            if (exception is AppException appException)
             {
-                statusCode = webEx.StatusCode;
-                errorCode = webEx.ErrorCode;
-                message = webEx.Message;
-                multipleErrors = webEx.MultipleErrors?
-                    .Select(x => new { error = x.Message, code = x.ErrorCode });
+                statusCode = appException.StatusCode;
+                errorCode = appException.ErrorCode.ToString();
+                message = appException.Message;
+                multipleErrors = appException.MultipleErrors?
+                    .Select(x => new { error = x.Message, code = x.ErrorCode.ToString() });
             }
             else
             {
-                message = _options.ShowAllErrorMessages ? ex.Message : "Internal server error";
+                message = _options.ShowAllErrorMessages ? exception.Message : "Internal server error";
             }
             string result = JsonSerializer.Serialize(new
             {
                 error = message,
-                stackTrace = _options.UseStackTrace ?
-                    ex.StackTrace.Split(Environment.NewLine).Select(x => x.Trim()) : null,
                 errorCode,
                 multipleErrors,
                 status = statusCode
@@ -69,12 +67,12 @@ namespace Tasktower.ProjectService.Errors.Middleware
 
             if (_options.UseStackTrace)
             {
-                _logger.LogError(
-                    $"Exception: {ex.GetType().FullName ?? ex.GetType().Name}{Environment.NewLine}" +
-                    $"Message: {ex.Message}{Environment.NewLine}" +
-                    ((errorCode is not null) ? $"Error Code: {errorCode?.ToString() ?? null}{Environment.NewLine}" : "") +
-                    $"Stacktrace: {Environment.NewLine}" +
-                    $"{ex.StackTrace}");
+                _logger.LogTrace("Exception: {0}{1}Message: {2}{3}Error Code: {4}{5}Stacktrace: {6}{7}",
+                    exception.GetType().FullName ?? exception.GetType().Name, Environment.NewLine,
+                    exception.Message, Environment.NewLine,
+                    errorCode ?? "", Environment.NewLine, 
+                    Environment.NewLine, 
+                    exception.StackTrace ?? "");
             }
 
             context.Response.ContentType = "application/json";

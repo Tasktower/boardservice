@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
+using Tasktower.ProjectService.BusinessLogic;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
+using Tasktower.ProjectService.Errors;
 using Tasktower.ProjectService.Security;
 
 namespace Tasktower.ProjectService.Controllers
@@ -25,13 +27,27 @@ namespace Tasktower.ProjectService.Controllers
         private readonly ILogger<TestController> _logger;
         private readonly BoardDBContext _context;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IErrorService _errorService;
 
         public TestController(ILogger<TestController> logger, 
-            BoardDBContext context, IUnitOfWork unitOfWork)
+            BoardDBContext context, 
+            IUnitOfWork unitOfWork,
+            IErrorService errorService)
         {
             _logger = logger;
             _context = context;
             _unitOfWork = unitOfWork;
+            _errorService = errorService;
+        }
+        
+        [HttpGet("manyError")]
+        public async Task<IEnumerable<Project>> ManyErrors()
+        {
+            List<AppException> appExceptions = new List<AppException>();
+            appExceptions.Add(_errorService.Create(ErrorCode.PROJECT_NOT_FOUND));
+            appExceptions.Add(_errorService.Create(ErrorCode.NON_EXISTENT_COLUMN));
+            appExceptions.Add(_errorService.Create(ErrorCode.NO_PROJECT_PERMISSIONS));
+            throw _errorService.CreateFromMultiple(appExceptions);
         }
 
         [HttpGet("project")]
@@ -56,24 +72,21 @@ namespace Tasktower.ProjectService.Controllers
         [HttpGet("auth")]
         public object GetData()
         {
-            var userContext = new UserContext(User);
-            return userContext;
+            return UserContext.FromHttpContext(HttpContext);
         }
 
-        [Authorize(Policy = Policies.PolicyNames.CanModerate)]
+        [Authorize(Policy = Policies.Names.CanModerate)]
         [HttpGet("moderator")]
         public object GetData2()
         {
-            var userContext = new UserContext(User);
-            return userContext;
+            return UserContext.FromHttpContext(HttpContext);
         }
 
-        [Authorize(Policy = Policies.PolicyNames.Admin)]
+        [Authorize(Policy = Policies.Names.Admin)]
         [HttpGet("adminonly")]
         public object GetData3()
         {
-            var userContext = new UserContext(User);
-            return userContext;
+            return UserContext.FromHttpContext(HttpContext);
         }
     }
 }

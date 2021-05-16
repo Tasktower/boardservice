@@ -14,12 +14,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Tasktower.ProjectService.Errors.Middleware.Extensions;
-using Tasktower.ProjectService.Security.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
-using Tasktower.ProjectService.Tools.DependencyInjection.Extensions;
+using Tasktower.ProjectService.BusinessLogic;
+using Tasktower.ProjectService.Configuration;
 using Tasktower.ProjectService.DataAccess.Context;
+using Tasktower.ProjectService.DataAccess.Repositories;
+using Tasktower.ProjectService.DataAccess.Repositories.Impl;
 using Tasktower.ProjectService.Errors.Middleware;
 using Tasktower.ProjectService.Security;
 
@@ -41,18 +43,16 @@ namespace Tasktower.ProjectService
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o => {
-                o.Authority = Configuration["Auth:Authority"];
-                o.Audience = Configuration["Auth:Audience"];
+                o.Authority = Configuration["Authentication:Authority"];
+                o.Audience = Configuration["Authentication:Audience"];
             });
             
             services.AddAuthorization(options =>
             {
-                var policies = typeof(Policies).GetFields(BindingFlags.Public | BindingFlags.Static)
-                    .Where(f => f.FieldType == typeof(Policy))
-                    .Select(f => (Policy)f.GetValue(null));
-                foreach (var policy in policies)
+                foreach (var policy in Policies.Get())
                 {
-                    options.AddPolicy(policy);
+                    options.AddPolicy(policy.Name, policyBuilder => 
+                            policyBuilder.RequireClaim(System.Security.Claims.ClaimTypes.Role, policy.Roles));
                 }
             });
             
@@ -63,8 +63,19 @@ namespace Tasktower.ProjectService
                 options.UseSqlServer(Configuration.GetConnectionString("SQLServerBoardDB"));
             });
 
-            // Custom scoped services
-            services.AddScopedServices();
+            // ------------------------------- Custom services ---------------------------------
+            // Data Access Services 
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
+            services.AddScoped<ITaskBoardRepository, TaskBoardRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // Business Logic Services
+            services.AddScoped<IBoardService, BoardService>();
+            services.AddSingleton<IErrorService, ErrorService>();
+            // Configuration
+            services.Configure<ErrorConfiguration>(Configuration.GetSection("Errors"));
+            // -------------------------- end custom services
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -76,8 +87,7 @@ namespace Tasktower.ProjectService
             services.AddSwaggerGen(c =>
             { 
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tasktower.ProjectService", Version = "3.0.0" });
-
-
+                
                 var bearerSchema = new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
