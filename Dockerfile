@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-COPY . Tasktower.BoardService
-WORKDIR  /Tasktower.BoardService/Tasktower.BoardService
-RUN rm -rf Tasktower.BoardService.Tests
+COPY . Tasktower.ProjectService
+WORKDIR  /Tasktower.ProjectService/Tasktower.ProjectService
+RUN rm -rf Tasktower.ProjectService.Tests
 RUN dotnet restore "Tasktower.ProjectService.csproj"
 RUN dotnet publish "Tasktower.ProjectService.csproj" -c release -o /App --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
