@@ -2,8 +2,8 @@
 COPY . Tasktower.BoardService
 WORKDIR  /Tasktower.BoardService/Tasktower.BoardService
 RUN rm -rf Tasktower.BoardService.Tests
-RUN dotnet restore "Tasktower.BoardService.csproj"
-RUN dotnet publish "Tasktower.BoardService.csproj" -c release -o /App --no-restore
+RUN dotnet restore "Tasktower.ProjectService.csproj"
+RUN dotnet publish "Tasktower.ProjectService.csproj" -c release -o /App --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 EXPOSE 5001
 EXPOSE 5000
