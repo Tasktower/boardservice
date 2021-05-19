@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tasktower.ProjectService.DataAccess.Entities.Base;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {
-    public class Task : BaseAuditableEntity
+    public class TaskEntity : AuditableEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -12,9 +13,9 @@ namespace Tasktower.ProjectService.DataAccess.Entities
         
         public string Column { get; set; }
         public Guid TaskBoardId { get; set; }
-        public virtual TaskBoard TaskBoard { get; set; }
+        public virtual TaskBoardEntity TaskBoardEntity { get; set; }
 
-        public static void BuildEntity(EntityTypeBuilder<Task> entityTypeBuilder)
+        public static void BuildEntity(EntityTypeBuilder<TaskEntity> entityTypeBuilder)
         {
             entityTypeBuilder = entityTypeBuilder.ToTable("tasks");
             BuildAuditableEntity(entityTypeBuilder);
@@ -43,7 +44,7 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .HasColumnName("task_board_id");
 
             entityTypeBuilder
-                .HasOne(e => e.TaskBoard)
+                .HasOne(e => e.TaskBoardEntity)
                 .WithMany(c => c.Tasks)
                 .HasForeignKey(e => e.TaskBoardId)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -6,10 +6,11 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tasktower.ProjectService.DataAccess.Entities.Base;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {
-    public class TaskBoard : BaseAuditableEntity
+    public class TaskBoardEntity : AuditableEntity
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -19,10 +20,10 @@ namespace Tasktower.ProjectService.DataAccess.Entities
         public List<string> Columns { get; set; }
         
         public Guid ProjectId { get; set; }
-        public virtual Project Project { get; set; }
-        public ICollection<Task> Tasks { get; set; }
+        public virtual ProjectEntity ProjectEntity { get; set; }
+        public ICollection<TaskEntity> Tasks { get; set; }
 
-        public static void BuildEntity(EntityTypeBuilder<TaskBoard> entityTypeBuilder)
+        public static void BuildEntity(EntityTypeBuilder<TaskBoardEntity> entityTypeBuilder)
         {
             entityTypeBuilder = entityTypeBuilder.ToTable("task_boards");
             BuildAuditableEntity(entityTypeBuilder);
@@ -61,14 +62,14 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .IsRequired();
 
             entityTypeBuilder
-                .HasOne(e => e.Project)
+                .HasOne(e => e.ProjectEntity)
                 .WithMany(t => t.TaskBoards)
                 .HasForeignKey(e => e.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entityTypeBuilder
                 .HasMany(e => e.Tasks)
-                .WithOne(e => e.TaskBoard)
+                .WithOne(e => e.TaskBoardEntity)
                 .HasForeignKey(e => e.TaskBoardId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

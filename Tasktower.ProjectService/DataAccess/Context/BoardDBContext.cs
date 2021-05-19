@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Tasktower.ProjectService.DataAccess.Entities.Base;
 using Tasktower.ProjectService.Security;
 
 namespace Tasktower.ProjectService.DataAccess.Context
@@ -18,17 +19,17 @@ namespace Tasktower.ProjectService.DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Entities.Project>(Entities.Project.BuildEntity);
-            modelBuilder.Entity<Entities.ProjectRole>(Entities.ProjectRole.BuildEntity);
-            modelBuilder.Entity<Entities.TaskBoard>(Entities.TaskBoard.BuildEntity);
-            modelBuilder.Entity<Entities.Task>(Entities.Task.BuildEntity);
+            modelBuilder.Entity<Entities.ProjectEntity>(Entities.ProjectEntity.BuildEntity);
+            modelBuilder.Entity<Entities.ProjectRoleEntity>(Entities.ProjectRoleEntity.BuildEntity);
+            modelBuilder.Entity<Entities.TaskBoardEntity>(Entities.TaskBoardEntity.BuildEntity);
+            modelBuilder.Entity<Entities.TaskEntity>(Entities.TaskEntity.BuildEntity);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var entries = ChangeTracker
                 .Entries()
-                .Where(e => e.Entity is Entities.BaseAuditableEntity && (
+                .Where(e => e.Entity is AuditableEntity && (
                     e.State == EntityState.Added
                     || e.State == EntityState.Modified));
 
@@ -37,24 +38,24 @@ namespace Tasktower.ProjectService.DataAccess.Context
                 UserContext userContext = UserContext.FromHttpContext(_httpContextAccessor?.HttpContext);
                 if (entityEntry.State == EntityState.Added)
                 {
-                    ((Entities.BaseAuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
-                    ((Entities.BaseAuditableEntity)entityEntry.Entity).CreatedBy = userContext.Name ?? "ANONYMOUS";
+                    ((AuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
+                    ((AuditableEntity)entityEntry.Entity).CreatedBy = userContext.Name ?? "ANONYMOUS";
                 }
                 else
                 {
-                    Entry((Entities.BaseAuditableEntity)entityEntry.Entity).Property(p => p.CreatedAt).IsModified = false;
-                    Entry((Entities.BaseAuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
+                    Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedAt).IsModified = false;
+                    Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
                 }
-                ((Entities.BaseAuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
-                ((Entities.BaseAuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name ?? "ANONYMOUS";
-                ((Entities.BaseAuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                ((AuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
+                ((AuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name ?? "ANONYMOUS";
+                ((AuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
             }
             return await base.SaveChangesAsync(cancellationToken);
         }
 
-        public DbSet<Entities.Project> Projects { get; set; }
-        public DbSet<Entities.ProjectRole> ProjectRoles { get; set; }
-        public DbSet<Entities.TaskBoard> TaskBoards { get; set; }
-        public DbSet<Entities.Task> Tasks { get; set; }
+        public DbSet<Entities.ProjectEntity> Projects { get; set; }
+        public DbSet<Entities.ProjectRoleEntity> ProjectRoles { get; set; }
+        public DbSet<Entities.TaskBoardEntity> TaskBoards { get; set; }
+        public DbSet<Entities.TaskEntity> Tasks { get; set; }
     }
 }

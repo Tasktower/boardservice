@@ -1,10 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tasktower.ProjectService.DataAccess.Entities.Base;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {
-    public class ProjectRole : BaseAuditableEntity
+    public class ProjectRoleEntity : AuditableEntity
     {
         public enum ProjectRoleValue { OWNER, BOARD_EDITOR, BOARD_READER }
         
@@ -16,9 +17,9 @@ namespace Tasktower.ProjectService.DataAccess.Entities
         
         public Guid ProjectId { get; set; }
 
-        public virtual Project Project { get; set; }
+        public virtual ProjectEntity ProjectEntity { get; set; }
 
-        public static void BuildEntity(EntityTypeBuilder<ProjectRole > entityTypeBuilder)
+        public static void BuildEntity(EntityTypeBuilder<ProjectRoleEntity > entityTypeBuilder)
         {
             entityTypeBuilder = entityTypeBuilder.ToTable("project_roles");
             BuildAuditableEntity(entityTypeBuilder);
@@ -47,7 +48,7 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .IsRequired();
 
             entityTypeBuilder
-                .HasOne(e => e.Project)
+                .HasOne(e => e.ProjectEntity)
                 .WithMany(t => t.ProjectRoles)
                 .HasForeignKey(e => e.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);

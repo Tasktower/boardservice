@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tasktower.ProjectService.DataAccess.Entities.Base;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {
-    public class Project : BaseAuditableEntity
+    public class ProjectEntity : AuditableEntity
     {
         public Guid Id { get; set; }
 
@@ -13,11 +14,11 @@ namespace Tasktower.ProjectService.DataAccess.Entities
 
         public string Description { get; set; }
 
-        public ICollection<ProjectRole> ProjectRoles { get; set; }
+        public ICollection<ProjectRoleEntity> ProjectRoles { get; set; }
 
-        public ICollection<TaskBoard> TaskBoards { get; set; }
+        public ICollection<TaskBoardEntity> TaskBoards { get; set; }
 
-        public static void BuildEntity(EntityTypeBuilder<Project> entityTypeBuilder)
+        public static void BuildEntity(EntityTypeBuilder<ProjectEntity> entityTypeBuilder)
         {
             entityTypeBuilder = entityTypeBuilder.ToTable("projects");
             BuildAuditableEntity(entityTypeBuilder);
@@ -41,13 +42,13 @@ namespace Tasktower.ProjectService.DataAccess.Entities
 
             entityTypeBuilder
                 .HasMany(e => e.TaskBoards)
-                .WithOne(e => e.Project)
+                .WithOne(e => e.ProjectEntity)
                 .HasForeignKey(e => e.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
             
             entityTypeBuilder
                 .HasMany(e => e.ProjectRoles)
-                .WithOne(e => e.Project)
+                .WithOne(e => e.ProjectEntity)
                 .HasForeignKey(e => e.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

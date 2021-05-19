@@ -6,7 +6,7 @@ using Tasktower.ProjectService.DataAccess.Repositories.Base;
 namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
 {
     public class ProjectRepository : 
-        CrudRepositoryImpl<Guid, Project, BoardDBContext>, 
+        CrudRepositoryImpl<Guid, ProjectEntity, BoardDBContext>, 
         IProjectRepository
     {
         public ProjectRepository(BoardDBContext context) : base(context) { }

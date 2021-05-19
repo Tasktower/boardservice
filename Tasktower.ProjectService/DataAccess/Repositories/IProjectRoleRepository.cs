@@ -4,7 +4,7 @@ using Tasktower.ProjectService.DataAccess.Repositories.Base;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories
 {
-    public interface IProjectRoleRepository : ICrudRepository<Guid, ProjectRole>
+    public interface IProjectRoleRepository : ICrudRepository<Guid, ProjectRoleEntity>
     {
     }
 }

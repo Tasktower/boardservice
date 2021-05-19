@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Tasktower.ProjectService.DataAccess.Entities
+namespace Tasktower.ProjectService.DataAccess.Entities.Base
 {
-    public abstract class BaseAuditableEntity
+    public abstract class AuditableEntity
     {
         public long Version { get; set; }
         public string CreatedBy { get; set; }
@@ -13,7 +13,7 @@ namespace Tasktower.ProjectService.DataAccess.Entities
         public DateTime ModifiedAt { get; set; }
 
         public static void BuildAuditableEntity<T>(EntityTypeBuilder<T> entityTypeBuilder) 
-            where T : BaseAuditableEntity
+            where T : AuditableEntity
         {
             entityTypeBuilder.Property(e => e.CreatedAt)
                 .HasColumnName("created_at")

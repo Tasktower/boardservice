@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,20 +29,23 @@ namespace Tasktower.ProjectService.Controllers
         private readonly BoardDBContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IErrorService _errorService;
+        private readonly IMapper _mapper; 
 
         public TestController(ILogger<TestController> logger, 
             BoardDBContext context, 
             IUnitOfWork unitOfWork,
-            IErrorService errorService)
+            IErrorService errorService,
+            IMapper mapper)
         {
             _logger = logger;
             _context = context;
             _unitOfWork = unitOfWork;
             _errorService = errorService;
+            _mapper = mapper;
         }
         
         [HttpGet("manyError")]
-        public async Task<IEnumerable<Project>> ManyErrors()
+        public async Task<IEnumerable<ProjectEntity>> ManyErrors()
         {
             List<AppException> appExceptions = new List<AppException>();
             appExceptions.Add(_errorService.Create(ErrorCode.PROJECT_NOT_FOUND));
@@ -51,18 +55,19 @@ namespace Tasktower.ProjectService.Controllers
         }
 
         [HttpGet("project")]
-        public async Task<IEnumerable<Project>> GetBoards()
+        public async Task<IEnumerable<object>> GetBoards()
         {
             var list = await _context.Projects
                 .Include(t => t.TaskBoards)
                 .Include("TaskBoards.Tasks")
                 .Include(t => t.ProjectRoles)
                 .ToListAsync();
-            return list;
+            // return list;
+            return list.Select(p => _mapper.Map<ProjectDto>(p));
         }
 
         [HttpGet("projectRoles")]
-        public async Task<ProjectRole> GetUserBoardRoles(
+        public async Task<ProjectRoleEntity> GetUserBoardRoles(
             [FromQuery(Name ="id")] Guid id)
         {
             return await _unitOfWork.ProjectRoleRepository.GetById(id);

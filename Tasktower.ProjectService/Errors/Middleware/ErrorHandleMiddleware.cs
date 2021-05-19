@@ -7,21 +7,24 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Extensions;
+using Tasktower.ProjectService.Configuration;
 
 namespace Tasktower.ProjectService.Errors.Middleware
 {
     public class ErrorHandeMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ErrorHandleMiddlewareOptions _options;
+        private readonly ErrorOptionsConfig _options;
         private readonly ILogger _logger;
 
         public ErrorHandeMiddleware(RequestDelegate next,
-            ErrorHandleMiddlewareOptions options,
+            IOptions<ErrorOptionsConfig> options,
             ILogger<ErrorHandeMiddleware> logger)
         {
             _next = next;
-            _options = options;
+            _options = options.Value;
             _logger = logger;
         }
 
@@ -48,10 +51,10 @@ namespace Tasktower.ProjectService.Errors.Middleware
             if (exception is AppException appException)
             {
                 statusCode = appException.StatusCode;
-                errorCode = appException.ErrorCode.ToString();
+                errorCode = appException.ErrorCode.GetDisplayName();
                 message = appException.Message;
                 multipleErrors = appException.MultipleErrors?
-                    .Select(x => new { error = x.Message, errorCode = x.ErrorCode.ToString() });
+                    .Select(x => new { error = x.Message, errorCode = x.ErrorCode.GetDisplayName() });
             }
             else
             {

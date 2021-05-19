@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Tasktower.ProjectService.Errors.Middleware.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
@@ -62,6 +61,8 @@ namespace Tasktower.ProjectService
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SQLServerBoardDB"));
             });
+            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // ------------------------------- Custom services ---------------------------------
             // Data Access Services 
@@ -74,7 +75,7 @@ namespace Tasktower.ProjectService
             services.AddScoped<IBoardService, BoardService>();
             services.AddSingleton<IErrorService, ErrorService>();
             // Configuration
-            services.Configure<ErrorConfiguration>(Configuration.GetSection("Errors"));
+            services.Configure<ErrorOptionsConfig>(Configuration.GetSection("Errors"));
             // -------------------------- end custom services
 
             services.AddControllers()
@@ -129,11 +130,7 @@ namespace Tasktower.ProjectService
                 });
             }
 
-            app.UseCustonErrorHandler(new ErrorHandleMiddlewareOptions
-            {
-                ShowAllErrorMessages = env.IsDevelopment(),
-                UseStackTrace = !env.IsProduction()
-            });
+            app.UseMiddleware<ErrorHandeMiddleware>();
 
             app.UseHttpsRedirection();
 
