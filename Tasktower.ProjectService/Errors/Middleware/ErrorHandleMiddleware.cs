@@ -51,7 +51,7 @@ namespace Tasktower.ProjectService.Errors.Middleware
                 errorCode = appException.ErrorCode.ToString();
                 message = appException.Message;
                 multipleErrors = appException.MultipleErrors?
-                    .Select(x => new { error = x.Message, code = x.ErrorCode.ToString() });
+                    .Select(x => new { error = x.Message, errorCode = x.ErrorCode.ToString() });
             }
             else
             {
