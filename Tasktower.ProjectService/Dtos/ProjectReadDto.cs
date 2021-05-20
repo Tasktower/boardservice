@@ -5,7 +5,7 @@ using Tasktower.ProjectService.DataAccess.Entities;
 
 namespace Tasktower.ProjectService.Dtos
 {
-    public class ProjectDto : AuditableDto
+    public class ProjectReadDto : AuditableDto
     {
         public Guid Id { get; set; }
         

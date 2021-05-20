@@ -17,7 +17,7 @@ namespace Tasktower.ProjectService.Dtos
         
         public Guid ProjectId { get; set; }
         
-        public virtual ProjectDto Project { get; set; }
+        public virtual ProjectReadDto ProjectRead { get; set; }
         
         public ICollection<TaskDto> Tasks { get; set; }
         

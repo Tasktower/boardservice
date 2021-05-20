@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 using Tasktower.ProjectService.DataAccess.Entities;
+using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.Dtos
 {
@@ -11,11 +12,13 @@ namespace Tasktower.ProjectService.Dtos
         
         public string UserId { get; set; }
         
-        public ProjectRoleEntity.ProjectRoleValue Role { get; set; }
+        public ProjectRoleValue Role { get; set; }
         
         public Guid ProjectId { get; set; }
         
-        public virtual ProjectDto Project { get; set; }
+        public bool PendingInvite { get; set; }
+        
+        public virtual ProjectReadDto Project { get; set; }
         
     }
 }

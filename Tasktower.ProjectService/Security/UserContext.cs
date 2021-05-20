@@ -23,9 +23,9 @@ namespace Tasktower.ProjectService.Security
 
         public bool IsAuthenticated => _user?.Identity?.IsAuthenticated ?? false;
 
-        public string UserId => _user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        public string UserId => _user?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "ANONYMOUS";
 
-        public string Name => _user?.Identity?.Name;
+        public string Name => _user?.Identity?.Name ?? "ANONYMOUS";
 
         public ICollection<string> Roles => _user?.FindAll(ClaimTypes.Role)
             .Select(r => r.Value).ToHashSet();

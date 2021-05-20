@@ -39,7 +39,7 @@ namespace Tasktower.ProjectService.DataAccess.Context
                 if (entityEntry.State == EntityState.Added)
                 {
                     ((AuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
-                    ((AuditableEntity)entityEntry.Entity).CreatedBy = userContext.Name ?? "ANONYMOUS";
+                    ((AuditableEntity)entityEntry.Entity).CreatedBy = userContext.Name;
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace Tasktower.ProjectService.DataAccess.Context
                     Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
                 }
                 ((AuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
-                ((AuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name ?? "ANONYMOUS";
+                ((AuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name;
                 ((AuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
             }
             return await base.SaveChangesAsync(cancellationToken);

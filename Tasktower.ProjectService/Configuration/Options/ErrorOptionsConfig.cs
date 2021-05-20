@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
-using Microsoft.Extensions.Configuration;
-using Tasktower.ProjectService.Dtos;
-using Tasktower.ProjectService.Errors;
 
-namespace Tasktower.ProjectService.Configuration
+namespace Tasktower.ProjectService.Configuration.Options
 {
     public class ErrorOptionsConfig
     {

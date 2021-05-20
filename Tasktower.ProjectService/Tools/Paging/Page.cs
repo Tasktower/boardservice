@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,22 @@ using System.Threading.Tasks;
 
 namespace Tasktower.ProjectService.Tools.Paging
 {
-    public class Page<T> where T : class
+    public class Page<T>
     {
-        public IList<T> Items { get; set; }
-        public int Count { get; set; }
-
+        public IEnumerable<T> ResultsList { get; set; }
+        public int ResultsSize { get; set; }
+        public int Total { get; set; }
         public Pagination Pagination { get; set; }
+        
+        public Page<TNew> Map<TNew>(Func<T, TNew> func)
+        {
+            return new()
+            {
+                ResultsList = ResultsList.Select(func),
+                ResultsSize = ResultsSize,
+                Total = Total,
+                Pagination = Pagination
+            };
+        }
     }
 }

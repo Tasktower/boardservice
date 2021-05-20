@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-using Tasktower.ProjectService.BusinessLogic;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Errors;
 using Tasktower.ProjectService.Security;
+using Tasktower.ProjectService.Services;
 
 namespace Tasktower.ProjectService.Controllers
 {
@@ -48,9 +48,9 @@ namespace Tasktower.ProjectService.Controllers
         public async Task<IEnumerable<ProjectEntity>> ManyErrors()
         {
             List<AppException> appExceptions = new List<AppException>();
-            appExceptions.Add(_errorService.Create(ErrorCode.PROJECT_NOT_FOUND));
+            appExceptions.Add(_errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, "ok"));
             appExceptions.Add(_errorService.Create(ErrorCode.NON_EXISTENT_COLUMN));
-            appExceptions.Add(_errorService.Create(ErrorCode.NO_PROJECT_PERMISSIONS));
+            appExceptions.Add(_errorService.Create(ErrorCode.NO_PROJECT_PERMISSIONS, "ok"));
             throw _errorService.CreateFromMultiple(appExceptions);
         }
 
@@ -63,7 +63,7 @@ namespace Tasktower.ProjectService.Controllers
                 .Include(t => t.ProjectRoles)
                 .ToListAsync();
             // return list;
-            return list.Select(p => _mapper.Map<ProjectDto>(p));
+            return list.Select(p => _mapper.Map<ProjectReadDto>(p));
         }
 
         [HttpGet("projectRoles")]

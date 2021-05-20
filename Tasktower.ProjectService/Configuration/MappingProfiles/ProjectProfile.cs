@@ -8,8 +8,9 @@ namespace Tasktower.ProjectService.Profiles
     {
         public ProjectProfile()
         {
-            CreateMap<ProjectEntity, ProjectDto>();
-            CreateMap<ProjectDto, ProjectEntity>();
+            CreateMap<ProjectSaveDto, ProjectEntity>();
+            CreateMap<ProjectEntity, ProjectReadDto>();
+            CreateMap<ProjectReadDto, ProjectEntity>();
         }
         
     }

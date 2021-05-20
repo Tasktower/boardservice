@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Extensions;
 using Tasktower.ProjectService.Configuration;
-using Tasktower.ProjectService.Dtos;
+using Tasktower.ProjectService.Configuration.Options;
 using Tasktower.ProjectService.Errors;
 
-namespace Tasktower.ProjectService.BusinessLogic
+namespace Tasktower.ProjectService.Services.Impl
 {
     public class ErrorService : IErrorService
     {
@@ -20,16 +17,16 @@ namespace Tasktower.ProjectService.BusinessLogic
             _errorOptionsConfig = errorConfigurationOptions.Value;
         }
 
-        public AppException Create(ErrorCode errorCode)
+        public AppException Create(ErrorCode errorCode, params object[] args)
         {
             var errorConfigData = _errorOptionsConfig.ErrorCodeMappings[errorCode.GetDisplayName()];
-            return new AppException(errorCode, errorConfigData, null);
+            return new AppException(errorCode, errorConfigData, null, args);
         }
         
-        public AppException CreateFromMultiple(IEnumerable<AppException> appExceptions)
+        public AppException CreateFromMultiple(IEnumerable<AppException> appExceptions, params object[] args)
         {
-            var errorConfigData = _errorOptionsConfig.ErrorCodeMappings[ErrorCode.MULTIPLE_ERRORS.ToString()];
-            return new AppException(ErrorCode.MULTIPLE_ERRORS, errorConfigData, appExceptions);
+            var errorConfigData = _errorOptionsConfig.ErrorCodeMappings[ErrorCode.MULTIPLE_ERRORS.GetDisplayName()];
+            return new AppException(ErrorCode.MULTIPLE_ERRORS, errorConfigData, appExceptions, args);
         }
     }
 }

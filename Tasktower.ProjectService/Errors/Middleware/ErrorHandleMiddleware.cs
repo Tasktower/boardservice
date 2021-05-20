@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Extensions;
 using Tasktower.ProjectService.Configuration;
+using Tasktower.ProjectService.Configuration.Options;
 
 namespace Tasktower.ProjectService.Errors.Middleware
 {
@@ -55,6 +56,11 @@ namespace Tasktower.ProjectService.Errors.Middleware
                 message = appException.Message;
                 multipleErrors = appException.MultipleErrors?
                     .Select(x => new { error = x.Message, errorCode = x.ErrorCode.GetDisplayName() });
+            }
+            else if (exception is PaginationException)
+            {
+                statusCode = HttpStatusCode.BadRequest;
+                message = exception.Message;
             }
             else
             {

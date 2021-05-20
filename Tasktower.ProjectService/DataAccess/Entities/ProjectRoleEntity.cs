@@ -2,19 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tasktower.ProjectService.DataAccess.Entities.Base;
+using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {
     public class ProjectRoleEntity : AuditableEntity
     {
-        public enum ProjectRoleValue { OWNER, BOARD_EDITOR, BOARD_READER }
-        
         public Guid Id { get; set; }
 
         public string UserId { get; set; }
 
         public ProjectRoleValue Role { get; set; }
-        
+
+        public bool PendingInvite { get; set; }
+
         public Guid ProjectId { get; set; }
 
         public virtual ProjectEntity ProjectEntity { get; set; }
@@ -42,6 +43,11 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .HasColumnName("role")
                 .HasMaxLength(20)
                 .IsRequired();
+
+            entityTypeBuilder.Property(e => e.PendingInvite)
+                .HasColumnName("pending_invite")
+                .IsRequired();
+                // .HasDefaultValue(true);
 
             entityTypeBuilder.Property(e => e.ProjectId)
                 .HasColumnName("project_id")

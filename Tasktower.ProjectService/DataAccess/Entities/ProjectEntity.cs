@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tasktower.ProjectService.DataAccess.Entities.Base;
@@ -51,6 +52,20 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .WithOne(e => e.ProjectEntity)
                 .HasForeignKey(e => e.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
+        }
+        
+        public static IQueryable<ProjectEntity> OrderByQuery(String orderBy, IQueryable<ProjectEntity> queryable)
+        {
+            return orderBy switch
+            {
+                "Id" => queryable.OrderBy(p => p.Id),
+                "Id_desc" => queryable.OrderByDescending(p => p.Id),
+                "Title" => queryable.OrderBy(p => p.Title),
+                "Title_desc" => queryable.OrderByDescending(p => p.Title),
+                "Description" => queryable.OrderBy(p => p.Description),
+                "Description_desc" => queryable.OrderByDescending(p => p.Description),
+                _ => queryable
+            };
         }
     }
 }
