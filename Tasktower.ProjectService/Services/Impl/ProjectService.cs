@@ -72,6 +72,7 @@ namespace Tasktower.ProjectService.Services.Impl
             }
             await _projectAuthorizeService.Authorize(id, _projectAuthorizeService.OwnerRoles());
             await _unitOfWork.ProjectRepository.Delete(id);
+            await _unitOfWork.SaveChanges();
             return _mapper.Map<ProjectEntity, ProjectReadDto>(project);
         }
 

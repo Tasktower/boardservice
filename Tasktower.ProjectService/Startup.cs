@@ -53,8 +53,7 @@ namespace Tasktower.ProjectService
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.ConfigureSecurity(env);
 
             app.UseEndpoints(endpoints =>
             {
