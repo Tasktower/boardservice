@@ -15,7 +15,7 @@ namespace Tasktower.ProjectService.Tests
         public void Test2()
         {
 
-            Assert.Equal("a", "a");
+            Assert.Equal("b", "b");
         }
     }
 }
