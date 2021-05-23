@@ -15,8 +15,8 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o => {
-                o.Authority = configuration["Authentication:Authority"];
-                o.Audience = configuration["Authentication:Audience"];
+                o.Authority = configuration["Authentication:Openid:Authority"];
+                o.Audience = configuration["Authentication:Openid:Audience"];
             });
             
             services.AddAuthorization(options =>
