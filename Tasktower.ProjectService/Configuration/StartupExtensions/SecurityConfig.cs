@@ -23,8 +23,9 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
             {
                 foreach (var policy in Policies.Get())
                 {
+                    
                     options.AddPolicy(policy.Name, policyBuilder => 
-                        policyBuilder.RequireClaim(System.Security.Claims.ClaimTypes.Role, policy.Roles));
+                        policyBuilder.RequireClaim("permissions", policy.Permissions));
                 }
             });
         }

@@ -80,18 +80,12 @@ namespace Tasktower.ProjectService.Controllers
             return UserContext.FromHttpContext(HttpContext);
         }
 
-        [Authorize(Policy = Policies.Names.CanModerate)]
-        [HttpGet("moderator")]
+        [Authorize(Policy = Policies.Names.UpdateProjectsAny)]
+        [HttpGet("policycheck")]
         public object GetData2()
         {
             return UserContext.FromHttpContext(HttpContext);
         }
-
-        [Authorize(Policy = Policies.Names.Admin)]
-        [HttpGet("adminonly")]
-        public object GetData3()
-        {
-            return UserContext.FromHttpContext(HttpContext);
-        }
+        
     }
 }

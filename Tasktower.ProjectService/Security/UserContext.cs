@@ -13,7 +13,7 @@ namespace Tasktower.ProjectService.Security
 
         public static UserContext FromHttpContext(HttpContext context)
         {
-            return new UserContext(context);
+            return new(context);
         }
 
         private UserContext(HttpContext context)
@@ -27,7 +27,6 @@ namespace Tasktower.ProjectService.Security
 
         public string Name => _user?.Identity?.Name ?? "ANONYMOUS";
 
-        public ICollection<string> Roles => _user?.FindAll(ClaimTypes.Role)
-            .Select(r => r.Value).ToHashSet();
+        public ICollection<string> Roles => _user?.FindAll("permissions").Select(r => r.Value).ToHashSet();
     }
 }

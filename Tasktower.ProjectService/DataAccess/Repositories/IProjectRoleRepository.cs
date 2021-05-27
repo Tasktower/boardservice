@@ -15,7 +15,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <param name="userId"></param>
-        /// <param name="projectRoles">Roles the user is tested against to see if any match</param>
+        /// <param name="projectRoles">Permissions the user is tested against to see if any match</param>
         /// <returns></returns>
         ValueTask<bool> UserHasProjectRolePermission(Guid id, 
             string userId, ISet<ProjectRoleValue> projectRoles);

@@ -10,33 +10,45 @@ namespace Tasktower.ProjectService.Security
     {
         public sealed class Policy
         {
-            public string Name { get; }
-            public IEnumerable<string> Roles { get; }
-            public Policy(string name, IEnumerable<IEnumerable<string>> roleGroups)
-            {
-                Name = name;
-                Roles = roleGroups.SelectMany(g => g).Distinct();
-            }
+            public string Name { get; set; }
+            public IEnumerable<string> Permissions { get; set; }
         }
         
         public static class Names
         {
-            public const string Admin = "Admin";
-            public const string CanModerate = "CanModerate";
+            public const string ReadProjectsAny = "ReadProjectsAny";
+            public const string UpdateProjectsAny = "UpdateProjectsAny";
+            public const string DeleteProjectsAny = "DeleteProjectsAny";
         }
 
         public static IEnumerable<Policy> Get()
         {
             return new List<Policy>()
             {
-                new Policy(Names.Admin, new[]
+                new()
                 {
-                    Roles.AdminGroup()
-                }),
-                new Policy(Names.CanModerate, new[]
+                    Name = Names.ReadProjectsAny,
+                    Permissions = new[]
+                    {
+                        Permissions.ReadProjectsAny
+                    }
+                },
+                new()
                 {
-                    Roles.AdminGroup(), Roles.ModeratorGroup()
-                })
+                    Name = Names.UpdateProjectsAny,
+                    Permissions = new[]
+                    {
+                        Permissions.UpdateProjectsAny
+                    }
+                },
+                new()
+                {
+                    Name = Names.DeleteProjectsAny,
+                    Permissions = new[]
+                    {
+                        Permissions.DeleteProjectsAny
+                    }
+                }
             };
         }
         
