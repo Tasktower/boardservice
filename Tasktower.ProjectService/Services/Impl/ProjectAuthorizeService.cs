@@ -27,9 +27,8 @@ namespace Tasktower.ProjectService.Services.Impl
         public async ValueTask Authorize(Guid projectId, ISet<ProjectRoleValue> projectRoles)
         {
             var userContext = _userContextService.Get();
-            var hasPermission = 
-                await _unitOfWork.ProjectRoleRepository.UserHasProjectRolePermission(
-                    projectId, userContext.UserId, projectRoles);
+            var hasPermission = await _unitOfWork.ProjectRoleRepository.UserHasProjectRolePermission(
+                projectId, userContext.UserId, projectRoles);
             if (!hasPermission)
             {
                 throw _errorService.Create(ErrorCode.NO_PROJECT_PERMISSIONS, projectId);

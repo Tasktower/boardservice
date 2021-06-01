@@ -4,7 +4,7 @@ using Tasktower.ProjectService.DataAccess.Entities;
 
 namespace Tasktower.ProjectService.Dtos
 {
-    public class TaskDto : AuditableDto
+    public class TaskReadDto : AuditableReadDto
     {
         public Guid Id { get; set; }
         
@@ -13,9 +13,5 @@ namespace Tasktower.ProjectService.Dtos
         public string TaskDescriptionMarkup { get; set; }
         
         public string Column { get; set; }
-        
-        public Guid TaskBoardId { get; set; }
-        
-        public virtual TaskBoardDto TaskBoard { get; set; }
     }
 }

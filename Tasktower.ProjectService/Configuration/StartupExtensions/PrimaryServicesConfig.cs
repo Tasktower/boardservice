@@ -14,6 +14,7 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
             services.AddScoped<IProjectAuthorizeService, ProjectAuthorizeService>();
             services.AddScoped<IProjectsService, ProjectsService>();
             services.AddScoped<IUserContextService, UserContextService>();
+            services.AddSingleton<IValidationService, ValidationService>();
         }
     }
 }

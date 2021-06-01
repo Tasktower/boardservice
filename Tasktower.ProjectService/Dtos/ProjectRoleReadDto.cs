@@ -6,7 +6,7 @@ using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.Dtos
 {
-    public class ProjectRoleDto : AuditableDto
+    public class ProjectRoleReadDto : AuditableReadDto
     {
         public Guid Id { get; set; }
         
@@ -14,11 +14,7 @@ namespace Tasktower.ProjectService.Dtos
         
         public ProjectRoleValue Role { get; set; }
         
-        public Guid ProjectId { get; set; }
-        
         public bool PendingInvite { get; set; }
-        
-        public virtual ProjectReadDto Project { get; set; }
         
     }
 }

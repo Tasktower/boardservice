@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq.Expressions;
-using Tasktower.ProjectService.DataAccess.Entities;
 
 namespace Tasktower.ProjectService.Dtos
 {
-    public class AuditableDto
+    public class AuditableReadDto
     {
+        public long Version { get; set; }
+        
         public string CreatedBy { get; set; }
         
         public DateTime CreatedAt { get; set; }
