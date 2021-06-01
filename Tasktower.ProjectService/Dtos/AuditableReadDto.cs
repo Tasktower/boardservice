@@ -4,7 +4,7 @@ namespace Tasktower.ProjectService.Dtos
 {
     public class AuditableReadDto
     {
-        public long Version { get; set; }
+        // public byte[] Version { get; set; }
         
         public string CreatedBy { get; set; }
         

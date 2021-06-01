@@ -2,7 +2,7 @@
 
 namespace Tasktower.ProjectService.Dtos
 {
-    public class ProjectSaveDto : AuditableSaveDto
+    public class ProjectSaveDto
     {
         [Required]
         public string Title { get; set; }

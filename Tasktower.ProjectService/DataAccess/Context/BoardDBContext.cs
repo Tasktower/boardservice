@@ -48,7 +48,7 @@ namespace Tasktower.ProjectService.DataAccess.Context
                 }
                 ((AuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
                 ((AuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name;
-                ((AuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                // ((AuditableEntity)entityEntry.Entity).Version = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
             }
             return await base.SaveChangesAsync(cancellationToken);
         }

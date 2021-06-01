@@ -6,7 +6,7 @@ namespace Tasktower.ProjectService.DataAccess.Entities.Base
 {
     public abstract class AuditableEntity
     {
-        public long Version { get; set; }
+        public byte[] Version { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         public string ModifiedBy { get; set; }
@@ -32,7 +32,7 @@ namespace Tasktower.ProjectService.DataAccess.Entities.Base
             entityTypeBuilder.Property(e => e.Version)
                 .HasColumnName("version")
                 .IsRequired()
-                .IsConcurrencyToken();
+                .IsRowVersion();
         }
     }
 }
