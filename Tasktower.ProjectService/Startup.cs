@@ -31,7 +31,8 @@ namespace Tasktower.ProjectService
             services.ConfigureSecurity(Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);
-            services.ConfigureDataAccess(Configuration);
+            services.ConfigureDatabaseConnection(Configuration);
+            services.ConfigureRepositories(Configuration);
             services.ConfigurePrimaryServices(Configuration);
             services.ConfigureOptionsServices(Configuration);
             services.ConfigureControllers(Configuration);

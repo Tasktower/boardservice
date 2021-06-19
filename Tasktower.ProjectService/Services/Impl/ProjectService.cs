@@ -8,9 +8,9 @@ using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Errors;
+using Tasktower.ProjectService.Security;
 using Tasktower.ProjectService.Tools.Constants;
 using Tasktower.ProjectService.Tools.Paging;
-using Tasktower.ProjectService.Tools.Paging.Extensions;
 
 namespace Tasktower.ProjectService.Services.Impl
 {
@@ -18,17 +18,17 @@ namespace Tasktower.ProjectService.Services.Impl
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
-        private readonly IUserContextService _userContextService;
+        private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
         private readonly IErrorService _errorService;
         private readonly IProjectAuthorizeService _projectAuthorizeService;
         private readonly IValidationService _validationService;
         
-        public ProjectsService(IUserContextService userContextService, IUnitOfWork unitOfWork, 
+        public ProjectsService(IUserContext userContext, IUnitOfWork unitOfWork, 
             ILogger<ProjectsService> logger, IMapper mapper, IErrorService errorService,
             IProjectAuthorizeService projectAuthorizeService, IValidationService validationService)
         {
-            _userContextService = userContextService;
+            _userContext = userContext;
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
@@ -42,7 +42,7 @@ namespace Tasktower.ProjectService.Services.Impl
             var projectEntity = _mapper.Map<ProjectSaveDto, ProjectEntity>(projectSaveDto);
             var projectRoleEntity = new ProjectRoleEntity()
             {
-                UserId = _userContextService.Get().UserId,
+                UserId = _userContext.UserId,
                 Role = ProjectRoleValue.OWNER,
                 PendingInvite = false
             };
@@ -103,25 +103,22 @@ namespace Tasktower.ProjectService.Services.Impl
         
         public async ValueTask<Page<ProjectSearchDto>> FindMemberProjects(Pagination pagination)
         {
-            var userContext = _userContextService.Get();
             var projectsPage = await _unitOfWork.ProjectRepository
-                .FindMemberProjects(userContext.UserId, pagination);
+                .FindMemberProjects(_userContext.UserId, pagination);
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }
         
         public async ValueTask<Page<ProjectSearchDto>> FindPendingInviteProjects(Pagination pagination)
         {
-            var userContext = _userContextService.Get();
             var projectsPage = await _unitOfWork.ProjectRepository
-                .FindPendingInviteProjects(userContext.UserId, pagination);
+                .FindPendingInviteProjects(_userContext.UserId, pagination);
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }
         
         public async ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool member = true)
         {
-            var userContext = _userContextService.Get();
             var projectsPage = member? 
-                await _unitOfWork.ProjectRepository.FindMemberAndInvitedProjects(userContext.UserId, pagination): 
+                await _unitOfWork.ProjectRepository.FindMemberAndInvitedProjects(_userContext.UserId, pagination): 
                 await _unitOfWork.ProjectRepository.FindAllProjectsWithRoles(pagination);
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }

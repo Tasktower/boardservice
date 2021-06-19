@@ -7,26 +7,27 @@ using System.Threading.Tasks;
 
 namespace Tasktower.ProjectService.Security
 {
-    public class UserContext
+    public class UserContext : IUserContext
     {
-        private readonly ClaimsPrincipal _user;
+        public const string permissionsClaimName = "permissions";
+            
 
-        public static UserContext FromHttpContext(HttpContext context)
+        public UserContext(IHttpContextAccessor httpContextAccessor)
         {
-            return new(context);
+            var user = httpContextAccessor.HttpContext?.User;
+            IsAuthenticated = user?.Identity?.IsAuthenticated ?? false;
+            UserId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "ANONYMOUS";
+            Name = user?.Identity?.Name ?? "ANONYMOUS";
+            Permissions = 
+                user?.FindAll(permissionsClaimName).Select(r => r.Value).ToHashSet() ?? new HashSet<string>();
         }
 
-        private UserContext(HttpContext context)
-        {
-            _user = context?.User;
-        }
+        public bool IsAuthenticated { get; set; }
 
-        public bool IsAuthenticated => _user?.Identity?.IsAuthenticated ?? false;
+        public string UserId { get; set; }
 
-        public string UserId => _user?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "ANONYMOUS";
+        public string Name { get; set; }
 
-        public string Name => _user?.Identity?.Name ?? "ANONYMOUS";
-
-        public ICollection<string> Permissions => _user?.FindAll("permissions").Select(r => r.Value).ToHashSet();
+        public ICollection<string> Permissions { get; set; }
     }
 }

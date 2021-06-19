@@ -12,12 +12,16 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
 {
     public static class DataAccessServicesConfig
     {
-        public static void ConfigureDataAccess(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureDatabaseConnection(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<BoardDBContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("SQLServerBoardDB"));
             });
+        }
+
+        public static void ConfigureRepositories(this IServiceCollection services, IConfiguration configuration)
+        {
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
             services.AddScoped<ITaskBoardRepository, TaskBoardRepository>();

@@ -11,10 +11,10 @@ namespace Tasktower.ProjectService.DataAccess.Context
 {
     public class BoardDBContext : DbContext
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public BoardDBContext(DbContextOptions<BoardDBContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+        private readonly IUserContext _userContext;
+        public BoardDBContext(DbContextOptions<BoardDBContext> options, IUserContext userContext) : base(options)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,11 +35,10 @@ namespace Tasktower.ProjectService.DataAccess.Context
 
             foreach (var entityEntry in entries)
             {
-                UserContext userContext = UserContext.FromHttpContext(_httpContextAccessor?.HttpContext);
                 if (entityEntry.State == EntityState.Added)
                 {
                     ((AuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
-                    ((AuditableEntity)entityEntry.Entity).CreatedBy = userContext.Name;
+                    ((AuditableEntity)entityEntry.Entity).CreatedBy = _userContext.Name;
                 }
                 else
                 {
@@ -47,7 +46,7 @@ namespace Tasktower.ProjectService.DataAccess.Context
                     Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
                 }
                 ((AuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
-                ((AuditableEntity)entityEntry.Entity).ModifiedBy = userContext.Name;
+                ((AuditableEntity)entityEntry.Entity).ModifiedBy = _userContext.Name;
             }
             return await base.SaveChangesAsync(cancellationToken);
         }

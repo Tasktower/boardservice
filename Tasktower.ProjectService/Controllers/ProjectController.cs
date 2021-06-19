@@ -28,7 +28,7 @@ namespace Tasktower.ProjectService.Controllers
         }
         
         [Authorize]
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public async ValueTask<ProjectReadDto> UpdateProject([FromRoute] Guid id,
             [FromBody] ProjectSaveDto projectSaveDto)
         {
@@ -36,7 +36,7 @@ namespace Tasktower.ProjectService.Controllers
         }
         
         [Authorize(Policy = Policies.Names.UpdateProjectsAny)]
-        [HttpPut("{id}/any")]
+        [HttpPut("{id:guid}/any")]
         public async ValueTask<ProjectReadDto> UpdateProjectAny([FromRoute] Guid id,
             [FromBody] ProjectSaveDto projectSaveDto)
         {
@@ -44,28 +44,28 @@ namespace Tasktower.ProjectService.Controllers
         }
         
         [Authorize]
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async ValueTask<ProjectReadDto> DeleteProject([FromRoute] Guid id)
         {
             return await _projectsService.DeleteProject(id);
         }
         
         [Authorize(Policy = Policies.Names.DeleteProjectsAny)]
-        [HttpDelete("{id}/any")]
+        [HttpDelete("{id:guid}/any")]
         public async ValueTask<ProjectReadDto> DeleteProjectAny([FromRoute] Guid id)
         {
             return await _projectsService.DeleteProject(id, false);
         }
         
         [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async ValueTask<ProjectSearchDto> GetById([FromRoute] Guid id)
         {
             return await _projectsService.FindProjectById(id);
         }
         
         [Authorize(Policy = Policies.Names.ReadProjectsAny)]
-        [HttpGet("{id}/any")]
+        [HttpGet("{id:guid}/any")]
         public async ValueTask<ProjectSearchDto> GetByIdAny([FromRoute] Guid id)
         {
             return await _projectsService.FindProjectById(id, false);
@@ -93,7 +93,7 @@ namespace Tasktower.ProjectService.Controllers
         }
         
         [Authorize]
-        [HttpGet("prendinginvite")]
+        [HttpGet("pending-invite")]
         public async ValueTask<Page<ProjectSearchDto>> GetPendingInviteProjects([FromQuery] Pagination pagination)
         {
             return await _projectsService.FindPendingInviteProjects(pagination);

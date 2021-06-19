@@ -13,23 +13,21 @@ namespace Tasktower.ProjectService.Services.Impl
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IErrorService _errorService;
-        private readonly IUserContextService _userContextService;
+        private readonly IUserContext _userContext;
         
-        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, 
-            IUserContextService userContextService)
+        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, IUserContext userContext)
         {
             _unitOfWork = unitOfWork;
             _errorService = errorService;
-            _userContextService = userContextService;
+            _userContext = userContext;
         }
 
 
         public async ValueTask Authorize(Guid projectId, ISet<ProjectRoleValue> projectRoles, 
             bool allowPendingInvite = false)
         {
-            var userContext = _userContextService.Get();
             var hasPermission = await _unitOfWork.ProjectRoleRepository.UserHasProjectRolePermission(
-                projectId, userContext.UserId, projectRoles, allowPendingInvite);
+                projectId, _userContext.UserId, projectRoles, allowPendingInvite);
             if (!hasPermission)
             {
                 throw _errorService.Create(ErrorCode.NO_PROJECT_PERMISSIONS, projectId);
