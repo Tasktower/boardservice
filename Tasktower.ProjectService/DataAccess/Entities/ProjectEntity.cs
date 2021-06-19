@@ -54,17 +54,17 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .OnDelete(DeleteBehavior.Cascade);
         }
         
-        public static IQueryable<ProjectEntity> OrderByQuery(String orderBy, IQueryable<ProjectEntity> queryable)
+        public static IQueryable<ProjectEntity> OrderByQuery(string orderBy, IQueryable<ProjectEntity> queryable)
         {
             return orderBy switch
             {
-                "Id" => queryable.OrderBy(p => p.Id),
-                "Id_desc" => queryable.OrderByDescending(p => p.Id),
-                "Title" => queryable.OrderBy(p => p.Title),
-                "Title_desc" => queryable.OrderByDescending(p => p.Title),
-                "Description" => queryable.OrderBy(p => p.Description),
-                "Description_desc" => queryable.OrderByDescending(p => p.Description),
-                _ => queryable
+                "id" => queryable.OrderBy(e => e.Id),
+                "id_desc" => queryable.OrderByDescending(e => e.Id),
+                "title" => queryable.OrderBy(e => e.Title),
+                "title_desc" => queryable.OrderByDescending(e => e.Title),
+                "description" => queryable.OrderBy(e => e.Description),
+                "description_desc" => queryable.OrderByDescending(e => e.Description),
+                _ => AuditableEntity.OrderByQuery(orderBy, queryable)
             };
         }
     }

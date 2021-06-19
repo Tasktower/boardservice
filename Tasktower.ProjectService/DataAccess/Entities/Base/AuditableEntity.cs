@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,6 +34,23 @@ namespace Tasktower.ProjectService.DataAccess.Entities.Base
                 .HasColumnName("version")
                 .IsRequired()
                 .IsRowVersion();
+        }
+
+        public static IQueryable<ProjectEntity> OrderByQuery(string orderBy, IQueryable<ProjectEntity> queryable)
+        {
+            return orderBy switch
+            {
+                "createdBy" => queryable.OrderBy(e => e.CreatedBy),
+                "createdBy_desc" => queryable.OrderByDescending(e => e.CreatedBy),
+                "createdAt" => queryable.OrderBy(e => e.CreatedAt.Ticks),
+                "createdAt_desc" => queryable.OrderByDescending(e => e.CreatedAt),
+                "modifiedBy" => queryable.OrderBy(e => e.ModifiedBy),
+                "modifiedBy_desc" => queryable.OrderByDescending(e => e.ModifiedBy),
+                "modifiedAt" => queryable.OrderBy(e => e.ModifiedAt),
+                "modifiedAt_desc" => queryable.OrderByDescending(p => p.ModifiedAt),
+                _ => queryable
+            };
+
         }
     }
 }

@@ -51,14 +51,14 @@ namespace Tasktower.ProjectService.Services.Impl
             return _mapper.Map<ProjectEntity, ProjectReadDto>(projectEntity);
         }
         
-        public async ValueTask<ProjectReadDto> UpdateProject(Guid id, ProjectSaveDto projectSaveDto, bool member = true)
+        public async ValueTask<ProjectReadDto> UpdateProject(Guid id, ProjectSaveDto projectSaveDto, bool authorize = true)
         {
             var oldProjectEntity = await _unitOfWork.ProjectRepository.GetById(id);
             if (oldProjectEntity == null)
             {
                 throw _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, id);
             }
-            if (member)
+            if (authorize)
             {
                 await _projectAuthorizeService.Authorize(id, _projectAuthorizeService.WriterRoles());
             }
@@ -85,14 +85,14 @@ namespace Tasktower.ProjectService.Services.Impl
             return _mapper.Map<ProjectEntity, ProjectReadDto>(project);
         }
 
-        public async ValueTask<ProjectReadDto> FindProjectById(Guid id, bool member = true)
+        public async ValueTask<ProjectReadDto> FindProjectById(Guid id, bool authorize = true)
         {
             var project = await _unitOfWork.ProjectRepository.GetById(id);
             if (project == null)
             {
                 throw _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, id);
             }
-            if (member)
+            if (authorize)
             {
                 await _projectAuthorizeService.Authorize(id, _projectAuthorizeService.ReaderRoles());
             }
