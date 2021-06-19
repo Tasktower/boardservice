@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MapsterMapper;
 using Microsoft.Extensions.Logging;
@@ -85,43 +86,53 @@ namespace Tasktower.ProjectService.Services.Impl
             return _mapper.Map<ProjectEntity, ProjectReadDto>(project);
         }
 
-        public async ValueTask<ProjectReadDto> FindProjectById(Guid id, bool authorize = true)
+        public async ValueTask<ProjectSearchDto> FindProjectById(Guid id, bool authorize = true)
         {
-            var project = await _unitOfWork.ProjectRepository.GetById(id);
+            var project = await _unitOfWork.ProjectRepository.FindProjectByIdWithProjectRoles(id);
             if (project == null)
             {
                 throw _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, id);
             }
             if (authorize)
             {
-                await _projectAuthorizeService.Authorize(id, _projectAuthorizeService.ReaderRoles());
+                await _projectAuthorizeService.Authorize(id, _projectAuthorizeService.ReaderRoles(), true);
             }
-            return _mapper.Map<ProjectEntity, ProjectReadDto>(project);
+            
+            return ProjectSearchDtoFromProject(project);
         }
         
-        public async ValueTask<Page<ProjectReadDto>> FindMemberProjects(Pagination pagination)
+        public async ValueTask<Page<ProjectSearchDto>> FindMemberProjects(Pagination pagination)
         {
             var userContext = _userContextService.Get();
             var projectsPage = await _unitOfWork.ProjectRepository
                 .FindMemberProjects(userContext.UserId, pagination);
-            return projectsPage.Map(p => _mapper.Map<ProjectReadDto>(p));
+            return projectsPage.Map(ProjectSearchDtoFromProject);
         }
         
-        public async ValueTask<Page<ProjectReadDto>> FindPendingInviteProjects(Pagination pagination)
+        public async ValueTask<Page<ProjectSearchDto>> FindPendingInviteProjects(Pagination pagination)
         {
             var userContext = _userContextService.Get();
             var projectsPage = await _unitOfWork.ProjectRepository
                 .FindPendingInviteProjects(userContext.UserId, pagination);
-            return projectsPage.Map(p => _mapper.Map<ProjectReadDto>(p));
+            return projectsPage.Map(ProjectSearchDtoFromProject);
         }
         
-        public async ValueTask<Page<ProjectReadDto>> FindProjectsPageForUser(Pagination pagination, bool member = true)
+        public async ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool member = true)
         {
             var userContext = _userContextService.Get();
             var projectsPage = member? 
-                await _unitOfWork.ProjectRepository.FindMemberProjectsWithUser(userContext.UserId, pagination): 
-                await _unitOfWork.ProjectRepository.Queryable().GetPage(pagination, ProjectEntity.OrderByQuery);
-            return projectsPage.Map(p => _mapper.Map<ProjectReadDto>(p));
+                await _unitOfWork.ProjectRepository.FindMemberAndInvitedProjects(userContext.UserId, pagination): 
+                await _unitOfWork.ProjectRepository.FindAllProjectsWithRoles(pagination);
+            return projectsPage.Map(ProjectSearchDtoFromProject);
+        }
+
+        private ProjectSearchDto ProjectSearchDtoFromProject(ProjectEntity project)
+        {
+            var projectReadDto = _mapper.Map<ProjectEntity, ProjectReadDto>(project);
+            var owner = (from pr in project.ProjectRoles 
+                where ProjectRoleValue.OWNER == pr.Role 
+                select pr.UserId).FirstOrDefault();
+            return new ProjectSearchDto {ProjectOwner = owner, Project = projectReadDto};
         }
     }
 }

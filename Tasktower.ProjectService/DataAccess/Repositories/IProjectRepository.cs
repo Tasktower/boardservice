@@ -8,7 +8,10 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
 {
     public interface IProjectRepository : ICrudRepository<Guid, ProjectEntity>
     {
-        public ValueTask<Page<ProjectEntity>> FindMemberProjectsWithUser(string userId, Pagination pagination);
+        public ValueTask<ProjectEntity> FindProjectByIdWithProjectRoles(Guid projectId);
+
+        public ValueTask<Page<ProjectEntity>> FindAllProjectsWithRoles(Pagination pagination);
+        public ValueTask<Page<ProjectEntity>> FindMemberAndInvitedProjects(string userId, Pagination pagination);
 
         public ValueTask<Page<ProjectEntity>> FindMemberProjects(string userId, Pagination pagination);
 

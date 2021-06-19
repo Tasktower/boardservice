@@ -10,7 +10,7 @@ namespace Tasktower.ProjectService.Tools.Paging.Extensions
 {
     public static class QueryablePagingExtension
     {
-        public static async ValueTask<Page<TEntity>> GetPage<TEntity>(this IQueryable<TEntity> query, 
+        public static async ValueTask<Page<TEntity>> GetPageAsync<TEntity>(this IQueryable<TEntity> query, 
             Pagination pagination, 
             Func<string, IQueryable<TEntity>, IQueryable<TEntity>> orderByQueryFunc) 
             where TEntity : class

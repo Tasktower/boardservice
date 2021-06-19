@@ -7,7 +7,8 @@ namespace Tasktower.ProjectService.Services
 {
     public interface IProjectAuthorizeService
     {
-        public ValueTask Authorize(Guid projectId, ISet<ProjectRoleValue> projectRoles);
+        public ValueTask Authorize(Guid projectId, ISet<ProjectRoleValue> projectRoles, 
+            bool allowPendingInvite = false);
 
         public ISet<ProjectRoleValue> OwnerRoles();
         public ISet<ProjectRoleValue> WriterRoles();

@@ -10,10 +10,10 @@ namespace Tasktower.ProjectService.Services
         public ValueTask<ProjectReadDto> CreateNewProject(ProjectSaveDto projectSaveDto);
         public ValueTask<ProjectReadDto> UpdateProject(Guid id, ProjectSaveDto projectSaveDto, bool authorize = true);
         public ValueTask<ProjectReadDto> DeleteProject(Guid id, bool authorize = true);
-        public ValueTask<ProjectReadDto> FindProjectById(Guid id, bool authorize = true);
-        public ValueTask<Page<ProjectReadDto>> FindMemberProjects(Pagination pagination);
-        public ValueTask<Page<ProjectReadDto>> FindPendingInviteProjects(Pagination pagination);
-        public ValueTask<Page<ProjectReadDto>> FindProjectsPageForUser(Pagination pagination, bool member = true);
+        public ValueTask<ProjectSearchDto> FindProjectById(Guid id, bool authorize = true);
+        public ValueTask<Page<ProjectSearchDto>> FindMemberProjects(Pagination pagination);
+        public ValueTask<Page<ProjectSearchDto>> FindPendingInviteProjects(Pagination pagination);
+        public ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool member = true);
 
     }
 }
