@@ -9,7 +9,7 @@ namespace Tasktower.ProjectService.Security
 {
     public class UserContext : IUserContext
     {
-        public const string permissionsClaimName = "permissions";
+        public const string PermissionsClaim = "permissions";
             
 
         public UserContext(IHttpContextAccessor httpContextAccessor)
@@ -19,7 +19,7 @@ namespace Tasktower.ProjectService.Security
             UserId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "ANONYMOUS";
             Name = user?.Identity?.Name ?? "ANONYMOUS";
             Permissions = 
-                user?.FindAll(permissionsClaimName).Select(r => r.Value).ToHashSet() ?? new HashSet<string>();
+                user?.FindAll(PermissionsClaim).Select(r => r.Value).ToHashSet() ?? new HashSet<string>();
         }
 
         public bool IsAuthenticated { get; set; }

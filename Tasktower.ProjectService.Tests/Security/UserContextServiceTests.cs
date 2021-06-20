@@ -57,8 +57,8 @@ namespace Tasktower.ProjectService.Tests.Security
                     {
                         new(ClaimTypes.NameIdentifier, userId),
                         new(ClaimTypes.Name, name),
-                        new(UserContext.permissionsClaimName, Permissions.ReadProjectsAny),
-                        new(UserContext.permissionsClaimName, Permissions.UpdateProjectsAny)
+                        new(UserContext.PermissionsClaim, Permissions.ReadProjectsAny),
+                        new(UserContext.PermissionsClaim, Permissions.UpdateProjectsAny)
                     },
                     "Basic")
             );
