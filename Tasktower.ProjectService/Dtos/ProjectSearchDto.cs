@@ -6,7 +6,7 @@ namespace Tasktower.ProjectService.Dtos
 {
     public class ProjectSearchDto
     {
-        public string ProjectOwner { get; set; }
+        public string ProjectOwnerId { get; set; }
         public ProjectReadDto Project { get; set; }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Tasktower.ProjectService.Tools.Paging;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories.Base
 {
@@ -14,8 +11,9 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Base
         public IQueryable<TEntity> Queryable();
         public ValueTask Insert(TEntity entity);
         public ValueTask InsertMany(IEnumerable<TEntity> entities);
-        public ValueTask Delete(TIdType idValues);
+        public ValueTask Delete(TIdType id);
         public ValueTask Delete(TEntity entityToDelete);
+        public ValueTask DeleteAll();
         public ValueTask Update(TEntity entityToUpdate);
     }
 }

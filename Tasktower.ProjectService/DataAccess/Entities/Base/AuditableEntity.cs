@@ -32,7 +32,6 @@ namespace Tasktower.ProjectService.DataAccess.Entities.Base
                 .IsRequired();
             entityTypeBuilder.Property(e => e.Version)
                 .HasColumnName("version")
-                .IsRequired()
                 .IsRowVersion();
         }
 

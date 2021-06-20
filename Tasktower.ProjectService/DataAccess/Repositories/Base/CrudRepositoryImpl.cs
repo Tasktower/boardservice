@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Tasktower.ProjectService.DataAccess.Entities;
-using Tasktower.ProjectService.Tools.Constants;
-using Tasktower.ProjectService.Tools.Paging;
-using Tasktower.ProjectService.Tools.Paging.Extensions;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories.Base
 {
@@ -46,15 +38,15 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Base
             await dbSet.AddRangeAsync(entities.ToArray());
         }
 
-        public virtual async ValueTask Delete(TIdType idValues)
+        public virtual async ValueTask Delete(TIdType id)
         {
-            TEntity entityToDelete = await dbSet.FindAsync(idValues);
+            var entityToDelete = await dbSet.FindAsync(id);
             await Delete(entityToDelete);
         }
 
         public virtual async ValueTask Delete(TEntity entityToDelete)
         {
-            ValueTask valueTask = new ValueTask();
+            var valueTask = new ValueTask();
             if (context.Entry(entityToDelete).State == EntityState.Detached)
             {
                 dbSet.Attach(entityToDelete);
@@ -63,9 +55,16 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Base
             await valueTask;
         }
 
+        public async ValueTask DeleteAll()
+        {
+            var entities = await dbSet.ToListAsync();
+            dbSet.AttachRange(entities);
+            dbSet.RemoveRange(entities);
+        }
+
         public virtual async ValueTask Update(TEntity entityToUpdate)
         {
-            ValueTask valueTask = new ValueTask();
+            var valueTask = new ValueTask();
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
             await valueTask;

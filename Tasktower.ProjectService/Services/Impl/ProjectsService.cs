@@ -115,9 +115,9 @@ namespace Tasktower.ProjectService.Services.Impl
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }
         
-        public async ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool member = true)
+        public async ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool authorized = true)
         {
-            var projectsPage = member? 
+            var projectsPage = authorized? 
                 await _unitOfWork.ProjectRepository.FindMemberAndInvitedProjects(_userContext.UserId, pagination): 
                 await _unitOfWork.ProjectRepository.FindAllProjectsWithRoles(pagination);
             return projectsPage.Map(ProjectSearchDtoFromProject);
@@ -129,7 +129,7 @@ namespace Tasktower.ProjectService.Services.Impl
             var owner = (from pr in project.ProjectRoles 
                 where ProjectRoleValue.OWNER == pr.Role 
                 select pr.UserId).FirstOrDefault();
-            return new ProjectSearchDto {ProjectOwner = owner, Project = projectReadDto};
+            return new ProjectSearchDto {ProjectOwnerId = owner, Project = projectReadDto};
         }
     }
 }

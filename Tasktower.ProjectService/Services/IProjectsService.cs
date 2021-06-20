@@ -13,7 +13,7 @@ namespace Tasktower.ProjectService.Services
         public ValueTask<ProjectSearchDto> FindProjectById(Guid id, bool authorize = true);
         public ValueTask<Page<ProjectSearchDto>> FindMemberProjects(Pagination pagination);
         public ValueTask<Page<ProjectSearchDto>> FindPendingInviteProjects(Pagination pagination);
-        public ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool member = true);
+        public ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool authorized = true);
 
     }
 }
