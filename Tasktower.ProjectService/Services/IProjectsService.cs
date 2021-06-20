@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Tools.Paging;
@@ -11,9 +12,9 @@ namespace Tasktower.ProjectService.Services
         public ValueTask<ProjectReadDto> UpdateProject(Guid id, ProjectSaveDto projectSaveDto, bool authorize = true);
         public ValueTask<ProjectReadDto> DeleteProject(Guid id, bool authorize = true);
         public ValueTask<ProjectSearchDto> FindProjectById(Guid id, bool authorize = true);
-        public ValueTask<Page<ProjectSearchDto>> FindMemberProjects(Pagination pagination);
-        public ValueTask<Page<ProjectSearchDto>> FindPendingInviteProjects(Pagination pagination);
-        public ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool authorized = true);
+        public ValueTask<Page<ProjectSearchDto>> FindProjects(Pagination pagination, string search,
+            ICollection<string> ownerIds, bool pendingInvites, bool member, bool authorized = true);
+   
 
     }
 }

@@ -100,26 +100,12 @@ namespace Tasktower.ProjectService.Services.Impl
             
             return ProjectSearchDtoFromProject(project);
         }
-        
-        public async ValueTask<Page<ProjectSearchDto>> FindMemberProjects(Pagination pagination)
+
+        public async ValueTask<Page<ProjectSearchDto>> FindProjects(Pagination pagination, string search, 
+            ICollection<string> ownerIds, bool pendingInvites, bool member, bool authorized = true)
         {
-            var projectsPage = await _unitOfWork.ProjectRepository
-                .FindMemberProjects(_userContext.UserId, pagination);
-            return projectsPage.Map(ProjectSearchDtoFromProject);
-        }
-        
-        public async ValueTask<Page<ProjectSearchDto>> FindPendingInviteProjects(Pagination pagination)
-        {
-            var projectsPage = await _unitOfWork.ProjectRepository
-                .FindPendingInviteProjects(_userContext.UserId, pagination);
-            return projectsPage.Map(ProjectSearchDtoFromProject);
-        }
-        
-        public async ValueTask<Page<ProjectSearchDto>> FindProjectsPage(Pagination pagination, bool authorized = true)
-        {
-            var projectsPage = authorized? 
-                await _unitOfWork.ProjectRepository.FindMemberAndInvitedProjects(_userContext.UserId, pagination): 
-                await _unitOfWork.ProjectRepository.FindAllProjectsWithRoles(pagination);
+            var projectsPage = await _unitOfWork.ProjectRepository.FindProjects(pagination, search, ownerIds, 
+                _userContext.UserId, pendingInvites, member, authorized);
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }
 

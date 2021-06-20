@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories.Base;
 using Tasktower.ProjectService.Errors;
 using Tasktower.ProjectService.Tools.Constants;
+using Tasktower.ProjectService.Tools.Helpers;
 using Tasktower.ProjectService.Tools.Paging;
 using Tasktower.ProjectService.Tools.Paging.Extensions;
 
@@ -34,36 +36,27 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
                 .GetPageAsync(pagination, ProjectEntity.OrderByQuery);
         }
 
-        public async ValueTask<Page<ProjectEntity>> FindMemberAndInvitedProjects(string userId, Pagination pagination)
+        public async ValueTask<Page<ProjectEntity>> FindProjects(Pagination pagination, string search, 
+            ICollection<string> ownerIds, string userId, bool pendingInvites, bool member, bool authorized)
         {
-            return await (from project in dbSet.AsQueryable()
-                    join projectRole in context.ProjectRoles.AsQueryable()
-                        on project.Id equals projectRole.ProjectId
-                    where userId == projectRole.UserId
-                    select project)
-                .Include(p => p.ProjectRoles)
-                .GetPageAsync(pagination, ProjectEntity.OrderByQuery);
-        }
+            ownerIds ??= new List<string>();
 
-        public async ValueTask<Page<ProjectEntity>> FindMemberProjects(string userId, Pagination pagination)
-        {
             return await (from project in dbSet.AsQueryable()
                     join projectRole in context.ProjectRoles.AsQueryable()
                         on project.Id equals projectRole.ProjectId
-                    where userId == projectRole.UserId && !projectRole.PendingInvite
+                    where (!authorized || 
+                           projectRole != null &&
+                           projectRole.UserId == userId && 
+                           (pendingInvites && projectRole.PendingInvite || 
+                            member && !projectRole.PendingInvite)) 
+                          &&
+                          (search == null || 
+                           EF.Functions.Like( project.Title, QueryUtils.LikeWrap(search)) || 
+                           EF.Functions.Like( project.Description, QueryUtils.LikeWrap(search)))
                     select project)
                 .Include(p => p.ProjectRoles)
-                .GetPageAsync(pagination, ProjectEntity.OrderByQuery);
-        }
-        
-        public async ValueTask<Page<ProjectEntity>> FindPendingInviteProjects(string userId, Pagination pagination)
-        {
-            return await (from project in dbSet.AsQueryable()
-                    join projectRole in context.ProjectRoles.AsQueryable()
-                        on project.Id equals projectRole.ProjectId
-                    where userId == projectRole.UserId && projectRole.PendingInvite
-                    select project)
-                .Include(p => p.ProjectRoles)
+                .Where(p => ownerIds.Count == 0 || 
+                            p.ProjectRoles.Any(pr => ownerIds.Contains(pr.UserId)))
                 .GetPageAsync(pagination, ProjectEntity.OrderByQuery);
         }
     }

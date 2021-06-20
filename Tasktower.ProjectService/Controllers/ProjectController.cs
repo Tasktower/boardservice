@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -73,30 +74,20 @@ namespace Tasktower.ProjectService.Controllers
         
         [Authorize]
         [HttpGet]
-        public async ValueTask<Page<ProjectSearchDto>> GetPage([FromQuery] Pagination pagination)
+        public async ValueTask<Page<ProjectSearchDto>> FindProjects([FromQuery] Pagination pagination,
+            [FromQuery] string search, [FromQuery] ICollection<string> ownerIds, 
+            [FromQuery] bool pendingInvites, [FromQuery] bool member)
         {
-            return await _projectsService.FindProjectsPage(pagination);
+            return await _projectsService.FindProjects(pagination, search, ownerIds, pendingInvites, member);
         }
         
         [Authorize(Policy = Policies.Names.ReadProjectsAny)]
         [HttpGet("any")]
-        public async ValueTask<Page<ProjectSearchDto>> GetPageAny([FromQuery] Pagination pagination)
+        public async ValueTask<Page<ProjectSearchDto>> FindProjectsAny([FromQuery] Pagination pagination,
+            [FromQuery] string search, [FromQuery] ICollection<string> ownerIds, 
+            [FromQuery] bool pendingInvites, [FromQuery] bool member)
         {
-            return await _projectsService.FindProjectsPage(pagination, false);
-        }
-        
-        [Authorize]
-        [HttpGet("member")]
-        public async ValueTask<Page<ProjectSearchDto>> GetMemberProjects([FromQuery] Pagination pagination)
-        {
-            return await _projectsService.FindMemberProjects(pagination);
-        }
-        
-        [Authorize]
-        [HttpGet("pending-invite")]
-        public async ValueTask<Page<ProjectSearchDto>> GetPendingInviteProjects([FromQuery] Pagination pagination)
-        {
-            return await _projectsService.FindPendingInviteProjects(pagination);
+            return await _projectsService.FindProjects(pagination, search, ownerIds, pendingInvites, member, false);
         }
     }
 }

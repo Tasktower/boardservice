@@ -165,14 +165,15 @@ namespace Tasktower.ProjectService.Tests.Services
         }
         
         [Fact]
-        public async void ReadAnyProjects_SearchForThreeProjectsPageOne_ThreeProjectsFound()
+        public async void FindAnyProjects_SearchForThreeProjectsPageOne_ThreeProjectsFound()
         {
             var pagination = new Pagination
             {
                 Page = 0,
                 PageSize = 3
             };
-            var projects = await _projectsService.FindProjectsPage(pagination, false);
+            var projects = await _projectsService.FindProjects(pagination, null, null,
+                true, true, false);
             Assert.Equal(3, projects.ResultsSize);
             Assert.Equal(ProjectsTotal, projects.Total);
             Assert.Equal(0, projects.Pagination.Page);
