@@ -14,15 +14,15 @@ using Tasktower.ProjectService.Configuration.Options;
 
 namespace Tasktower.ProjectService.Errors.Middleware
 {
-    public class ErrorHandeMiddleware
+    public class ErrorHandleMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ErrorOptionsConfig _options;
-        private readonly ILogger _logger;
+        private readonly ILogger<ErrorHandleMiddleware> _logger;
 
-        public ErrorHandeMiddleware(RequestDelegate next,
+        public ErrorHandleMiddleware(RequestDelegate next,
             IOptions<ErrorOptionsConfig> options,
-            ILogger<ErrorHandeMiddleware> logger)
+            ILogger<ErrorHandleMiddleware> logger)
         {
             _next = next;
             _options = options.Value;
@@ -45,28 +45,28 @@ namespace Tasktower.ProjectService.Errors.Middleware
         {
             string errorCode = null;
             string message;
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError; // 500 if unexpected
+            var statusCode = HttpStatusCode.InternalServerError; // 500 if unexpected
             IEnumerable<object> multipleErrors = null;
 
-            // Specify different custom exceptions here
-            if (exception is AppException appException)
+            switch (exception)
             {
-                statusCode = appException.StatusCode;
-                errorCode = appException.ErrorCode.GetDisplayName();
-                message = appException.Message;
-                multipleErrors = appException.MultipleErrors?
-                    .Select(x => new { error = x.Message, errorCode = x.ErrorCode.GetDisplayName() });
+                // Specify different custom exceptions here
+                case AppException appException:
+                    statusCode = appException.StatusCode;
+                    errorCode = appException.ErrorCode.GetDisplayName();
+                    message = appException.Message;
+                    multipleErrors = appException.MultipleErrors?
+                        .Select(x => new { error = x.Message, errorCode = x.ErrorCode.GetDisplayName() });
+                    break;
+                case PaginationException:
+                    statusCode = HttpStatusCode.BadRequest;
+                    message = exception.Message;
+                    break;
+                default:
+                    message = _options.ShowAllErrorMessages ? exception.Message : "Internal server error";
+                    break;
             }
-            else if (exception is PaginationException)
-            {
-                statusCode = HttpStatusCode.BadRequest;
-                message = exception.Message;
-            }
-            else
-            {
-                message = _options.ShowAllErrorMessages ? exception.Message : "Internal server error";
-            }
-            string result = JsonSerializer.Serialize(new
+            var result = JsonSerializer.Serialize(new
             {
                 error = message,
                 errorCode,
@@ -74,9 +74,13 @@ namespace Tasktower.ProjectService.Errors.Middleware
                 status = statusCode
             }, Tools.JsonTools.JsonSerializerUtils.CustomSerializerOptions()); ;
 
-            if (_options.UseStackTrace)
+            if (_options.UseStackTrace && (_options.ShowAllErrorMessages || (int)statusCode >= 500))
             {
-                _logger.LogTrace("Exception: {0}{1}Message: {2}{3}Error Code: {4}{5}Stacktrace: {6}{7}",
+                _logger.LogError("Exception: {0}{1}" +
+                                 "Message: {2}{3}" +
+                                 "Error Code: {4}{5}" +
+                                 "Stacktrace: {6}" +
+                                 "{7}",
                     exception.GetType().FullName ?? exception.GetType().Name, Environment.NewLine,
                     exception.Message, Environment.NewLine,
                     errorCode ?? "", Environment.NewLine, 

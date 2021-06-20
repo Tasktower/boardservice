@@ -48,7 +48,7 @@ namespace Tasktower.ProjectService
                 app.ConfigureSwagger(env);
             }
 
-            app.UseMiddleware<ErrorHandeMiddleware>();
+            app.UseMiddleware<ErrorHandleMiddleware>();
 
             app.UseHttpsRedirection();
 

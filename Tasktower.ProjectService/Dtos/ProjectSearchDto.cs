@@ -1,5 +1,4 @@
 ﻿using System;
-using StackExchange.Redis;
 using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.Dtos
