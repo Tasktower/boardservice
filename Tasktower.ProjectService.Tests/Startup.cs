@@ -6,8 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Tasktower.ProjectService.Configuration.StartupExtensions;
-using Tasktower.ProjectService.Tests.TestHelpers;
-using Tasktower.ProjectService.Tests.TestHelpers.DependencyInjection;
+using Tasktower.ProjectService.Tests.TestTools.DependencyInjection;
 
 namespace Tasktower.ProjectService.Tests
 {

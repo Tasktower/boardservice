@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tasktower.ProjectService.DataAccess.Context;
 
-namespace Tasktower.ProjectService.Tests.TestHelpers.DependencyInjection
+namespace Tasktower.ProjectService.Tests.TestTools.DependencyInjection
 {
     public static class TestDataBaseConnectionConfig
     {

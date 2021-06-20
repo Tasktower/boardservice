@@ -54,7 +54,7 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .OnDelete(DeleteBehavior.Cascade);
         }
         
-        public static IQueryable<ProjectEntity> OrderByQuery(string orderBy, IQueryable<ProjectEntity> queryable)
+        public new static IQueryable<ProjectEntity> OrderByQuery(string orderBy, IQueryable<ProjectEntity> queryable)
         {
             return orderBy switch
             {
