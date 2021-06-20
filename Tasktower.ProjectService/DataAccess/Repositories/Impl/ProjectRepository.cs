@@ -25,7 +25,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
                     where project.Id == projectId
                     select project)
                 .Include(p => p.ProjectRoles)
-                .FirstAsync();
+                .SingleOrDefaultAsync();
         }
 
         public async ValueTask<Page<ProjectEntity>> FindAllProjectsWithRoles(Pagination pagination)

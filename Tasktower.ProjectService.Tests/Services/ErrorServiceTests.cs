@@ -29,7 +29,7 @@ namespace Tasktower.ProjectService.Tests.Services
             var randomId = Guid.NewGuid();
             var appError = _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, randomId);
             Assert.Equal(HttpStatusCode.NotFound, appError.StatusCode);
-            Assert.Equal($"Project with id {randomId} not found", appError.Message);
+            Assert.Equal($"Project with id {randomId.ToString()} not found", appError.Message);
         }
     }
 }
