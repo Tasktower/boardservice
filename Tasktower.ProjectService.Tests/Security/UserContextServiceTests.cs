@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Tasktower.ProjectService.Security;
+using Tasktower.Lib.Aspnetcore.Security;
 using Tasktower.ProjectService.Tests.TestTools.Helpers;
 using Xunit;
 

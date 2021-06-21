@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
+using Tasktower.Lib.Aspnetcore.Errors;
+using Tasktower.Lib.Aspnetcore.Security;
+using Tasktower.Lib.Aspnetcore.Tools.Paging;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Errors;
-using Tasktower.ProjectService.Security;
 using Tasktower.ProjectService.Services;
 using Tasktower.ProjectService.Tests.TestTools.Helpers;
 using Tasktower.ProjectService.Tools.Constants;
-using Tasktower.ProjectService.Tools.Paging;
 using Xunit;
 
 namespace Tasktower.ProjectService.Tests.Services
@@ -195,10 +196,11 @@ namespace Tasktower.ProjectService.Tests.Services
         public async void FindProjectById_Project1AIdAsUser2_ThrowForbidden()
         {
             _userContext.SignInForTesting(User2Id, User2Name, _user2Permissions);
-            var exception = await Assert.ThrowsAsync<AppException>(async () =>
+            var exception = await Assert.ThrowsAsync<AppException<ErrorCode>>(async () =>
             {
                 await _projectsService.FindProjectById(_project1AId);
             });
+            Assert.Equal(ErrorCode.NO_PROJECT_PERMISSIONS, exception.ErrorCode);
             Assert.Equal(HttpStatusCode.Forbidden, exception.StatusCode);
         }
         
@@ -206,10 +208,11 @@ namespace Tasktower.ProjectService.Tests.Services
         public async void FindProjectById_UseIdNotInDatabase_ThrowNotFound()
         {
             var projectId = Guid.Parse("44a8079d-ef92-434c-a3d2-aaa4848c4396");
-            var exception = await Assert.ThrowsAsync<AppException>(async () =>
+            var exception = await Assert.ThrowsAsync<AppException<ErrorCode>>(async () =>
             {
                 await _projectsService.FindProjectById(projectId, false);
             });
+            Assert.Equal(ErrorCode.PROJECT_ID_NOT_FOUND, exception.ErrorCode);
             Assert.Equal(HttpStatusCode.NotFound, exception.StatusCode);
             Assert.Equal($"Project with id {projectId.ToString()} not found", exception.Message);
         }

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using MapsterMapper;
 using Microsoft.Extensions.Logging;
+using Tasktower.Lib.Aspnetcore.Security;
+using Tasktower.Lib.Aspnetcore.Tools.Paging;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Errors;
-using Tasktower.ProjectService.Security;
 using Tasktower.ProjectService.Tools.Constants;
-using Tasktower.ProjectService.Tools.Paging;
 
 namespace Tasktower.ProjectService.Services.Impl
 {
@@ -102,10 +102,10 @@ namespace Tasktower.ProjectService.Services.Impl
         }
 
         public async ValueTask<Page<ProjectSearchDto>> FindProjects(Pagination pagination, string search, 
-            ICollection<string> ownerIds, bool pendingInvites, bool member, bool authorized = true)
+            ICollection<string> ownerIds, bool pendingInvites, bool member, bool authorizedProjects = true)
         {
             var projectsPage = await _unitOfWork.ProjectRepository.FindProjects(pagination, search, ownerIds, 
-                _userContext.UserId, pendingInvites, member, authorized);
+                _userContext.UserId, pendingInvites, member, authorizedProjects);
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }
 

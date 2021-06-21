@@ -1,6 +1,6 @@
 ﻿using System;
+using Tasktower.Lib.Aspnetcore.DataAccess.Repositories;
 using Tasktower.ProjectService.DataAccess.Entities;
-using Tasktower.ProjectService.DataAccess.Repositories.Base;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories
 {

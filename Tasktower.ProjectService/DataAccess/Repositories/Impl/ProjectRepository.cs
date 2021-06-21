@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Tasktower.Lib.Aspnetcore.DataAccess.Repositories;
+using Tasktower.Lib.Aspnetcore.Tools.Helpers;
+using Tasktower.Lib.Aspnetcore.Tools.Paging;
+using Tasktower.Lib.Aspnetcore.Tools.Paging.Extensions;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
-using Tasktower.ProjectService.DataAccess.Repositories.Base;
-using Tasktower.ProjectService.Errors;
-using Tasktower.ProjectService.Tools.Constants;
-using Tasktower.ProjectService.Tools.Helpers;
-using Tasktower.ProjectService.Tools.Paging;
-using Tasktower.ProjectService.Tools.Paging.Extensions;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
 {
     public class ProjectRepository : 
-        CrudRepositoryImpl<Guid, ProjectEntity, BoardDBContext>, 
+        CrudRepositoryEfCore<Guid, ProjectEntity, BoardDBContext>, 
         IProjectRepository
     {
         public ProjectRepository(BoardDBContext context) : base(context) { }
@@ -37,14 +34,14 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
         }
 
         public async ValueTask<Page<ProjectEntity>> FindProjects(Pagination pagination, string search, 
-            ICollection<string> ownerIds, string userId, bool pendingInvites, bool member, bool authorized)
+            ICollection<string> ownerIds, string userId, bool pendingInvites, bool member, bool authorizedProjects)
         {
             ownerIds ??= new List<string>();
 
             return await (from project in dbSet.AsQueryable()
                     join projectRole in context.ProjectRoles.AsQueryable()
                         on project.Id equals projectRole.ProjectId
-                    where (!authorized || 
+                    where (!authorizedProjects || 
                            projectRole != null &&
                            projectRole.UserId == userId && 
                            (pendingInvites && projectRole.PendingInvite || 

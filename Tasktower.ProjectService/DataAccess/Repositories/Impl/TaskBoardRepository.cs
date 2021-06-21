@@ -1,12 +1,12 @@
 ﻿using System;
+using Tasktower.Lib.Aspnetcore.DataAccess.Repositories;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
-using Tasktower.ProjectService.DataAccess.Repositories.Base;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
 {
     public class TaskBoardRepository : 
-        CrudRepositoryImpl<Guid, TaskBoardEntity, BoardDBContext>, 
+        CrudRepositoryEfCore<Guid, TaskBoardEntity, BoardDBContext>, 
         ITaskBoardRepository
     {
         public TaskBoardRepository(BoardDBContext context) : base(context) { }

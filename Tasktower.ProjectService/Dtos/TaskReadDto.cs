@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Linq.Expressions;
-using Tasktower.ProjectService.DataAccess.Entities;
+using Tasktower.Lib.Aspnetcore.Dtos;
 
 namespace Tasktower.ProjectService.Dtos
 {

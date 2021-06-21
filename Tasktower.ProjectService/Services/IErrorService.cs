@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
+using Tasktower.Lib.Aspnetcore.Errors.Services;
 using Tasktower.ProjectService.Errors;
 
 namespace Tasktower.ProjectService.Services
 {
-    public interface IErrorService
+    public interface IErrorService : IBaseErrorService<ErrorCode>
     {
-        public AppException Create(ErrorCode errorCode, params object[] args);
-        
-        public AppException CreateFromMultiple(IEnumerable<AppException> apiExceptions, params object[] args);
     }
 }

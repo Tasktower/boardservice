@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Intrinsics;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tasktower.ProjectService.DataAccess.Entities.Base;
+using Tasktower.Lib.Aspnetcore.DataAccess.Entities;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {

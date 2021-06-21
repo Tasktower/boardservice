@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tasktower.Lib.Aspnetcore.DataAccess.Repositories;
 using Tasktower.ProjectService.DataAccess.Entities;
-using Tasktower.ProjectService.DataAccess.Repositories.Base;
 using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories

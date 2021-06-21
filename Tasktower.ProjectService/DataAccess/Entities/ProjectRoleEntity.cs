@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tasktower.ProjectService.DataAccess.Entities.Base;
+using Tasktower.Lib.Aspnetcore.DataAccess.Entities;
 using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.DataAccess.Entities

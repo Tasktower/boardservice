@@ -1,32 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Extensions;
-using Tasktower.ProjectService.Configuration;
-using Tasktower.ProjectService.Configuration.Options;
+using Tasktower.Lib.Aspnetcore.Errors;
+using Tasktower.Lib.Aspnetcore.Errors.Options;
+using Tasktower.Lib.Aspnetcore.Errors.Services.Impl;
 using Tasktower.ProjectService.Errors;
 
 namespace Tasktower.ProjectService.Services.Impl
 {
-    public class ErrorService : IErrorService
+    public class ErrorService : BaseBaseErrorService<ErrorCode>, IErrorService 
     {
-        private readonly ErrorOptionsConfig _errorOptionsConfig;
-        
-        public ErrorService(IOptions<ErrorOptionsConfig> errorConfigurationOptions)
+        public ErrorService(IOptions<ErrorOptionsConfig> errorConfigurationOptions) : base(errorConfigurationOptions)
         {
-            _errorOptionsConfig = errorConfigurationOptions.Value;
         }
 
-        public AppException Create(ErrorCode errorCode, params object[] args)
+        public override AppException<ErrorCode> CreateFromMultiple(IEnumerable<AppException<ErrorCode>> apiExceptions, 
+            params object[] args)
         {
-            var errorConfigData = _errorOptionsConfig.ErrorCodeMappings[errorCode.GetDisplayName()];
-            return new AppException(errorCode, errorConfigData, null, args);
-        }
-        
-        public AppException CreateFromMultiple(IEnumerable<AppException> appExceptions, params object[] args)
-        {
-            var errorConfigData = _errorOptionsConfig.ErrorCodeMappings[ErrorCode.MULTIPLE_ERRORS.GetDisplayName()];
-            return new AppException(ErrorCode.MULTIPLE_ERRORS, errorConfigData, appExceptions, args);
+            return base.CreateFromMultiple(ErrorCode.MULTIPLE_ERRORS, apiExceptions, args);
         }
     }
 }

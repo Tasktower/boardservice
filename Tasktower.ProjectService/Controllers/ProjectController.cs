@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tasktower.Lib.Aspnetcore.Security;
+using Tasktower.Lib.Aspnetcore.Tools.Paging;
 using Tasktower.ProjectService.Dtos;
-using Tasktower.ProjectService.Security;
 using Tasktower.ProjectService.Services;
-using Tasktower.ProjectService.Tools.Paging;
 
 namespace Tasktower.ProjectService.Controllers
 {
@@ -84,10 +84,10 @@ namespace Tasktower.ProjectService.Controllers
         [Authorize(Policy = Policies.Names.ReadProjectsAny)]
         [HttpGet("any")]
         public async ValueTask<Page<ProjectSearchDto>> FindProjectsAny([FromQuery] Pagination pagination,
-            [FromQuery] string search, [FromQuery] ICollection<string> ownerIds, 
-            [FromQuery] bool pendingInvites, [FromQuery] bool member)
+            [FromQuery] string search, [FromQuery] ICollection<string> ownerIds)
         {
-            return await _projectsService.FindProjects(pagination, search, ownerIds, pendingInvites, member, false);
+            return await _projectsService.FindProjects(pagination, search, ownerIds, 
+                true, true, false);
         }
     }
 }

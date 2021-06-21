@@ -1,8 +1,4 @@
-﻿using Tasktower.ProjectService.DataAccess.Entities.Base;
-using Tasktower.ProjectService.Dtos;
-using Tasktower.ProjectService.Errors;
-
-namespace Tasktower.ProjectService.Services.Impl
+﻿namespace Tasktower.ProjectService.Services.Impl
 {
     public class ValidationService : IValidationService
     {

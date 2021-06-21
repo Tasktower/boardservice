@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using Tasktower.ProjectService.DataAccess.Entities;
+using Tasktower.Lib.Aspnetcore.Dtos;
 using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.Dtos

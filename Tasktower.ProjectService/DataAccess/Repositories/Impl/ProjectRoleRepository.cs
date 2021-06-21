@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Tasktower.Lib.Aspnetcore.DataAccess.Repositories;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
-using Tasktower.ProjectService.DataAccess.Repositories.Base;
 using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
 {
     public class ProjectRoleRepository : 
-        CrudRepositoryImpl<Guid, ProjectRoleEntity, BoardDBContext>, IProjectRoleRepository
+        CrudRepositoryEfCore<Guid, ProjectRoleEntity, BoardDBContext>, IProjectRoleRepository
     {
         public ProjectRoleRepository(BoardDBContext context) : base(context) { }
 

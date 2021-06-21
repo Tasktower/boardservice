@@ -1,21 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Tasktower.ProjectService.DataAccess.Entities.Base;
-using Tasktower.ProjectService.Security;
+﻿using Microsoft.EntityFrameworkCore;
+using Tasktower.Lib.Aspnetcore.DataAccess.Context;
+using Tasktower.Lib.Aspnetcore.Security;
 
 namespace Tasktower.ProjectService.DataAccess.Context
 {
-    public class BoardDBContext : DbContext
+    public class BoardDBContext : BaseEfCoreDbContext
     {
-        private readonly IUserContext _userContext;
-        public BoardDBContext(DbContextOptions<BoardDBContext> options, IUserContext userContext) : base(options)
-        {
-            _userContext = userContext;
-        }
+        public BoardDBContext(DbContextOptions<BoardDBContext> options, IUserContext userContext) :
+            base(options, userContext) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,33 +16,7 @@ namespace Tasktower.ProjectService.DataAccess.Context
             modelBuilder.Entity<Entities.TaskBoardEntity>(Entities.TaskBoardEntity.BuildEntity);
             modelBuilder.Entity<Entities.TaskEntity>(Entities.TaskEntity.BuildEntity);
         }
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var entries = ChangeTracker
-                .Entries()
-                .Where(e => e.Entity is AuditableEntity && (
-                    e.State == EntityState.Added
-                    || e.State == EntityState.Modified));
-
-            foreach (var entityEntry in entries)
-            {
-                if (entityEntry.State == EntityState.Added)
-                {
-                    ((AuditableEntity)entityEntry.Entity).CreatedAt = DateTime.UtcNow;
-                    ((AuditableEntity)entityEntry.Entity).CreatedBy = _userContext.Name;
-                }
-                else
-                {
-                    Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedAt).IsModified = false;
-                    Entry((AuditableEntity)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
-                }
-                ((AuditableEntity)entityEntry.Entity).ModifiedAt = DateTime.UtcNow;
-                ((AuditableEntity)entityEntry.Entity).ModifiedBy = _userContext.Name;
-            }
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
+        
         public DbSet<Entities.ProjectEntity> Projects { get; set; }
         public DbSet<Entities.ProjectRoleEntity> ProjectRoles { get; set; }
         public DbSet<Entities.TaskBoardEntity> TaskBoards { get; set; }

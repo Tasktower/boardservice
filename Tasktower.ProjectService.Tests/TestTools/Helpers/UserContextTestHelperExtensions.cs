@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Tasktower.ProjectService.Security;
+using Tasktower.Lib.Aspnetcore.Security;
 
 namespace Tasktower.ProjectService.Tests.TestTools.Helpers
 {
