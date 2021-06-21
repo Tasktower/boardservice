@@ -21,7 +21,7 @@ namespace Tasktower.ProjectService
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureErrors(Configuration);
-            services.ConfigureSecurity(Configuration);
+            services.ConfigureAuth(Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);
             services.ConfigureDatabaseConnection(Configuration);
@@ -47,7 +47,7 @@ namespace Tasktower.ProjectService
 
             app.UseRouting();
 
-            app.ConfigureSecurity(env);
+            app.UseAuth(env);
 
             app.UseEndpoints(endpoints =>
             {

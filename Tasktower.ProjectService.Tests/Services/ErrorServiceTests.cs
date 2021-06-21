@@ -18,7 +18,7 @@ namespace Tasktower.ProjectService.Tests.Services
         [Fact]
         public void CreateError_OptimisticLocking_ReturnOptimisticLockingFromConfig()
         {
-            var appError = _errorService.Create(ErrorCode.OPTIMISTIC_LOCKING);
+            var appError = _errorService.Create(ErrorCode.OptimisticLocking);
             Assert.Equal(HttpStatusCode.Conflict, appError.StatusCode);
             Assert.Equal("Optimistic locking", appError.Message);
         }
@@ -27,7 +27,7 @@ namespace Tasktower.ProjectService.Tests.Services
         public void CreateError_ProjectIdNotFound_ReturnProjectIdNotFoundFromConfig()
         {
             var randomId = Guid.NewGuid();
-            var appError = _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, randomId);
+            var appError = _errorService.Create(ErrorCode.ProjectIdNotFound, randomId);
             Assert.Equal(HttpStatusCode.NotFound, appError.StatusCode);
             Assert.Equal($"Project with id {randomId.ToString()} not found", appError.Message);
         }

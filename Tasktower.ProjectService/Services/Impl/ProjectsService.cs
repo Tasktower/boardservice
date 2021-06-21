@@ -57,7 +57,7 @@ namespace Tasktower.ProjectService.Services.Impl
             var oldProjectEntity = await _unitOfWork.ProjectRepository.GetById(id);
             if (oldProjectEntity == null)
             {
-                throw _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, id);
+                throw _errorService.Create(ErrorCode.ProjectIdNotFound, id);
             }
             if (authorize)
             {
@@ -75,7 +75,7 @@ namespace Tasktower.ProjectService.Services.Impl
             var project = await _unitOfWork.ProjectRepository.GetById(id);
             if (project == null)
             {
-                throw _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, id);
+                throw _errorService.Create(ErrorCode.ProjectIdNotFound, id);
             }
             if (member)
             {
@@ -91,7 +91,7 @@ namespace Tasktower.ProjectService.Services.Impl
             var project = await _unitOfWork.ProjectRepository.FindProjectByIdWithProjectRoles(id);
             if (project == null)
             {
-                throw _errorService.Create(ErrorCode.PROJECT_ID_NOT_FOUND, id);
+                throw _errorService.Create(ErrorCode.ProjectIdNotFound, id);
             }
             if (authorize)
             {

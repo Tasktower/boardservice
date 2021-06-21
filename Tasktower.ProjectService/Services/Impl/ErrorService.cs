@@ -16,7 +16,7 @@ namespace Tasktower.ProjectService.Services.Impl
         public override AppException<ErrorCode> CreateFromMultiple(IEnumerable<AppException<ErrorCode>> apiExceptions, 
             params object[] args)
         {
-            return base.CreateFromMultiple(ErrorCode.MULTIPLE_ERRORS, apiExceptions, args);
+            return base.CreateFromMultiple(ErrorCode.MultipleErrors, apiExceptions, args);
         }
     }
 }

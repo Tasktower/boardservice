@@ -30,7 +30,7 @@ namespace Tasktower.ProjectService.Services.Impl
                 projectId, _userContext.UserId, projectRoles, allowPendingInvite);
             if (!hasPermission)
             {
-                throw _errorService.Create(ErrorCode.NO_PROJECT_PERMISSIONS, projectId);
+                throw _errorService.Create(ErrorCode.NoProjectPermissions, projectId);
             }
         }
 

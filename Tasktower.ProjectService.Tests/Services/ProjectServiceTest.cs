@@ -200,7 +200,7 @@ namespace Tasktower.ProjectService.Tests.Services
             {
                 await _projectsService.FindProjectById(_project1AId);
             });
-            Assert.Equal(ErrorCode.NO_PROJECT_PERMISSIONS, exception.ErrorCode);
+            Assert.Equal(ErrorCode.NoProjectPermissions, exception.ErrorCode);
             Assert.Equal(HttpStatusCode.Forbidden, exception.StatusCode);
         }
         
@@ -212,7 +212,7 @@ namespace Tasktower.ProjectService.Tests.Services
             {
                 await _projectsService.FindProjectById(projectId, false);
             });
-            Assert.Equal(ErrorCode.PROJECT_ID_NOT_FOUND, exception.ErrorCode);
+            Assert.Equal(ErrorCode.ProjectIdNotFound, exception.ErrorCode);
             Assert.Equal(HttpStatusCode.NotFound, exception.StatusCode);
             Assert.Equal($"Project with id {projectId.ToString()} not found", exception.Message);
         }
