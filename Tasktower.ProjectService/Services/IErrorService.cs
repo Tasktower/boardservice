@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Tasktower.Lib.Aspnetcore.Errors.Services;
+using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.ProjectService.Errors;
 
 namespace Tasktower.ProjectService.Services
