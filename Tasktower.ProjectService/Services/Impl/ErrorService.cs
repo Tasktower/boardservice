@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using Tasktower.Lib.Aspnetcore.Configuration.Options;
 using Tasktower.Lib.Aspnetcore.Errors;
-using Tasktower.Lib.Aspnetcore.Services.Impl;
+using Tasktower.Lib.Aspnetcore.Errors.Options;
+using Tasktower.Lib.Aspnetcore.Errors.Services;
 using Tasktower.ProjectService.Errors;
 
 namespace Tasktower.ProjectService.Services.Impl

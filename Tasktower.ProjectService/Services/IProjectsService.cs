@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tasktower.Lib.Aspnetcore.Tools.Paging;
+using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.ProjectService.Dtos;
 
 namespace Tasktower.ProjectService.Services

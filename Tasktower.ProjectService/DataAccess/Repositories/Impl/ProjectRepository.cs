@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Tasktower.Lib.Aspnetcore.DataAccess.Helpers;
 using Tasktower.Lib.Aspnetcore.DataAccess.Repositories;
-using Tasktower.Lib.Aspnetcore.Tools.Helpers;
-using Tasktower.Lib.Aspnetcore.Tools.Paging;
-using Tasktower.Lib.Aspnetcore.Tools.Paging.Extensions;
+using Tasktower.Lib.Aspnetcore.Paging;
+using Tasktower.Lib.Aspnetcore.Paging.Extensions;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
 

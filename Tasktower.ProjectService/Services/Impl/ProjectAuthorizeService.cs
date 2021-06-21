@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tasktower.Lib.Aspnetcore.Security;
+using Tasktower.Lib.Aspnetcore.Security.Services;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Errors;
 using Tasktower.ProjectService.Tools.Constants;
@@ -13,13 +14,13 @@ namespace Tasktower.ProjectService.Services.Impl
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IErrorService _errorService;
-        private readonly IUserContext _userContext;
+        private readonly IUserContextService _userContextService;
         
-        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, IUserContext userContext)
+        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, IUserContextService userContextService)
         {
             _unitOfWork = unitOfWork;
             _errorService = errorService;
-            _userContext = userContext;
+            _userContextService = userContextService;
         }
 
 
@@ -27,7 +28,7 @@ namespace Tasktower.ProjectService.Services.Impl
             bool allowPendingInvite = false)
         {
             var hasPermission = await _unitOfWork.ProjectRoleRepository.UserHasProjectRolePermission(
-                projectId, _userContext.UserId, projectRoles, allowPendingInvite);
+                projectId, _userContextService.UserId, projectRoles, allowPendingInvite);
             if (!hasPermission)
             {
                 throw _errorService.Create(ErrorCode.NoProjectPermissions, projectId);

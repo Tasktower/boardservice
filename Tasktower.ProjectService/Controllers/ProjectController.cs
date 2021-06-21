@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.Lib.Aspnetcore.Security;
-using Tasktower.Lib.Aspnetcore.Tools.Paging;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Services;
 

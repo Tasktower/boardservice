@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Tasktower.Lib.Aspnetcore.Configuration.StartupExtensions;
+using Tasktower.Lib.Aspnetcore.StartupExtensions;
 using Tasktower.ProjectService.Configuration.StartupExtensions;
 using Tasktower.ProjectService.Tests.TestTools.DependencyInjection;
 

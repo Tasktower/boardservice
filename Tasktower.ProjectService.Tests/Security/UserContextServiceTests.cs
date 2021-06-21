@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using Tasktower.Lib.Aspnetcore.Security;
+using Tasktower.Lib.Aspnetcore.Security.Services;
 using Tasktower.ProjectService.Tests.TestTools.Helpers;
 using Xunit;
 
@@ -11,16 +12,16 @@ namespace Tasktower.ProjectService.Tests.Security
 {
     public sealed class UserContextServiceTests : IDisposable
     {
-        private readonly IUserContext _userContext;
+        private readonly IUserContextService _userContextService;
 
-        public UserContextServiceTests(IUserContext userContext)
+        public UserContextServiceTests(IUserContextService userContextService)
         {
-            _userContext = userContext;
+            _userContextService = userContextService;
         }
         
         public void Dispose()
         {
-            _userContext.SignOutForTesting();
+            _userContextService.SignOutForTesting();
         }
 
         [Fact]
@@ -29,11 +30,11 @@ namespace Tasktower.ProjectService.Tests.Security
             const string userId = "123";
             const string name = "John Stewart";
             var permissions = new HashSet<string>() {Permissions.ReadProjectsAny, Permissions.UpdateProjectsAny};
-            _userContext.SignInForTesting(userId, name, permissions);
-            Assert.True(_userContext.IsAuthenticated);
-            Assert.Equal(userId, _userContext.UserId);
-            Assert.Equal(name, _userContext.Name);
-            Assert.Collection(_userContext.Permissions, 
+            _userContextService.SignInForTesting(userId, name, permissions);
+            Assert.True(_userContextService.IsAuthenticated);
+            Assert.Equal(userId, _userContextService.UserId);
+            Assert.Equal(name, _userContextService.Name);
+            Assert.Collection(_userContextService.Permissions, 
                 p => Assert.Equal(p, Permissions.ReadProjectsAny),
                 p => Assert.Equal(p, Permissions.UpdateProjectsAny));
         }
@@ -41,10 +42,10 @@ namespace Tasktower.ProjectService.Tests.Security
         [Fact]
         public void UserContext_NoUserAuthenticated_ReturnAnonymousUser()
         {
-            Assert.Equal("ANONYMOUS", _userContext.Name);
-            Assert.Equal("ANONYMOUS", _userContext.UserId);
-            Assert.False(_userContext.IsAuthenticated);
-            Assert.Equal(0, _userContext.Permissions.Count);
+            Assert.Equal("ANONYMOUS", _userContextService.Name);
+            Assert.Equal("ANONYMOUS", _userContextService.UserId);
+            Assert.False(_userContextService.IsAuthenticated);
+            Assert.Equal(0, _userContextService.Permissions.Count);
         }
 
         [Fact] public void CreateUserContext_WithAuthenticatedPrinciple_ReturnAnonymousUser()
@@ -57,8 +58,8 @@ namespace Tasktower.ProjectService.Tests.Security
                     {
                         new(ClaimTypes.NameIdentifier, userId),
                         new(ClaimTypes.Name, name),
-                        new(UserContext.PermissionsClaim, Permissions.ReadProjectsAny),
-                        new(UserContext.PermissionsClaim, Permissions.UpdateProjectsAny)
+                        new(UserContextService.PermissionsClaim, Permissions.ReadProjectsAny),
+                        new(UserContextService.PermissionsClaim, Permissions.UpdateProjectsAny)
                     },
                     "Basic")
             );
@@ -69,7 +70,7 @@ namespace Tasktower.ProjectService.Tests.Security
             var httpContextAccessor = new HttpContextAccessor();
             httpContextAccessor.HttpContext = httpContextMock.Object;
         
-            var testUserContext = new UserContext(httpContextAccessor);
+            var testUserContext = new UserContextService(httpContextAccessor);
         
             Assert.True(testUserContext.IsAuthenticated);
             Assert.Equal(userId, testUserContext.UserId);
@@ -90,7 +91,7 @@ namespace Tasktower.ProjectService.Tests.Security
             var httpContextAccessor = new HttpContextAccessor();
             httpContextAccessor.HttpContext = httpContextMock.Object;
 
-            var testUserContext = new UserContext(httpContextAccessor);
+            var testUserContext = new UserContextService(httpContextAccessor);
 
             Assert.False(claimsPrincipal.Identity?.IsAuthenticated);
             Assert.Equal("ANONYMOUS", testUserContext.Name);

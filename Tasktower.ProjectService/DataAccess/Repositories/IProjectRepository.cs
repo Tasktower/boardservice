@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tasktower.Lib.Aspnetcore.DataAccess.Repositories;
-using Tasktower.Lib.Aspnetcore.Tools.Paging;
+using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.ProjectService.DataAccess.Entities;
 
 namespace Tasktower.ProjectService.DataAccess.Repositories

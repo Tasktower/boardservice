@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tasktower.Lib.Aspnetcore.Configuration.StartupExtensions;
+using Tasktower.Lib.Aspnetcore.StartupExtensions;
 using Tasktower.ProjectService.Errors;
 
 namespace Tasktower.ProjectService.Configuration.StartupExtensions
