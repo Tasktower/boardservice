@@ -171,14 +171,14 @@ namespace Tasktower.ProjectService.Tests.Services
         {
             var pagination = new Pagination
             {
-                Page = 0,
+                PageNumber = 0,
                 PageSize = 3
             };
             var projects = await _projectsService.FindProjects(pagination, null, null,
                 true, true, false);
             Assert.Equal(3, projects.ResultsSize);
             Assert.Equal(ProjectsTotal, projects.Total);
-            Assert.Equal(0, projects.Pagination.Page);
+            Assert.Equal(0, projects.Pagination.PageNumber);
             Assert.False(projects.ResultsList.IsNullOrEmpty());
         }
         
