@@ -12,7 +12,7 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
     {
         public static void ConfigureErrors(this IServiceCollection services, IConfiguration configuration)
         {
-            ErrorConfigHelper.ConfigureErrorsGeneric(services, configuration);
+            services.ConfigureErrorsGeneric(configuration);
         }
         
         public static void UseErrorsHandling(this IApplicationBuilder app, IWebHostEnvironment env)

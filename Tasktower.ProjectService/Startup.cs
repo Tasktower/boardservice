@@ -38,7 +38,7 @@ namespace Tasktower.ProjectService
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.ConfigureSwagger(env);
+                app.ConfigureSwagger(env, Configuration);
             }
 
             app.UseErrorsHandling(env);

@@ -7,8 +7,7 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
 {
     public static class PrimaryServicesConfig
     {
-        public static void ConfigurePrimaryServices(this IServiceCollection services, 
-            IConfiguration configuration)
+        public static void ConfigurePrimaryServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IErrorService, ErrorService>();
             services.AddScoped<IProjectAuthorizeService, ProjectAuthorizeService>();
