@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tasktower.Lib.Aspnetcore.DataAccess.Context;
 using Tasktower.Lib.Aspnetcore.Security;
-using Tasktower.Lib.Aspnetcore.Security.Services;
+using Tasktower.Lib.Aspnetcore.Services;
 
 namespace Tasktower.ProjectService.DataAccess.Context
 {

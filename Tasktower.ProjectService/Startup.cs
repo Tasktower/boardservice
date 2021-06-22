@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Tasktower.Lib.Aspnetcore.StartupExtensions;
+using Tasktower.Lib.Aspnetcore.Configuration.StartupExtensions;
 using Tasktower.ProjectService.Configuration.StartupExtensions;
 
 namespace Tasktower.ProjectService
@@ -20,7 +20,7 @@ namespace Tasktower.ProjectService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureErrors(Configuration);
+            ErrorConfig.ConfigureErrors(services, Configuration);
             services.ConfigureAuth(Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);

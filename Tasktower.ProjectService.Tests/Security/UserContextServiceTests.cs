@@ -4,7 +4,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using Tasktower.Lib.Aspnetcore.Security;
-using Tasktower.Lib.Aspnetcore.Security.Services;
+using Tasktower.Lib.Aspnetcore.Services;
+using Tasktower.Lib.Aspnetcore.Services.Impl;
 using Tasktower.ProjectService.Tests.TestTools.Helpers;
 using Xunit;
 

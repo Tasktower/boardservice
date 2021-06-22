@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tasktower.Lib.Aspnetcore.Security;
-using Tasktower.Lib.Aspnetcore.Security.Services;
+using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Errors;
 using Tasktower.ProjectService.Tools.Constants;

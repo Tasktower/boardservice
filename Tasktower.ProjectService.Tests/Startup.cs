@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Tasktower.Lib.Aspnetcore.StartupExtensions;
+using Tasktower.Lib.Aspnetcore.Configuration.StartupExtensions;
 using Tasktower.ProjectService.Configuration.StartupExtensions;
 using Tasktower.ProjectService.Tests.TestTools.DependencyInjection;
 
@@ -26,7 +26,7 @@ namespace Tasktower.ProjectService.Tests
         public void ConfigureServices(IServiceCollection services)
         {
             Configuration = SetupConfiguration().Build();
-            services.ConfigureErrors(Configuration);
+            ErrorConfig.ConfigureErrors(services, Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);
             services.ConfigurePrimaryServices(Configuration);

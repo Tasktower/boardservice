@@ -6,7 +6,7 @@ using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.Lib.Aspnetcore.Security;
-using Tasktower.Lib.Aspnetcore.Security.Services;
+using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;

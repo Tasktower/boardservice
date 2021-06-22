@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Tasktower.Lib.Aspnetcore.StartupExtensions;
+using Tasktower.Lib.Aspnetcore.Configuration.StartupExtensions;
 
 namespace Tasktower.ProjectService.Configuration.StartupExtensions
 {

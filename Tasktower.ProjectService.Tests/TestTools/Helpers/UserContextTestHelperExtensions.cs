@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Tasktower.Lib.Aspnetcore.Security;
-using Tasktower.Lib.Aspnetcore.Security.Services;
+using Tasktower.Lib.Aspnetcore.Services;
 
 namespace Tasktower.ProjectService.Tests.TestTools.Helpers
 {
