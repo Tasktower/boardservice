@@ -176,10 +176,10 @@ namespace Tasktower.ProjectService.Tests.Services
             };
             var projects = await _projectsService.FindProjects(pagination, null, null,
                 true, true, false);
-            Assert.Equal(3, projects.ResultsSize);
+            Assert.Equal(3, projects.ContentSize);
             Assert.Equal(ProjectsTotal, projects.Total);
             Assert.Equal(0, projects.Pagination.PageNumber);
-            Assert.False(projects.ResultsList.IsNullOrEmpty());
+            Assert.False(projects.Content.IsNullOrEmpty());
         }
         
         [Fact]
