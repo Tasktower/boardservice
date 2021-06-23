@@ -26,7 +26,7 @@ namespace Tasktower.ProjectService.Tests
         public void ConfigureServices(IServiceCollection services)
         {
             Configuration = SetupConfiguration().Build();
-            ErrorConfig.ConfigureErrors(services, Configuration);
+            services.ConfigureErrors(Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);
             services.ConfigurePrimaryServices(Configuration);

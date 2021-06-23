@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
         {
             services.AddDbContext<BoardDBContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("SQLServerBoardDB"));
+                options.UseSqlServer(configuration.GetConnectionString("SQLServer"));
             });
         }
 
