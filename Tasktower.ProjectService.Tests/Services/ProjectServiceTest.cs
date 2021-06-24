@@ -162,8 +162,8 @@ namespace Tasktower.ProjectService.Tests.Services
             Assert.Equal(createResult.Id, queriedResult.Project.Id);
             Assert.Equal(projectSave.Title, queriedResult.Project.Title);
             Assert.Equal(projectSave.Description, queriedResult.Project.Description);
-            Assert.Equal(User1Name, queriedResult.Project.CreatedBy);
-            Assert.Equal(User1Name, queriedResult.Project.ModifiedBy);
+            Assert.Equal(User1Id, queriedResult.Project.CreatedBy);
+            Assert.Equal(User1Id, queriedResult.Project.ModifiedBy);
             Assert.Equal(User1Id, queriedResult.ProjectOwnerId);
         }
         
