@@ -12,13 +12,13 @@ namespace Tasktower.ProjectService.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IErrorService _errorService;
-        private readonly IUserContextService _userContextService;
+        private readonly IUserSecurityContext _userSecurityContext;
         
-        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, IUserContextService userContextService)
+        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, IUserSecurityContext userSecurityContext)
         {
             _unitOfWork = unitOfWork;
             _errorService = errorService;
-            _userContextService = userContextService;
+            _userSecurityContext = userSecurityContext;
         }
 
 
@@ -26,7 +26,7 @@ namespace Tasktower.ProjectService.Services
             bool allowPendingInvite = false)
         {
             var hasPermission = await _unitOfWork.ProjectRoleRepository.UserHasProjectRolePermission(
-                projectId, _userContextService.UserId, projectRoles, allowPendingInvite);
+                projectId, _userSecurityContext.UserId, projectRoles, allowPendingInvite);
             if (!hasPermission)
             {
                 throw _errorService.Create(ErrorCode.NoProjectPermissions, projectId);

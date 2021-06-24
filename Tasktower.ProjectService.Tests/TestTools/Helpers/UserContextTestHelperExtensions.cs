@@ -6,21 +6,21 @@ namespace Tasktower.ProjectService.Tests.TestTools.Helpers
 {
     public static class UserContextTestHelperExtensions
     {
-        public static void SignOutForTesting(this IUserContextService userContextService)
+        public static void SignOutForTesting(this IUserSecurityContext userSecurityContext)
         {
-            userContextService.IsAuthenticated = false;
-            userContextService.UserId = "ANONYMOUS";
-            userContextService.Name = "ANONYMOUS";
-            userContextService.Permissions = new HashSet<string>();
+            userSecurityContext.IsAuthenticated = false;
+            userSecurityContext.UserId = "ANONYMOUS";
+            userSecurityContext.Name = "ANONYMOUS";
+            userSecurityContext.Permissions = new HashSet<string>();
         }
 
-        public static void SignInForTesting(this IUserContextService userContextService, string userId, string name,
+        public static void SignInForTesting(this IUserSecurityContext userSecurityContext, string userId, string name,
             ICollection<string> permissions)
         {
-            userContextService.IsAuthenticated = true;
-            userContextService.UserId = userId;
-            userContextService.Name = name;
-            userContextService.Permissions = permissions;
+            userSecurityContext.IsAuthenticated = true;
+            userSecurityContext.UserId = userId;
+            userSecurityContext.Name = name;
+            userSecurityContext.Permissions = permissions;
         }
     }
 }

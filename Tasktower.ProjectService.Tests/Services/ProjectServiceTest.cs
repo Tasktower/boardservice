@@ -59,20 +59,20 @@ namespace Tasktower.ProjectService.Tests.Services
         private const int ProjectsTotal = 5;
 
         private readonly IProjectsService _projectsService;
-        private readonly IUserContextService _userContextService;
+        private readonly IUserSecurityContext _userSecurityContext;
         private readonly IUnitOfWork _unitOfWork;
         
-        public ProjectServiceTest(IProjectsService projectsService, IUserContextService userContextService, IUnitOfWork unitOfWork)
+        public ProjectServiceTest(IProjectsService projectsService, IUserSecurityContext userSecurityContext, IUnitOfWork unitOfWork)
         {
             _projectsService = projectsService;
-            _userContextService = userContextService;
+            _userSecurityContext = userSecurityContext;
             _unitOfWork = unitOfWork;
             InitData().Wait();
         }
         
         public void Dispose()
         {
-            _userContextService.SignOutForTesting();
+            _userSecurityContext.SignOutForTesting();
             _unitOfWork.ProjectRepository.DeleteAll().Wait();
             _unitOfWork.SaveChanges().Wait();
         }
@@ -80,7 +80,7 @@ namespace Tasktower.ProjectService.Tests.Services
         private async Task InitData()
         {
             // User 1 projects
-            _userContextService.SignInForTesting(User1Id, User1Name, _user1Permissions);
+            _userSecurityContext.SignInForTesting(User1Id, User1Name, _user1Permissions);
             var user1Projects = new[]
             {
                 new ProjectEntity
@@ -100,7 +100,7 @@ namespace Tasktower.ProjectService.Tests.Services
             };
             await _unitOfWork.ProjectRepository.InsertMany(user1Projects);
             // User 2 projects
-            _userContextService.SignInForTesting(User2Id, User2Name, _user2Permissions);
+            _userSecurityContext.SignInForTesting(User2Id, User2Name, _user2Permissions);
             await _unitOfWork.ProjectRepository.InsertMany(new[]
             {
                 new ProjectEntity
@@ -112,7 +112,7 @@ namespace Tasktower.ProjectService.Tests.Services
                 }
             });
             // User 3 projects
-            _userContextService.SignInForTesting(User3Id, User3Name, _user3Permissions);
+            _userSecurityContext.SignInForTesting(User3Id, User3Name, _user3Permissions);
             await _unitOfWork.ProjectRepository.InsertMany(new[]
             {
                 new ProjectEntity
@@ -133,14 +133,14 @@ namespace Tasktower.ProjectService.Tests.Services
             // Save changes
             _unitOfWork.SaveChanges().Wait();
             // Sign out user
-            _userContextService.SignOutForTesting();
+            _userSecurityContext.SignOutForTesting();
         }
         
         private ProjectRoleEntity NewProjectOwnerRoleFromContext()
         {
             return new()
             {
-                UserId = _userContextService.UserId,
+                UserId = _userSecurityContext.UserId,
                 Role = ProjectRoleValue.OWNER,
                 PendingInvite = false
             };
@@ -149,7 +149,7 @@ namespace Tasktower.ProjectService.Tests.Services
         [Fact]
         public async void CreateProject_AsSignedInUserAndWithRequiredFields_ProjectCanBeQueried()
         {
-            _userContextService.SignInForTesting(User1Id, User1Name, _user1Permissions);
+            _userSecurityContext.SignInForTesting(User1Id, User1Name, _user1Permissions);
             var projectSave = new ProjectSaveDto
             {
                 Title = "Make App",
@@ -186,7 +186,7 @@ namespace Tasktower.ProjectService.Tests.Services
         [Fact]
         public async void FindProjectById_Project1AIdAsUser1_ReturnProject()
         {
-            _userContextService.SignInForTesting(User1Id, User1Name, _user1Permissions);
+            _userSecurityContext.SignInForTesting(User1Id, User1Name, _user1Permissions);
             var projectSearchDto = await _projectsService.FindProjectById(_project1AId);
             Assert.Equal(User1Id, projectSearchDto.ProjectOwnerId);
             Assert.Equal(_project1AId, projectSearchDto.Project.Id);
@@ -197,7 +197,7 @@ namespace Tasktower.ProjectService.Tests.Services
         [Fact]
         public async void FindProjectById_Project1AIdAsUser2_ThrowForbidden()
         {
-            _userContextService.SignInForTesting(User2Id, User2Name, _user2Permissions);
+            _userSecurityContext.SignInForTesting(User2Id, User2Name, _user2Permissions);
             var exception = await Assert.ThrowsAsync<AppException<ErrorCode>>(async () =>
             {
                 await _projectsService.FindProjectById(_project1AId);

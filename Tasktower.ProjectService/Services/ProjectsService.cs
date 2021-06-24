@@ -18,17 +18,17 @@ namespace Tasktower.ProjectService.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
-        private readonly IUserContextService _userContextService;
+        private readonly IUserSecurityContext _userSecurityContext;
         private readonly IMapper _mapper;
         private readonly IErrorService _errorService;
         private readonly IProjectAuthorizeService _projectAuthorizeService;
         private readonly IValidationService _validationService;
         
-        public ProjectsService(IUserContextService userContextService, IUnitOfWork unitOfWork, 
+        public ProjectsService(IUserSecurityContext userSecurityContext, IUnitOfWork unitOfWork, 
             ILogger<ProjectsService> logger, IMapper mapper, IErrorService errorService,
             IProjectAuthorizeService projectAuthorizeService, IValidationService validationService)
         {
-            _userContextService = userContextService;
+            _userSecurityContext = userSecurityContext;
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
@@ -42,7 +42,7 @@ namespace Tasktower.ProjectService.Services
             var projectEntity = _mapper.Map<ProjectSaveDto, ProjectEntity>(projectSaveDto);
             var projectRoleEntity = new ProjectRoleEntity()
             {
-                UserId = _userContextService.UserId,
+                UserId = _userSecurityContext.UserId,
                 Role = ProjectRoleValue.OWNER,
                 PendingInvite = false
             };
@@ -105,7 +105,7 @@ namespace Tasktower.ProjectService.Services
             ICollection<string> ownerIds, bool pendingInvites, bool member, bool authorizedProjects = true)
         {
             var projectsPage = await _unitOfWork.ProjectRepository.FindProjects(pagination, search, ownerIds, 
-                _userContextService.UserId, pendingInvites, member, authorizedProjects);
+                _userSecurityContext.UserId, pendingInvites, member, authorizedProjects);
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }
 
