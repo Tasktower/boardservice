@@ -55,17 +55,5 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .HasForeignKey(e => e.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
-        
-        public static IQueryable<ProjectEntity> OrderByQuery(IQueryable<ProjectEntity> queryable, 
-            SortValue sortValue, bool chainOrder = false)
-        {
-            return sortValue.Field switch
-            {
-                "id" => queryable.OrderBySortValue(sortValue,e => e.Id, chainOrder),
-                "title" => queryable.OrderBySortValue(sortValue,e => e.Title, chainOrder),
-                "description" => queryable.OrderBySortValue(sortValue,e => e.Description, chainOrder),
-                _ => AuditableEntity.OrderByQuery(queryable, sortValue, chainOrder)
-            };
-        }
     }
 }

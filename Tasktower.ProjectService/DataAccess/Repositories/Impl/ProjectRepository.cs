@@ -30,7 +30,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
         public async Task<Page<ProjectEntity>> FindAllProjectsWithRoles(Pagination pagination)
         {
             return await dbSet.AsQueryable().Include(p => p.ProjectRoles)
-                .GetPageAsync(pagination, ProjectEntity.OrderByQuery);
+                .GetPageAsync(pagination);
         }
 
         public async Task<Page<ProjectEntity>> FindProjects(Pagination pagination, string search, 
@@ -54,7 +54,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
                 .Include(p => p.ProjectRoles)
                 .Where(p => ownerIds.Count == 0 || 
                             p.ProjectRoles.Any(pr => ownerIds.Contains(pr.UserId)))
-                .GetPageAsync(pagination, ProjectEntity.OrderByQuery);
+                .GetPageAsync(pagination);
         }
     }
 }
