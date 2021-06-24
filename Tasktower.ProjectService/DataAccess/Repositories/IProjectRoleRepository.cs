@@ -16,9 +16,9 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
         /// <param name="userId"></param>
         /// <param name="projectRoles">Permissions the user is tested against to see if any match</param>
         /// <returns></returns>
-        ValueTask<bool> UserHasProjectRolePermission(Guid projectId, string userId, 
+        Task<bool> UserHasProjectRolePermission(Guid projectId, string userId, 
             ISet<ProjectRoleValue> projectRoles, bool allowPendingInvite = false);
 
-        ValueTask<ProjectRoleEntity> findProjectOwner(Guid projectId);
+        Task<ProjectRoleEntity> findProjectOwner(Guid projectId);
     }
 }

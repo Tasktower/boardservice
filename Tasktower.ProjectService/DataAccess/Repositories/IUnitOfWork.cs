@@ -4,7 +4,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
 {
     public interface IUnitOfWork
     {
-        public ValueTask SaveChanges();
+        public Task SaveChanges();
 
         public IProjectRepository ProjectRepository { get; }
         

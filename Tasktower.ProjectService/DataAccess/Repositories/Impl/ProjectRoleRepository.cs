@@ -15,7 +15,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
     {
         public ProjectRoleRepository(BoardDBContext context) : base(context) { }
 
-        public async ValueTask<bool> UserHasProjectRolePermission(Guid projectId, string userId, 
+        public async Task<bool> UserHasProjectRolePermission(Guid projectId, string userId, 
             ISet<ProjectRoleValue> projectRoles, bool allowPendingInvite = false)
         {
             return await (from p in dbSet.AsQueryable()
@@ -26,7 +26,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
                 select p).AnyAsync();
         }
 
-        public async ValueTask<ProjectRoleEntity> findProjectOwner(Guid projectId)
+        public async Task<ProjectRoleEntity> findProjectOwner(Guid projectId)
         {
             return await (from p in dbSet.AsQueryable()
                 where p.ProjectId == projectId &&

@@ -73,8 +73,8 @@ namespace Tasktower.ProjectService.Tests.Services
         public void Dispose()
         {
             _userContextService.SignOutForTesting();
-            _unitOfWork.ProjectRepository.DeleteAll().AsTask().Wait();
-            _unitOfWork.SaveChanges().AsTask().Wait();
+            _unitOfWork.ProjectRepository.DeleteAll().Wait();
+            _unitOfWork.SaveChanges().Wait();
         }
 
         private async Task InitData()
@@ -130,8 +130,9 @@ namespace Tasktower.ProjectService.Tests.Services
                     ProjectRoles = new [] {NewProjectOwnerRoleFromContext()}
                 }
             });
+            // Save changes
+            _unitOfWork.SaveChanges().Wait();
             // Sign out user
-            _unitOfWork.SaveChanges().AsTask().Wait();
             _userContextService.SignOutForTesting();
         }
         

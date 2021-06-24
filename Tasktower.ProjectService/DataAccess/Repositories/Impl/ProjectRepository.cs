@@ -18,7 +18,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
     {
         public ProjectRepository(BoardDBContext context) : base(context) { }
 
-        public async ValueTask<ProjectEntity> FindProjectByIdWithProjectRoles(Guid projectId)
+        public async Task<ProjectEntity> FindProjectByIdWithProjectRoles(Guid projectId)
         {
             return await (from project in dbSet.AsQueryable()
                     where project.Id == projectId
@@ -27,13 +27,13 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
                 .SingleOrDefaultAsync();
         }
 
-        public async ValueTask<Page<ProjectEntity>> FindAllProjectsWithRoles(Pagination pagination)
+        public async Task<Page<ProjectEntity>> FindAllProjectsWithRoles(Pagination pagination)
         {
             return await dbSet.AsQueryable().Include(p => p.ProjectRoles)
                 .GetPageAsync(pagination, ProjectEntity.OrderByQuery);
         }
 
-        public async ValueTask<Page<ProjectEntity>> FindProjects(Pagination pagination, string search, 
+        public async Task<Page<ProjectEntity>> FindProjects(Pagination pagination, string search, 
             ICollection<string> ownerIds, string userId, bool pendingInvites, bool member, bool authorizedProjects)
         {
             ownerIds ??= new List<string>();

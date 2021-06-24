@@ -9,11 +9,11 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
 {
     public interface IProjectRepository : ICrudRepository<Guid, ProjectEntity>
     {
-        public ValueTask<ProjectEntity> FindProjectByIdWithProjectRoles(Guid projectId);
+        public Task<ProjectEntity> FindProjectByIdWithProjectRoles(Guid projectId);
 
-        public ValueTask<Page<ProjectEntity>> FindAllProjectsWithRoles(Pagination pagination);
+        public Task<Page<ProjectEntity>> FindAllProjectsWithRoles(Pagination pagination);
 
-        public ValueTask<Page<ProjectEntity>> FindProjects(Pagination pagination, string search, 
+        public Task<Page<ProjectEntity>> FindProjects(Pagination pagination, string search, 
             ICollection<string> ownerIds, string userId, bool pendingInvites, bool member, bool authorizedProjects);
     }
 }

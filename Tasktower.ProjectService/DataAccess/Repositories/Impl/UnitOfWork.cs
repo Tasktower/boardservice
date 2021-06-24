@@ -20,7 +20,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
             ProjectRoleRepository = projectRoleRepository;
         }
 
-        public async ValueTask SaveChanges()
+        public async Task SaveChanges()
         {
             await _boardDbContext.SaveChangesAsync();
         }
