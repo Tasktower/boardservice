@@ -1,4 +1,4 @@
-﻿namespace Tasktower.ProjectService.Services.Impl
+﻿namespace Tasktower.ProjectService.Services
 {
     public class ValidationService : IValidationService
     {

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Tasktower.Lib.Aspnetcore.Security;
 using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Errors;
 using Tasktower.ProjectService.Tools.Constants;
 
-namespace Tasktower.ProjectService.Services.Impl
+namespace Tasktower.ProjectService.Services
 {
     public class ProjectAuthorizeService : IProjectAuthorizeService
     {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tasktower.ProjectService.Services;
-using Tasktower.ProjectService.Services.Impl;
 
 namespace Tasktower.ProjectService.Configuration.StartupExtensions
 {

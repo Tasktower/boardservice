@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Repositories;
-using Tasktower.ProjectService.DataAccess.Repositories.Impl;
 
 namespace Tasktower.ProjectService.Configuration.StartupExtensions
 {

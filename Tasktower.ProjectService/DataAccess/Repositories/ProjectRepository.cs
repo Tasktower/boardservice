@@ -10,7 +10,7 @@ using Tasktower.Lib.Aspnetcore.Tools;
 using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
 
-namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
+namespace Tasktower.ProjectService.DataAccess.Repositories
 {
     public class ProjectRepository : 
         CrudRepositoryEfCore<Guid, ProjectEntity, BoardDBContext>, 

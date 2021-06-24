@@ -8,7 +8,7 @@ using Tasktower.ProjectService.DataAccess.Context;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.Tools.Constants;
 
-namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
+namespace Tasktower.ProjectService.DataAccess.Repositories
 {
     public class ProjectRoleRepository : 
         CrudRepositoryEfCore<Guid, ProjectRoleEntity, BoardDBContext>, IProjectRoleRepository

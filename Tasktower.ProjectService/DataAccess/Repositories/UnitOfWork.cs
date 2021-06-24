@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Tasktower.ProjectService.DataAccess.Context;
 
-namespace Tasktower.ProjectService.DataAccess.Repositories.Impl
+namespace Tasktower.ProjectService.DataAccess.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

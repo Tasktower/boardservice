@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using Tasktower.Lib.Aspnetcore.Paging;
-using Tasktower.Lib.Aspnetcore.Security;
 using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
@@ -13,7 +12,7 @@ using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Errors;
 using Tasktower.ProjectService.Tools.Constants;
 
-namespace Tasktower.ProjectService.Services.Impl
+namespace Tasktower.ProjectService.Services
 {
     public class ProjectsService : IProjectsService
     {
