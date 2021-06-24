@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tasktower.Lib.Aspnetcore.DataAccess.Entities;
+using Tasktower.Lib.Aspnetcore.Paging;
+using Tasktower.Lib.Aspnetcore.Paging.Extensions;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {
@@ -54,17 +56,15 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .OnDelete(DeleteBehavior.Cascade);
         }
         
-        public static IQueryable<ProjectEntity> OrderByQuery(string orderBy, IQueryable<ProjectEntity> queryable)
+        public static IQueryable<ProjectEntity> OrderByQuery(IQueryable<ProjectEntity> queryable, 
+            SortValue sortValue, bool chainOrder = false)
         {
-            return orderBy switch
+            return sortValue.Field switch
             {
-                "id:1" => queryable.OrderBy(e => e.Id),
-                "id:-1" => queryable.OrderByDescending(e => e.Id),
-                "title" => queryable.OrderBy(e => e.Title),
-                "title_desc" => queryable.OrderByDescending(e => e.Title),
-                "description" => queryable.OrderBy(e => e.Description),
-                "description_desc" => queryable.OrderByDescending(e => e.Description),
-                _ => AuditableEntity.OrderByQuery(orderBy, queryable)
+                "id" => queryable.OrderBySortValue(sortValue,e => e.Id, chainOrder),
+                "title" => queryable.OrderBySortValue(sortValue,e => e.Title, chainOrder),
+                "description" => queryable.OrderBySortValue(sortValue,e => e.Description, chainOrder),
+                _ => AuditableEntity.OrderByQuery(queryable, sortValue, chainOrder)
             };
         }
     }
