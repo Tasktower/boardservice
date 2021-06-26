@@ -10,6 +10,7 @@ using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Errors;
+using Tasktower.ProjectService.Services.External;
 using Tasktower.ProjectService.Tools.Constants;
 
 namespace Tasktower.ProjectService.Services
@@ -23,10 +24,12 @@ namespace Tasktower.ProjectService.Services
         private readonly IErrorService _errorService;
         private readonly IProjectAuthorizeService _projectAuthorizeService;
         private readonly IValidationService _validationService;
-        
+        private readonly IExternalUserService _externalUserService;
+
         public ProjectsService(IUserSecurityContext userSecurityContext, IUnitOfWork unitOfWork, 
             ILogger<ProjectsService> logger, IMapper mapper, IErrorService errorService,
-            IProjectAuthorizeService projectAuthorizeService, IValidationService validationService)
+            IProjectAuthorizeService projectAuthorizeService, IValidationService validationService,
+            IExternalUserService externalUserService)
         {
             _userSecurityContext = userSecurityContext;
             _unitOfWork = unitOfWork;
@@ -35,6 +38,7 @@ namespace Tasktower.ProjectService.Services
             _errorService = errorService;
             _projectAuthorizeService = projectAuthorizeService;
             _validationService = validationService;
+            _externalUserService = externalUserService;
         }
 
         public async ValueTask<ProjectReadDto> CreateNewProject(ProjectSaveDto projectSaveDto)
@@ -43,12 +47,8 @@ namespace Tasktower.ProjectService.Services
             var userEntity = await _unitOfWork.UserRepository.GetById(_userSecurityContext.UserId);
             if (userEntity == null)
             {
-                //Todo: get user data from user service
-                userEntity = new UserEntity()
-                {
-                    Id = _userSecurityContext.UserId,
-                    UserName = _userSecurityContext.UserId // Todo: get username from user service
-                };
+                var extUserPublicReadDto = await _externalUserService.GetUser(_userSecurityContext.UserId);
+                userEntity = _mapper.Map<UserEntity>(extUserPublicReadDto);
             }
             var projectRoleEntity = new ProjectRoleEntity()
             {

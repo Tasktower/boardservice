@@ -8,6 +8,7 @@ namespace Tasktower.ProjectService.DataAccess.Entities
     public class UserEntity : AuditableEntity
     {
         public string Id { get; set; }
+        public string UserId { get => Id; set => Id = value; }
         public string UserName { get; set; }
         public ICollection<ProjectRoleEntity> ProjectRoles { get; set; }
 
@@ -21,6 +22,8 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .HasMaxLength(100)
                 .IsRequired();
             entityTypeBuilder.HasKey(e => e.Id);
+
+            entityTypeBuilder.Ignore(e => e.UserId);
             
             entityTypeBuilder.Property(e => e.UserName)
                 .HasColumnName("username")

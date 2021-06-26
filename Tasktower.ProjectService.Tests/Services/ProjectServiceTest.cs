@@ -84,7 +84,7 @@ namespace Tasktower.ProjectService.Tests.Services
             // Owner 1 projects
             var user1Entity = new UserEntity()
             {
-                Id = User1Id,
+                UserId = User1Id,
                 UserName = User1UserName
             };
             var user1Projects = new[]
@@ -109,7 +109,7 @@ namespace Tasktower.ProjectService.Tests.Services
             // Owner 2 projects
             var user2Entity = new UserEntity()
             {
-                Id = User2Id,
+                UserId = User2Id,
                 UserName = User2UserName
             };
             var user2Projects = new[]
@@ -126,7 +126,7 @@ namespace Tasktower.ProjectService.Tests.Services
             // Owner 3 projects
             var user3Entity = new UserEntity()
             {
-                Id = User3Id,
+                UserId = User3Id,
                 UserName = User3UserName
             };
             await _unitOfWork.ProjectRepository.InsertMany(new[]
@@ -180,7 +180,7 @@ namespace Tasktower.ProjectService.Tests.Services
             Assert.Equal(projectSave.Description, queriedResult.Project.Description);
             Assert.Equal(User1Id, queriedResult.Project.CreatedBy);
             Assert.Equal(User1Id, queriedResult.Project.ModifiedBy);
-            Assert.Equal(User1Id, queriedResult.Owner.Id);
+            Assert.Equal(User1Id, queriedResult.Owner.UserId);
             Assert.Equal(User1UserName, queriedResult.Owner.UserName);
         }
         
@@ -205,8 +205,8 @@ namespace Tasktower.ProjectService.Tests.Services
         {
             _userSecurityContext.SignInForTesting(User1Id, User1UserName, _user1Permissions);
             var projectSearchDto = await _projectsService.FindProjectById(_project1AId);
-            Assert.Equal(User1Id, projectSearchDto.Owner.Id);
-            Assert.Equal(User1Id, projectSearchDto.Owner.Id);
+            Assert.Equal(User1Id, projectSearchDto.Owner.UserId);
+            Assert.Equal(User1UserName, projectSearchDto.Owner.UserName);
             Assert.Equal(_project1AId, projectSearchDto.Project.Id);
             Assert.Equal(Project1ATitle, projectSearchDto.Project.Title);
             Assert.Equal(Project1ADescription, projectSearchDto.Project.Description);

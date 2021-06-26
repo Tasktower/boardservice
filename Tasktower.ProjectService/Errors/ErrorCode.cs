@@ -4,6 +4,7 @@
     {
         MultipleErrors,
         OptimisticLocking,
+        UserNotFound,
         ProjectIdNotFound,
         NoProjectPermissions,
         NonExistentColumn

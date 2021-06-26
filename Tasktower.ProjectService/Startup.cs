@@ -20,8 +20,9 @@ namespace Tasktower.ProjectService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ErrorConfig.ConfigureErrors(services, Configuration);
+            services.ConfigureErrors(Configuration);
             services.ConfigureAuth(Configuration);
+            services.ConfigureHttpClient(Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);
             services.ConfigureDatabaseConnection(Configuration);

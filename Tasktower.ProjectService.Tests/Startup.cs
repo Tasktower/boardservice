@@ -33,6 +33,7 @@ namespace Tasktower.ProjectService.Tests
             services.ConfigureOptionsServices(Configuration);
             services.ConfigureInMemoryDatabase(Configuration);
             services.ConfigureRepositories(Configuration);
+            services.ConfigureHttpClient(Configuration);
         }
 
         private static IConfigurationBuilder SetupConfiguration()
