@@ -22,6 +22,7 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
 
         public static void ConfigureRepositories(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
             services.AddScoped<ITaskBoardRepository, TaskBoardRepository>();

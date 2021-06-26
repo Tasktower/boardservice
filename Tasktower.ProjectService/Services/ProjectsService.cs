@@ -40,9 +40,19 @@ namespace Tasktower.ProjectService.Services
         public async ValueTask<ProjectReadDto> CreateNewProject(ProjectSaveDto projectSaveDto)
         {
             var projectEntity = _mapper.Map<ProjectSaveDto, ProjectEntity>(projectSaveDto);
+            var userEntity = await _unitOfWork.UserRepository.GetById(_userSecurityContext.UserId);
+            if (userEntity == null)
+            {
+                //Todo: get user data from user service
+                userEntity = new UserEntity()
+                {
+                    Id = _userSecurityContext.UserId,
+                    UserName = _userSecurityContext.UserId // Todo: get username from user service
+                };
+            }
             var projectRoleEntity = new ProjectRoleEntity()
             {
-                UserId = _userSecurityContext.UserId,
+                UserEntity = userEntity,
                 Role = ProjectRoleValue.OWNER,
                 PendingInvite = false
             };
@@ -114,8 +124,9 @@ namespace Tasktower.ProjectService.Services
             var projectReadDto = _mapper.Map<ProjectEntity, ProjectReadDto>(project);
             var owner = (from pr in project.ProjectRoles 
                 where ProjectRoleValue.OWNER == pr.Role 
-                select pr.UserId).FirstOrDefault();
-            return new ProjectSearchDto {ProjectOwnerId = owner, Project = projectReadDto};
+                select pr.UserEntity).FirstOrDefault();
+            var ownerReadDto = _mapper.Map<UserReadDto>(owner);
+            return new ProjectSearchDto {Owner = ownerReadDto, Project = projectReadDto};
         }
     }
 }

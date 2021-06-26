@@ -8,12 +8,14 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
         private readonly BoardDBContext _boardDbContext;
         
         public UnitOfWork(BoardDBContext boardDbContext,
+            IUserRepository userRepository,
             IProjectRepository projectRepository,
             ITaskBoardRepository taskBoardRepository,
             ITaskRepository taskRepository,
-            Repositories.IProjectRoleRepository projectRoleRepository) 
+            IProjectRoleRepository projectRoleRepository) 
         {
             _boardDbContext = boardDbContext;
+            UserRepository = userRepository;
             ProjectRepository = projectRepository;
             TaskBoardRepository = taskBoardRepository;
             TaskRepository = taskRepository;
@@ -25,6 +27,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
             await _boardDbContext.SaveChangesAsync();
         }
 
+        public IUserRepository UserRepository { get; }
         public IProjectRepository ProjectRepository { get;  }
         public ITaskBoardRepository TaskBoardRepository { get; }
         public ITaskRepository TaskRepository { get; }

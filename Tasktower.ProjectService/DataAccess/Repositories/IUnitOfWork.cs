@@ -5,6 +5,8 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
     public interface IUnitOfWork
     {
         public Task SaveChanges();
+        
+        public IUserRepository UserRepository { get; }
 
         public IProjectRepository ProjectRepository { get; }
         

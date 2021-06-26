@@ -31,7 +31,9 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
             return await (from p in dbSet.AsQueryable()
                 where p.ProjectId == projectId &&
                       p.Role == ProjectRoleValue.OWNER
-                select p).SingleOrDefaultAsync();
+                select p)
+                .Include(p => p.UserEntity)
+                .SingleOrDefaultAsync();
         }
     }
 }

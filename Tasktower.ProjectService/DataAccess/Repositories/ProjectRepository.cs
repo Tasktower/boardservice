@@ -52,6 +52,7 @@ namespace Tasktower.ProjectService.DataAccess.Repositories
                            EF.Functions.Like( project.Description, QueryUtils.LikeWrap(search)))
                     select project)
                 .Include(p => p.ProjectRoles)
+                .ThenInclude(p => p.UserEntity)
                 .Where(p => ownerIds.Count == 0 || 
                             p.ProjectRoles.Any(pr => ownerIds.Contains(pr.UserId)))
                 .GetPageAsync(pagination);

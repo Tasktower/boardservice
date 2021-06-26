@@ -20,9 +20,9 @@ namespace Tasktower.ProjectService.Tests.Services
 {
     public sealed class ProjectServiceTest : IDisposable
     {
-        // User 1 Data
+        // Owner 1 Data
         private const string User1Id = "10001";
-        private const string User1Name = "John Stewart";
+        private const string User1UserName = "JohnStewart";
         private readonly HashSet<string> _user1Permissions = new() 
             {Permissions.DeleteProjectsAny, Permissions.ReadProjectsAny, Permissions.UpdateProjectsAny};
         
@@ -34,18 +34,18 @@ namespace Tasktower.ProjectService.Tests.Services
         private const string Project1BTitle = "Project 1B";
         private const string Project1BDescription = "Project 1B description";
         
-        // User 2 Data
+        // Owner 2 Data
         private const string User2Id = "10002";
-        private const string User2Name = "Steve Rodgers";
+        private const string User2UserName = "SteveRodgers";
         private readonly HashSet<string> _user2Permissions = new() {Permissions.ReadProjectsAny};
         
         private readonly Guid _project2AId = Guid.Parse("2fceb781-c31c-4f47-9689-3916ad0bcbe8");
         private const string Project2ATitle = "Project 2A";
         private const string Project2ADescription = "Project 2A description";
         
-        // User 3 Data
+        // Owner 3 Data
         private const string User3Id = "10003";
-        private const string User3Name = "Gorilla Grodd";
+        private const string User3UserName = "GorillaGrodd";
         private readonly HashSet<string> _user3Permissions = new();
         
         private readonly Guid _project3AId = Guid.Parse("e52a6e70-1ffd-4439-8f8a-ba8dbfea9efe");
@@ -73,14 +73,20 @@ namespace Tasktower.ProjectService.Tests.Services
         public void Dispose()
         {
             _userSecurityContext.SignOutForTesting();
+            _unitOfWork.UserRepository.DeleteAll().Wait();
             _unitOfWork.ProjectRepository.DeleteAll().Wait();
+            _unitOfWork.ProjectRoleRepository.DeleteAll().Wait();
             _unitOfWork.SaveChanges().Wait();
         }
 
         private async Task InitData()
         {
-            // User 1 projects
-            _userSecurityContext.SignInForTesting(User1Id, User1Name, _user1Permissions);
+            // Owner 1 projects
+            var user1Entity = new UserEntity()
+            {
+                Id = User1Id,
+                UserName = User1UserName
+            };
             var user1Projects = new[]
             {
                 new ProjectEntity
@@ -88,31 +94,41 @@ namespace Tasktower.ProjectService.Tests.Services
                     Id = _project1AId,
                     Title = Project1ATitle,
                     Description = Project1ADescription,
-                    ProjectRoles = new [] {NewProjectOwnerRoleFromContext()}
+                    ProjectRoles = new [] {NewProjectRole(user1Entity)}
                 },
                 new ProjectEntity
                 {
                     Id = _project1BId,
                     Title = Project1BTitle,
                     Description = Project1BDescription,
-                    ProjectRoles = new [] {NewProjectOwnerRoleFromContext()}
+                    ProjectRoles = new [] {NewProjectRole(user1Entity)}
                 }
             };
+            await _unitOfWork.UserRepository.Insert(user1Entity);
             await _unitOfWork.ProjectRepository.InsertMany(user1Projects);
-            // User 2 projects
-            _userSecurityContext.SignInForTesting(User2Id, User2Name, _user2Permissions);
-            await _unitOfWork.ProjectRepository.InsertMany(new[]
+            // Owner 2 projects
+            var user2Entity = new UserEntity()
+            {
+                Id = User2Id,
+                UserName = User2UserName
+            };
+            var user2Projects = new[]
             {
                 new ProjectEntity
                 {
                     Id = _project2AId,
                     Title = Project2ATitle,
                     Description = Project2ADescription,
-                    ProjectRoles = new [] {NewProjectOwnerRoleFromContext()}
+                    ProjectRoles = new[] {NewProjectRole(user2Entity)}
                 }
-            });
-            // User 3 projects
-            _userSecurityContext.SignInForTesting(User3Id, User3Name, _user3Permissions);
+            };
+            await _unitOfWork.ProjectRepository.InsertMany(user2Projects);
+            // Owner 3 projects
+            var user3Entity = new UserEntity()
+            {
+                Id = User3Id,
+                UserName = User3UserName
+            };
             await _unitOfWork.ProjectRepository.InsertMany(new[]
             {
                 new ProjectEntity
@@ -120,14 +136,14 @@ namespace Tasktower.ProjectService.Tests.Services
                     Id = _project3AId,
                     Title = Project3ATitle,
                     Description = Project3ADescription,
-                    ProjectRoles = new [] {NewProjectOwnerRoleFromContext()}
+                    ProjectRoles = new [] {NewProjectRole(user3Entity)}
                 },
                 new ProjectEntity
                 {
                     Id = _project3BId,
                     Title = Project3BTitle,
                     Description = Project3BDescription,
-                    ProjectRoles = new [] {NewProjectOwnerRoleFromContext()}
+                    ProjectRoles = new [] {NewProjectRole(user3Entity)}
                 }
             });
             // Save changes
@@ -136,11 +152,11 @@ namespace Tasktower.ProjectService.Tests.Services
             _userSecurityContext.SignOutForTesting();
         }
         
-        private ProjectRoleEntity NewProjectOwnerRoleFromContext()
+        private ProjectRoleEntity NewProjectRole(UserEntity userEntity)
         {
             return new()
             {
-                UserId = _userSecurityContext.UserId,
+                UserEntity = userEntity,
                 Role = ProjectRoleValue.OWNER,
                 PendingInvite = false
             };
@@ -149,7 +165,7 @@ namespace Tasktower.ProjectService.Tests.Services
         [Fact]
         public async void CreateProject_AsSignedInUserAndWithRequiredFields_ProjectCanBeQueried()
         {
-            _userSecurityContext.SignInForTesting(User1Id, User1Name, _user1Permissions);
+            _userSecurityContext.SignInForTesting(User1Id, User1UserName, _user1Permissions);
             var projectSave = new ProjectSaveDto
             {
                 Title = "Make App",
@@ -164,7 +180,8 @@ namespace Tasktower.ProjectService.Tests.Services
             Assert.Equal(projectSave.Description, queriedResult.Project.Description);
             Assert.Equal(User1Id, queriedResult.Project.CreatedBy);
             Assert.Equal(User1Id, queriedResult.Project.ModifiedBy);
-            Assert.Equal(User1Id, queriedResult.ProjectOwnerId);
+            Assert.Equal(User1Id, queriedResult.Owner.Id);
+            Assert.Equal(User1UserName, queriedResult.Owner.UserName);
         }
         
         [Fact]
@@ -186,9 +203,10 @@ namespace Tasktower.ProjectService.Tests.Services
         [Fact]
         public async void FindProjectById_Project1AIdAsUser1_ReturnProject()
         {
-            _userSecurityContext.SignInForTesting(User1Id, User1Name, _user1Permissions);
+            _userSecurityContext.SignInForTesting(User1Id, User1UserName, _user1Permissions);
             var projectSearchDto = await _projectsService.FindProjectById(_project1AId);
-            Assert.Equal(User1Id, projectSearchDto.ProjectOwnerId);
+            Assert.Equal(User1Id, projectSearchDto.Owner.Id);
+            Assert.Equal(User1Id, projectSearchDto.Owner.Id);
             Assert.Equal(_project1AId, projectSearchDto.Project.Id);
             Assert.Equal(Project1ATitle, projectSearchDto.Project.Title);
             Assert.Equal(Project1ADescription, projectSearchDto.Project.Description);
@@ -197,7 +215,7 @@ namespace Tasktower.ProjectService.Tests.Services
         [Fact]
         public async void FindProjectById_Project1AIdAsUser2_ThrowForbidden()
         {
-            _userSecurityContext.SignInForTesting(User2Id, User2Name, _user2Permissions);
+            _userSecurityContext.SignInForTesting(User2Id, User2UserName, _user2Permissions);
             var exception = await Assert.ThrowsAsync<AppException<ErrorCode>>(async () =>
             {
                 await _projectsService.FindProjectById(_project1AId);
