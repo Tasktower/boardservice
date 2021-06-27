@@ -40,6 +40,10 @@ namespace Tasktower.ProjectService
             {
                 app.UseDeveloperExceptionPage();
                 app.ConfigureSwagger(env, Configuration);
+            } 
+            else if (env.IsStaging())
+            {
+                app.ConfigureSwagger(env, Configuration);
             }
 
             app.UseErrorsHandling(env);
