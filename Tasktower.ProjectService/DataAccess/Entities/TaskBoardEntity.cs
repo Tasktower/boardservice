@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tasktower.Lib.Aspnetcore.DataAccess.Entities;
+using Tasktower.Lib.Aspnetcore.Tools;
 
 namespace Tasktower.ProjectService.DataAccess.Entities
 {
@@ -48,13 +49,14 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .HasColumnName("columns")
                 .IsRequired()
                 .HasConversion(
-                    e => JsonSerializer.Serialize(e, null),
-                    e => JsonSerializer.Deserialize<List<String>>(e, null),
-                    new ValueComparer<List<String>>(
+                    e => 
+                        JsonSerializer.Serialize(e, JsonSerializerUtils.CustomSerializerOptions()), 
+                    e => 
+                        JsonSerializer.Deserialize<List<string>>(e, JsonSerializerUtils.CustomSerializerOptions()),
+                    new ValueComparer<List<string>>(
                         (c1, c2) => c1.SequenceEqual(c2),
-                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                        c => c.ToList()))
-                .HasDefaultValue(new List<String>());
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), c => c.ToList()))
+                .HasDefaultValue(new List<string>());
 
             entityTypeBuilder.Property(e => e.ProjectId)
                 .HasColumnName("project_id")

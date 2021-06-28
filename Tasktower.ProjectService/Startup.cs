@@ -22,6 +22,7 @@ namespace Tasktower.ProjectService
         {
             services.ConfigureErrors(Configuration);
             services.ConfigureAuth(Configuration);
+            services.ConfigureRabbitMq(Configuration);
             services.ConfigureHttpClient(Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);
