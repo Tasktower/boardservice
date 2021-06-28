@@ -6,6 +6,7 @@ using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.Lib.Aspnetcore.Services;
+using Tasktower.Lib.Aspnetcore.Services.Contexts;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;
@@ -19,19 +20,19 @@ namespace Tasktower.ProjectService.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
-        private readonly IUserSecurityContext _userSecurityContext;
+        private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
         private readonly IErrorService _errorService;
         private readonly IProjectAuthorizeService _projectAuthorizeService;
         private readonly IValidationService _validationService;
         private readonly IExternalUserService _externalUserService;
 
-        public ProjectsService(IUserSecurityContext userSecurityContext, IUnitOfWork unitOfWork, 
+        public ProjectsService(IUserContext userContext, IUnitOfWork unitOfWork, 
             ILogger<ProjectsService> logger, IMapper mapper, IErrorService errorService,
             IProjectAuthorizeService projectAuthorizeService, IValidationService validationService,
             IExternalUserService externalUserService)
         {
-            _userSecurityContext = userSecurityContext;
+            _userContext = userContext;
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
@@ -44,10 +45,10 @@ namespace Tasktower.ProjectService.Services
         public async ValueTask<ProjectReadDto> CreateNewProject(ProjectSaveDto projectSaveDto)
         {
             var projectEntity = _mapper.Map<ProjectSaveDto, ProjectEntity>(projectSaveDto);
-            var userEntity = await _unitOfWork.UserRepository.GetById(_userSecurityContext.UserId);
+            var userEntity = await _unitOfWork.UserRepository.GetById(_userContext.UserId);
             if (userEntity == null)
             {
-                var extUserPublicReadDto = await _externalUserService.GetUser(_userSecurityContext.UserId);
+                var extUserPublicReadDto = await _externalUserService.GetUser(_userContext.UserId);
                 userEntity = _mapper.Map<UserEntity>(extUserPublicReadDto);
             }
             var projectRoleEntity = new ProjectRoleEntity()
@@ -115,7 +116,7 @@ namespace Tasktower.ProjectService.Services
             ICollection<string> ownerIds, bool pendingInvites, bool member, bool authorizedProjects = true)
         {
             var projectsPage = await _unitOfWork.ProjectRepository.FindProjects(pagination, search, ownerIds, 
-                _userSecurityContext.UserId, pendingInvites, member, authorizedProjects);
+                _userContext.UserId, pendingInvites, member, authorizedProjects);
             return projectsPage.Map(ProjectSearchDtoFromProject);
         }
 

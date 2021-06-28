@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tasktower.Lib.Aspnetcore.DataAccess.Context;
 using Tasktower.Lib.Aspnetcore.Services;
+using Tasktower.Lib.Aspnetcore.Services.Contexts;
 using Tasktower.ProjectService.DataAccess.Entities;
 
 namespace Tasktower.ProjectService.DataAccess.Context
 {
     public class BoardDBContext : BaseEfCoreDbContext
     {
-        public BoardDBContext(DbContextOptions<BoardDBContext> options, IUserSecurityContext userSecurityContext) :
-            base(options, userSecurityContext) { }
+        public BoardDBContext(DbContextOptions<BoardDBContext> options, IUserContext userContext) :
+            base(options, userContext) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
