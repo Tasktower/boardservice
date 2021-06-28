@@ -5,11 +5,13 @@ using Microsoft.Extensions.Options;
 using RestClient.Net;
 using Tasktower.Lib.Aspnetcore.Tools.Http;
 using Tasktower.ProjectService.Configuration;
+using Tasktower.ProjectService.Configuration.Options;
 using Tasktower.ProjectService.Dtos;
+using Tasktower.ProjectService.Dtos.External;
 using Tasktower.ProjectService.Errors;
 using Urls;
 
-namespace Tasktower.ProjectService.Services.External
+namespace Tasktower.ProjectService.BusinessLogic.External
 {
     public class ExternalUserService : IExternalUserService
     {

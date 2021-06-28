@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.Lib.Aspnetcore.Security;
+using Tasktower.ProjectService.BusinessLogic;
 using Tasktower.ProjectService.Dtos;
-using Tasktower.ProjectService.Services;
 
 namespace Tasktower.ProjectService.Controllers
 {

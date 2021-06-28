@@ -28,7 +28,7 @@ namespace Tasktower.ProjectService
             services.ConfigureDataMapper(Configuration);
             services.ConfigureDatabaseConnection(Configuration);
             services.ConfigureRepositories(Configuration);
-            services.ConfigurePrimaryServices(Configuration);
+            services.ConfigureBusinessLogicServices(Configuration);
             services.ConfigureOptionsServices(Configuration);
             services.ConfigureControllers(Configuration);
             services.ConfigureSwagger(Configuration);

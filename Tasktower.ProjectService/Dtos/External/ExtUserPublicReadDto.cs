@@ -1,6 +1,4 @@
-﻿using Tasktower.ProjectService.DataAccess.Entities;
-
-namespace Tasktower.ProjectService.Dtos
+﻿namespace Tasktower.ProjectService.Dtos.External
 {
     public class ExtUserPublicReadDto
     {

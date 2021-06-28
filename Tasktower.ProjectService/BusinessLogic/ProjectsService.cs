@@ -5,21 +5,20 @@ using System.Threading.Tasks;
 using MapsterMapper;
 using Microsoft.Extensions.Logging;
 using Tasktower.Lib.Aspnetcore.Paging;
-using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.Lib.Aspnetcore.Services.Contexts;
+using Tasktower.ProjectService.BusinessLogic.External;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Errors;
-using Tasktower.ProjectService.Services.External;
 using Tasktower.ProjectService.Tools.Constants;
 
-namespace Tasktower.ProjectService.Services
+namespace Tasktower.ProjectService.BusinessLogic
 {
     public class ProjectsService : IProjectsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger _logger;
+        private readonly ILogger<ProjectsService> _logger;
         private readonly IUserContext _userContext;
         private readonly IMapper _mapper;
         private readonly IErrorService _errorService;

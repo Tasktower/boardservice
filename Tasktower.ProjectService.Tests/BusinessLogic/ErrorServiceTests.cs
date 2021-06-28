@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
+using Tasktower.ProjectService.BusinessLogic;
 using Tasktower.ProjectService.Errors;
-using Tasktower.ProjectService.Services;
 using Xunit;
 
-namespace Tasktower.ProjectService.Tests.Services
+namespace Tasktower.ProjectService.Tests.BusinessLogic
 {
     public class ErrorServiceTests
     {

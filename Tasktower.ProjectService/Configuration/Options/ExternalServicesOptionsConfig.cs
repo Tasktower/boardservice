@@ -1,6 +1,6 @@
 ﻿using Tasktower.Lib.Aspnetcore.Attributes;
 
-namespace Tasktower.ProjectService.Configuration
+namespace Tasktower.ProjectService.Configuration.Options
 {
     [OptionsConfig("ExternalServices")]
     public class ExternalServicesOptionsConfig

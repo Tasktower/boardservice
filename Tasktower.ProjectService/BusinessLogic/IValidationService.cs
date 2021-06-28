@@ -1,4 +1,4 @@
-﻿namespace Tasktower.ProjectService.Services
+﻿namespace Tasktower.ProjectService.BusinessLogic
 {
     public interface IValidationService
     {

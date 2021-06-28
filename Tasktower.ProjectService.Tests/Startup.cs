@@ -29,7 +29,7 @@ namespace Tasktower.ProjectService.Tests
             services.ConfigureErrors(Configuration);
             services.ConfigureHttpContext(Configuration);
             services.ConfigureDataMapper(Configuration);
-            services.ConfigurePrimaryServices(Configuration);
+            services.ConfigureBusinessLogicServices(Configuration);
             services.ConfigureOptionsServices(Configuration);
             services.ConfigureInMemoryDatabase(Configuration);
             services.ConfigureRepositories(Configuration);

@@ -6,18 +6,17 @@ using Castle.Core.Internal;
 using Tasktower.Lib.Aspnetcore.Errors;
 using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.Lib.Aspnetcore.Security;
-using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.Lib.Aspnetcore.Services.Contexts;
+using Tasktower.ProjectService.BusinessLogic;
 using Tasktower.ProjectService.DataAccess.Entities;
 using Tasktower.ProjectService.DataAccess.Repositories;
 using Tasktower.ProjectService.Dtos;
 using Tasktower.ProjectService.Errors;
-using Tasktower.ProjectService.Services;
 using Tasktower.ProjectService.Tests.TestTools.Helpers;
 using Tasktower.ProjectService.Tools.Constants;
 using Xunit;
 
-namespace Tasktower.ProjectService.Tests.Services
+namespace Tasktower.ProjectService.Tests.BusinessLogic
 {
     public sealed class ProjectServiceTest : IDisposable
     {

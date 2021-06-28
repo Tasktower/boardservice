@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Tasktower.Lib.Aspnetcore.Paging;
 using Tasktower.ProjectService.Dtos;
 
-namespace Tasktower.ProjectService.Services
+namespace Tasktower.ProjectService.BusinessLogic
 {
     public interface IProjectsService
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tasktower.Lib.Aspnetcore.Configuration.StartupExtensions.HelperExtensions;
+using Tasktower.ProjectService.Configuration.Options;
 
 namespace Tasktower.ProjectService.Configuration.StartupExtensions
 {

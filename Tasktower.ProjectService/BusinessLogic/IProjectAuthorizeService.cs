@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tasktower.ProjectService.Tools.Constants;
 
-namespace Tasktower.ProjectService.Services
+namespace Tasktower.ProjectService.BusinessLogic
 {
     public interface IProjectAuthorizeService
     {

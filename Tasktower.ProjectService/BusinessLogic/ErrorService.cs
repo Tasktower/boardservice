@@ -5,7 +5,7 @@ using Tasktower.Lib.Aspnetcore.Errors;
 using Tasktower.Lib.Aspnetcore.Services;
 using Tasktower.ProjectService.Errors;
 
-namespace Tasktower.ProjectService.Services
+namespace Tasktower.ProjectService.BusinessLogic
 {
     public class ErrorService : BaseBaseErrorService<ErrorCode>, IErrorService 
     {
