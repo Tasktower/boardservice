@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client.Core.DependencyInjection;
-using RabbitMQ.Client.Core.DependencyInjection.Configuration;
-using RabbitMQ.Client.Core.DependencyInjection.InternalExtensions;
-using Tasktower.Lib.Aspnetcore.RabbitMQ;
-using Tasktower.ProjectService.RabbitMq;
-using Tasktower.ProjectService.RabbitMq.MessageHandlers;
+using Tasktower.Lib.Aspnetcore.Configuration.StartupExtensions.HelperExtensions;
+using Tasktower.Lib.Aspnetcore.Tools.RabbitMQ;
+using Tasktower.ProjectService.MessageHandlers;
 
 namespace Tasktower.ProjectService.Configuration.StartupExtensions
 {
@@ -25,8 +23,7 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
                 .AddAsyncMessageHandlerSingleton<UserDeleteMessageHandler>(
                     $"{ExchangeDataUpdateUtils.Models.User}.{ExchangeDataUpdateUtils.Actions.Delete}",
                     ExchangeDataUpdateUtils.ExchangeName);
-            ;
-            services.AddHostedService<ConsumingHostedService>();
+            services.ConfigureRabbitMqConsumingHost(configuration);
         }
     }
 }

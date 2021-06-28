@@ -12,13 +12,13 @@ namespace Tasktower.ProjectService.BusinessLogic
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IErrorService _errorService;
-        private readonly IUserContext _userContext;
+        private readonly IUserContextAccessorService _userContextAccessorService;
         
-        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, IUserContext userContext)
+        public ProjectAuthorizeService(IUnitOfWork unitOfWork, IErrorService errorService, IUserContextAccessorService userContextAccessorService)
         {
             _unitOfWork = unitOfWork;
             _errorService = errorService;
-            _userContext = userContext;
+            _userContextAccessorService = userContextAccessorService;
         }
 
 
@@ -26,7 +26,7 @@ namespace Tasktower.ProjectService.BusinessLogic
             bool allowPendingInvite = false)
         {
             var hasPermission = await _unitOfWork.ProjectRoleRepository.UserHasProjectRolePermission(
-                projectId, _userContext.UserId, projectRoles, allowPendingInvite);
+                projectId, _userContextAccessorService.UserContext.UserId, projectRoles, allowPendingInvite);
             if (!hasPermission)
             {
                 throw _errorService.Create(ErrorCode.NoProjectPermissions, projectId);

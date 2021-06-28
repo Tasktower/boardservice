@@ -8,8 +8,8 @@ namespace Tasktower.ProjectService.DataAccess.Context
 {
     public class BoardDBContext : BaseEfCoreDbContext
     {
-        public BoardDBContext(DbContextOptions<BoardDBContext> options, IUserContext userContext) :
-            base(options, userContext) { }
+        public BoardDBContext(DbContextOptions<BoardDBContext> options, IUserContextAccessorService userContextAccessorService) :
+            base(options, userContextAccessorService) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

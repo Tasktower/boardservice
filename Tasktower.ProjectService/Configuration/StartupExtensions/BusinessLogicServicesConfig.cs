@@ -11,6 +11,7 @@ namespace Tasktower.ProjectService.Configuration.StartupExtensions
         {
             services.AddSingleton<IErrorService, ErrorService>();
             services.AddSingleton<IExternalUserService, ExternalUserService>();
+            services.AddScoped<IUserSyncService, UserSyncService>();
             services.AddScoped<IProjectAuthorizeService, ProjectAuthorizeService>();
             services.AddScoped<IProjectsService, ProjectsService>();
             services.AddSingleton<IValidationService, ValidationService>();

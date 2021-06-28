@@ -28,11 +28,12 @@ namespace Tasktower.ProjectService.BusinessLogic.External
                 o.BaseUrl = _externalServicesOptionsConfig.UserService.Url.ToAbsoluteUrl();
                 o.DefaultRequestHeaders = HeaderCollectionUtils.JsonHeadersDefault;
             });
+            _errorService = errorService;
         }
         
-        public async Task<ExtUserPublicReadDto> GetUser(string UserId)
+        public async Task<ExtUserProfileReadDto> GetUser(string UserId)
         {
-            var res = await _client.GetAsync<ExtUserPublicReadDto>($"/users/public/{UserId}");
+            var res = await _client.GetAsync<ExtUserProfileReadDto>($"/users/public/{UserId}");
             if (res.IsSuccess) return res.Body;
             if (res.StatusCode == (int) HttpStatusCode.NotFound)
             {

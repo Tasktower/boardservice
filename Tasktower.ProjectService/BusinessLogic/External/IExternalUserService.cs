@@ -6,6 +6,6 @@ namespace Tasktower.ProjectService.BusinessLogic.External
 {
     public interface IExternalUserService
     {
-        public Task<ExtUserPublicReadDto> GetUser(string UserId);
+        public Task<ExtUserProfileReadDto> GetUser(string UserId);
     }
 }

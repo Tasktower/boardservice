@@ -8,8 +8,13 @@ namespace Tasktower.ProjectService.DataAccess.Entities
     public class UserEntity : AuditableEntity
     {
         public string Id { get; set; }
+        /// <summary>
+        /// Alias for the user's Id
+        /// </summary>
         public string UserId { get => Id; set => Id = value; }
         public string UserName { get; set; }
+        
+        public string Picture { get; set; }
         public ICollection<ProjectRoleEntity> ProjectRoles { get; set; }
 
         public static void BuildEntity(EntityTypeBuilder<UserEntity> entityTypeBuilder)
@@ -22,13 +27,16 @@ namespace Tasktower.ProjectService.DataAccess.Entities
                 .HasMaxLength(100)
                 .IsRequired();
             entityTypeBuilder.HasKey(e => e.Id);
-
-            entityTypeBuilder.Ignore(e => e.UserId);
+            entityTypeBuilder.Ignore(e => e.UserId); // alias for id
             
             entityTypeBuilder.Property(e => e.UserName)
                 .HasColumnName("username")
                 .HasMaxLength(100)
                 .IsRequired();
+            
+            entityTypeBuilder.Property(e => e.Picture)
+                .HasColumnName("picture")
+                .HasMaxLength(1000);
             
             entityTypeBuilder
                 .HasMany(e => e.ProjectRoles)

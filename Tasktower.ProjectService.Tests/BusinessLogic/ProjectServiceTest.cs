@@ -59,20 +59,20 @@ namespace Tasktower.ProjectService.Tests.BusinessLogic
         private const int ProjectsTotal = 5;
 
         private readonly IProjectsService _projectsService;
-        private readonly IUserContext _userContext;
+        private readonly IUserContextAccessorService _userContextAccessorService;
         private readonly IUnitOfWork _unitOfWork;
         
-        public ProjectServiceTest(IProjectsService projectsService, IUserContext userContext, IUnitOfWork unitOfWork)
+        public ProjectServiceTest(IProjectsService projectsService, IUserContextAccessorService userContextAccessorService, IUnitOfWork unitOfWork)
         {
             _projectsService = projectsService;
-            _userContext = userContext;
+            _userContextAccessorService = userContextAccessorService;
             _unitOfWork = unitOfWork;
             InitData().Wait();
         }
         
         public void Dispose()
         {
-            _userContext.SignOutForTesting();
+            _userContextAccessorService.SignOutForTesting();
             _unitOfWork.UserRepository.DeleteAll().Wait();
             _unitOfWork.ProjectRepository.DeleteAll().Wait();
             _unitOfWork.ProjectRoleRepository.DeleteAll().Wait();
@@ -149,7 +149,7 @@ namespace Tasktower.ProjectService.Tests.BusinessLogic
             // Save changes
             _unitOfWork.SaveChanges().Wait();
             // Sign out user
-            _userContext.SignOutForTesting();
+            _userContextAccessorService.SignOutForTesting();
         }
         
         private ProjectRoleEntity NewProjectRole(UserEntity userEntity)
@@ -165,7 +165,7 @@ namespace Tasktower.ProjectService.Tests.BusinessLogic
         [Fact]
         public async void CreateProject_AsSignedInUserAndWithRequiredFields_ProjectCanBeQueried()
         {
-            _userContext.SignInForTesting(User1Id, User1UserName, _user1Permissions);
+            _userContextAccessorService.SignInForTesting(User1Id, User1UserName, _user1Permissions);
             var projectSave = new ProjectSaveDto
             {
                 Title = "Make App",
@@ -203,7 +203,7 @@ namespace Tasktower.ProjectService.Tests.BusinessLogic
         [Fact]
         public async void FindProjectById_Project1AIdAsUser1_ReturnProject()
         {
-            _userContext.SignInForTesting(User1Id, User1UserName, _user1Permissions);
+            _userContextAccessorService.SignInForTesting(User1Id, User1UserName, _user1Permissions);
             var projectSearchDto = await _projectsService.FindProjectById(_project1AId);
             Assert.Equal(User1Id, projectSearchDto.Owner.UserId);
             Assert.Equal(User1UserName, projectSearchDto.Owner.UserName);
@@ -215,7 +215,7 @@ namespace Tasktower.ProjectService.Tests.BusinessLogic
         [Fact]
         public async void FindProjectById_Project1AIdAsUser2_ThrowForbidden()
         {
-            _userContext.SignInForTesting(User2Id, User2UserName, _user2Permissions);
+            _userContextAccessorService.SignInForTesting(User2Id, User2UserName, _user2Permissions);
             var exception = await Assert.ThrowsAsync<AppException<ErrorCode>>(async () =>
             {
                 await _projectsService.FindProjectById(_project1AId);
